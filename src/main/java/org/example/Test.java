@@ -1,35 +1,50 @@
 package org.example;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Test {
-
-    List<String> testowa = new ArrayList<>();
-
-    public void cos(){
-        testowa.add("ys");
-        testowa.add("www");
-        testowa.add("eee");
-        testowa.add("wis");
-        testowa.add("krzys");
-        testowa.add("mys");
+    public static void main(String[] args) throws FileNotFoundException {
 
 
+        File file = new File("produkty.txt");
+        int licznik = 0;
+        Scanner scanner = new Scanner(file);
 
-    }
-    public void eee(){
+        String cos = "wasdas";
+        while (scanner.hasNext()){
+            licznik++;
+            String linia = scanner.nextLine();
+            System.out.println(licznik +" "+ linia);
 
-        cos();
-        for (int i = 0; i < testowa.size(); i++) {
-            System.out.println(i+1 +testowa.get(i));
+            if(licznik %5 ==1){
+                if(linia.equals(cos)){
+                    System.out.println("nigggger");
+                }
+                System.out.println(licznik+"!!!");
+            }
+
+
         }
 
-     //   System.out.println(testowa.);
+      //  while (scanner.hasNext()) {
+          //  System.out.println(licznik);
+//            if (licznik % 5 == 0) {
+//                String linia = scanner.nextLine();
+//               // System.out.println(licznik+"!");
+//
+//            }
+            licznik++;
+
+
+     //   }
+
+
+
 
 
     }
-
-
-
 }

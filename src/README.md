@@ -34,4 +34,5 @@
         (ile razy wystąpił w pliku?) najlepiej w dodatkowym wypisane wszystkie dania i
         ilosc ich wybran podczas dodawania do dnia
 
-
+        po odpaleniu aplikacji jest tworzona lista z pliku i potem podczas dodania jest sprawdzane 
+        czy produkt o takiej nazwie juz nie istanieje w liscie

@@ -1,6 +1,9 @@
 package org.example;
+
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 
         DietaApk dietaApk = new DietaApk();
@@ -10,6 +13,8 @@ public class Main {
 
 //        Test test = new Test();
 //        test.eee();
+
+        //MenadzerPlikow.plik();
 
     }
 }
