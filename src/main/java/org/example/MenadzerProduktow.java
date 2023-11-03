@@ -12,8 +12,9 @@ public class MenadzerProduktow {
     private List<Produkt> produkty = new ArrayList<>();
     File file = new File("produkty.txt");
 
-
-
+    public List<Produkt> getProdukty() {
+        return produkty;
+    }
 
     public void tworzenieProduktu(Scanner scanner) throws IOException {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
@@ -54,20 +55,21 @@ public class MenadzerProduktow {
             produkty.add(nowyProdukt);
 
 
-
         }
 
-
-
-
-
     }
+
+    public Produkt wybierzProdukt(int jakiProdukt){
+        return produkty.get(jakiProdukt);
+    }
+
+
     public void wyswietlWszystkieProdukty(){
         for (Produkt produkt : produkty) {
             System.out.println(wypiszProdukt(produkt));
         }
     }
-    public static String wypiszProdukt(Produkt produkt){
+    public String wypiszProdukt(Produkt produkt){
         return "["+produkt.getId() +"] - "+produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
                 + ", węglowodany: " + produkt.getWeglowodany()+ ", błonnik: "+produkt.getBlonnik()
                 + ", tłuszcze: "+produkt.getTluszcze();

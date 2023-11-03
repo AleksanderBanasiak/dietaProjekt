@@ -11,6 +11,7 @@ public class DietaApk {
         wyswietlDate();
         int wybor;
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
+        Danie danie = new Danie();
         Scanner scanner = new Scanner(System.in);
         menadzerProduktow.dodajProduktyZPlikuDoListy();
         while (true){
@@ -19,7 +20,7 @@ public class DietaApk {
             switch (wybor){
                 case 1 -> menadzerProduktow.dodajProduktyZPlikuDoListy();
                 case 2 -> menadzerProduktow.wyswietlWszystkieProdukty();
-                case 3 -> System.out.println("3");
+                case 3 -> danie.dodajDanie(menadzerProduktow);
                 case 4 -> System.out.println("4");
                 case 5 -> System.out.println("5");
                 case 6 -> menadzerProduktow.tworzenieProduktu(scanner);

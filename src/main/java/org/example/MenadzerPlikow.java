@@ -26,6 +26,7 @@ public class MenadzerPlikow {
 
 
 
+
     public boolean sprawdzCzyJestWPilku(String nazwa, File file) throws FileNotFoundException {
 
         int licznik = 0;
