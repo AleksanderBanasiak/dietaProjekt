@@ -63,12 +63,12 @@ public class MenadzerProduktow {
 
     }
     public void wyswietlWszystkieProdukty(){
-        for (int i = 0; i < produkty.size(); i++) {
-            System.out.println("["+(i+1) + "] - "+ wypiszProdukt(produkty.get(i)));
+        for (Produkt produkt : produkty) {
+            System.out.println(wypiszProdukt(produkt));
         }
     }
     public static String wypiszProdukt(Produkt produkt){
-        return produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
+        return "["+produkt.getId() +"] - "+produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
                 + ", węglowodany: " + produkt.getWeglowodany()+ ", błonnik: "+produkt.getBlonnik()
                 + ", tłuszcze: "+produkt.getTluszcze();
     }
