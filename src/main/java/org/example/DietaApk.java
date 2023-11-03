@@ -22,9 +22,8 @@ public class DietaApk {
                 case 3 -> System.out.println("3");
                 case 4 -> System.out.println("4");
                 case 5 -> System.out.println("5");
-                case 6 -> System.out.println("6");
-                case 7 -> menadzerProduktow.tworzenieProduktu(scanner);
-                case 8 ->
+                case 6 -> menadzerProduktow.tworzenieProduktu(scanner);
+                case 7 ->
                 {
                     System.out.println("Koniec programu");
                     scanner.close();
@@ -48,9 +47,8 @@ public class DietaApk {
         System.out.println("[3] - OBIAD");
         System.out.println("[4] - KOLACJA");
         System.out.println("[5] - DODATKOWE DANIE");
-        System.out.println("[6] - DODAJ POSIŁEK");
-        System.out.println("[7] - DODAJ PRODUKT");
-        System.out.println("[8] - WYJŚCIE Z PROGRAMU");
+        System.out.println("[6] - DODAJ PRODUKT");
+        System.out.println("[7] - WYJŚCIE Z PROGRAMU");
         System.out.println("-".repeat(25));
     }
 
