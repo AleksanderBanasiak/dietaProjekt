@@ -27,9 +27,16 @@ public class MenadzerPlikow {
     public void swtorzPlikZPosilkiem(String nazwa,List<Produkt> produkts){
         File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
 
-        if(file.exists()){
-            System.out.println("Takie danie juz isnieje");
-        }else {
+        if(!file.exists()) {
+            try{
+                file.createNewFile();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+
+
             if (file.canWrite()) {
                 try {
                     FileWriter fileWriter = new FileWriter(file, true);
@@ -48,7 +55,7 @@ public class MenadzerPlikow {
                     System.out.println(e.getMessage());
                 }
             }
-        }
+
 
 
 
