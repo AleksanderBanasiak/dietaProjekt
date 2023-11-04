@@ -1,10 +1,10 @@
 package org.example;
 
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenadzerPlikow {
-
 
     public void zapiszDoPliku(Produkt produkt, File file) {
         if (file.canWrite()) {
@@ -22,6 +22,36 @@ public class MenadzerPlikow {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    public void swtorzPlikZPosilkiem(String nazwa,List<Produkt> produkts){
+        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
+
+        if(file.exists()){
+            System.out.println("Takie danie juz isnieje");
+        }else {
+            if (file.canWrite()) {
+                try {
+                    FileWriter fileWriter = new FileWriter(file, true);
+                    PrintWriter printWriter = new PrintWriter(fileWriter);
+                    printWriter.println(nazwa.toUpperCase());
+                    for (Produkt produkt : produkts) {
+                        printWriter.println(produkt.getNazwa());
+                        printWriter.println(produkt.getKcal());
+                        printWriter.println(produkt.getBialko());
+                        printWriter.println(produkt.getWeglowodany());
+                        printWriter.println(produkt.getBlonnik());
+                        printWriter.println(produkt.getTluszcze());
+                    }
+                    printWriter.close();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+
+
     }
 
 

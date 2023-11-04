@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Danie {
+public class MenadzerPosilku{
+    public void tworzeniePosilku(MenadzerProduktow menadzerProduktow, Scanner scanner){
+        System.out.println("Jak ma się nazywać posiłek: ");
+        String nazwaPosilku = scanner.nextLine();
+        TypPosilku typ = typPosilku(scanner);
+        List<Produkt> produkts = wybierzProduktyDoPosilku(menadzerProduktow);
+        new Posilek(nazwaPosilku,typ, produkts);
+        MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
+        menadzerPlikow.swtorzPlikZPosilkiem(nazwaPosilku, produkts);
 
 
-    public void kod(MenadzerProduktow menadzerProduktow){
-        wyswietlListeZWybranymiProduktami(wybierzProduktyDoDania(menadzerProduktow));
+        // wyswietlListeZWybranymiProduktami(wybierzProduktyDoPosilku(menadzerProduktow));
     }
 
 
-    public List<Produkt> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
+    public List<Produkt> wybierzProduktyDoPosilku(MenadzerProduktow menadzerProduktow){
         //tworzenie Listy Dania składanjącego się z obiektów produktów
 
         Scanner scanner = new Scanner(System.in);
@@ -51,7 +58,9 @@ public class Danie {
 
 
 
-    public void obliczMakro(int ileGram, Produkt produkt){
+
+
+    public Produkt obliczMakro(int ileGram, Produkt produkt){
 
         double kcal = (produkt.getKcal() * ileGram) / 100;
         double bailko = (produkt.getBialko() * ileGram) / 100;
@@ -59,8 +68,34 @@ public class Danie {
         double blonnik = (produkt.getBlonnik() * ileGram) / 100;
         double tluszcze = (produkt.getTluszcze() * ileGram) / 100;
 
-        //dodanie tutaj obslugi na pliku
+       return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
 
+    }
+    public TypPosilku typPosilku(Scanner scanner){
+        menuTypuPosilku();
+        System.out.println("Do jakiego dania chcesz dodać ten posiłek?: ");
+        int typ = Integer.parseInt(scanner.nextLine());
+        switch (typ) {
+            case 1 -> {
+                return TypPosilku.SNIADANIE;
+            }
+            case 2 -> {
+                return TypPosilku.DRUGIE_SNIADANIE;
+            }
+            case 3 -> {
+                return TypPosilku.OBIAD;
+            }
+            case 4 -> {
+                return TypPosilku.KOLACJA;
+            }
+        }
+        return null;
+    }
+    public void menuTypuPosilku(){
+        System.out.println("[1] - Śniadanie");
+        System.out.println("[2] - Drugie śniadanie");
+        System.out.println("[3] - Obiad");
+        System.out.println("[4] - Kolacja");
     }
 
 
