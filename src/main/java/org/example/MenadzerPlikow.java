@@ -25,10 +25,10 @@ public class MenadzerPlikow {
     }
 
     public void swtorzPlikZPosilkiem(TypPosilku typ,String nazwa,List<Produkt> produkts){
-        String indexPosilku= zwrocPierwszyZnakTypu(typ);
+      //  String indexPosilku= zwrocPierwszyZnakTypu(typ);
 
 
-        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+ indexPosilku+nazwa);
+        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
 
         if(!file.exists()) {
             try{
@@ -42,6 +42,7 @@ public class MenadzerPlikow {
                     FileWriter fileWriter = new FileWriter(file, true);
                     PrintWriter printWriter = new PrintWriter(fileWriter);
                     printWriter.println(nazwa.toUpperCase());
+                    printWriter.println(typ);
                     for (Produkt produkt : produkts) {
                         printWriter.println(produkt.getNazwa());
                         printWriter.println(produkt.getKcal());

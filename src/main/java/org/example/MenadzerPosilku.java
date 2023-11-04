@@ -64,30 +64,14 @@ public class MenadzerPosilku{
         List<Posilek> posilki = new ArrayList<>();
         File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
-        int[] tablicaTypow = new int[nazwyPlikow.length];
-        //dwie tablice przechowujace nazwe pliku i vartosc
-        for (int i = 0; i < tablicaTypow.length; i++) {
-            tablicaTypow[i] = Integer.parseInt(String.valueOf(nazwyPlikow[i].charAt(0)));
-        }
-
         for (int i = 0; i < nazwyPlikow.length; i++) {
             String s = nazwyPlikow[i];
-            int typPosilku = tablicaTypow[i];
             List<Produkt> listaDoPosilku = new ArrayList<>();
-
-
-           TypPosilku obecyTypPosilku = typPosilku(typPosilku);
-
             File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/" + s);
             Scanner scanner = new Scanner(file);
-            boolean flaga = true;
-            String nazwaPosilku ="";
-
-            while (scanner.hasNext()) {
-                if (flaga) {
-                    nazwaPosilku = scanner.nextLine();
-                    flaga = false;
-                }
+            String nazwaPosilku= scanner.nextLine();
+            TypPosilku t = TypPosilku.valueOf(scanner.nextLine());
+            while (scanner.hasNext()) { // ten moment jest w menadzerze posilkow
                 String nazwa = scanner.nextLine();
                 double kcal = Double.parseDouble(scanner.nextLine());
                 double bialko = Double.parseDouble(scanner.nextLine());
@@ -97,8 +81,7 @@ public class MenadzerPosilku{
                 Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
                 listaDoPosilku.add(nowyProdukt);
             }
-
-            posilki.add(new Posilek(obecyTypPosilku, nazwaPosilku, listaDoPosilku));
+            posilki.add(new Posilek(t, nazwaPosilku, listaDoPosilku));
 
 
 
