@@ -24,8 +24,11 @@ public class MenadzerPlikow {
         }
     }
 
-    public void swtorzPlikZPosilkiem(String nazwa,List<Produkt> produkts){
-        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
+    public void swtorzPlikZPosilkiem(TypPosilku typ,String nazwa,List<Produkt> produkts){
+        String indexPosilku= zwrocPierwszyZnakTypu(typ);
+
+
+        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+ indexPosilku+nazwa);
 
         if(!file.exists()) {
             try{
@@ -34,9 +37,6 @@ public class MenadzerPlikow {
                 System.out.println(e.getMessage());
             }
         }
-
-
-
             if (file.canWrite()) {
                 try {
                     FileWriter fileWriter = new FileWriter(file, true);
@@ -59,6 +59,17 @@ public class MenadzerPlikow {
 
 
 
+    }
+    public String zwrocPierwszyZnakTypu(TypPosilku typ){
+        String wynik ="";
+        switch (typ){
+            case SNIADANIE -> wynik ="1";
+            case DRUGIE_SNIADANIE -> wynik ="2";
+            case OBIAD -> wynik ="3";
+            case KOLACJA -> wynik ="4";
+        }
+
+        return wynik;
     }
 
 

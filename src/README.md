@@ -28,3 +28,5 @@
 
 
         zabezpiecznenie sie przed nadpisaniem pliku z posilkiem
+        
+        są wypisyane pliki ktorych "nazwa" jest taka sama jak TypPosilku

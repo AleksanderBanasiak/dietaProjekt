@@ -1,31 +1,39 @@
 package org.example;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) throws FileNotFoundException {
 
+        //zapisywanie nazw plikow do tablicy
+//        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+//        String[] nazwyPlikow  = fileNazwy.list();
+//        for (String s : nazwyPlikow) {
+//            System.out.println(s);
+//        }
 
-        File file = new File("produkty.txt");
-        int licznik = 0;
-        Scanner scanner = new Scanner(file);
+        MenadzerPosilku menadzerPosilku = new MenadzerPosilku();
+        List<Posilek> posileks = menadzerPosilku.dodajPosilkiZPlikuDoListy();
+        System.out.println(posileks.size());
 
-        String cos = "wasdas";
-        while (scanner.hasNext()){
-            licznik++;
-            String linia = scanner.nextLine();
-            System.out.println(licznik +" "+ linia);
+        for (int i = 0; i < posileks.size(); i++) {
+            menadzerPosilku.wypiszPosilek(posileks.get(i));
+        }
 
-            if(licznik %5 ==1){
-                if(linia.equals(cos)){
-                    System.out.println("nigggger");
-                }
-                System.out.println(licznik+"!!!");
-            }
+
+//        String cos = "wasdas";
+//        while (scanner.hasNext()){
+//            licznik++;
+//            String linia = scanner.nextLine();
+//            System.out.println(licznik +" "+ linia);
+//
+//            if(licznik %5 ==1){
+//                if(linia.equals(cos)){
+//                    System.out.println("nigggger");
+//                }
+//                System.out.println(licznik+"!!!");
+//            }
 
 
         }
@@ -37,8 +45,6 @@ public class Test {
 //               // System.out.println(licznik+"!");
 //
 //            }
-            licznik++;
-
 
      //   }
 
@@ -47,4 +53,3 @@ public class Test {
 
 
     }
-}

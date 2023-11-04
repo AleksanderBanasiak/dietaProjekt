@@ -1,5 +1,7 @@
 package org.example;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,11 +10,14 @@ public class MenadzerPosilku{
     public void tworzeniePosilku(MenadzerProduktow menadzerProduktow, Scanner scanner){
         System.out.println("Jak ma się nazywać posiłek: ");
         String nazwaPosilku = scanner.nextLine();
-        TypPosilku typ = typPosilku(scanner);
+        menuTypuPosilku();
+        System.out.println("Do jakiego dania chcesz dodać ten posiłek?: ");
+        int jakiTyp = Integer.parseInt(scanner.nextLine());
+        TypPosilku typ = typPosilku(jakiTyp);
         List<Produkt> produkts = wybierzProduktyDoPosilku(menadzerProduktow);
-        new Posilek(nazwaPosilku,typ, produkts);
+        new Posilek(typ,nazwaPosilku, produkts);
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
-        menadzerPlikow.swtorzPlikZPosilkiem(nazwaPosilku, produkts);
+        menadzerPlikow.swtorzPlikZPosilkiem(typ, nazwaPosilku, produkts);
 
 
         // wyswietlListeZWybranymiProduktami(wybierzProduktyDoPosilku(menadzerProduktow));
@@ -55,6 +60,70 @@ public class MenadzerPosilku{
         }
 
     }
+    public List<Posilek> dodajPosilkiZPlikuDoListy() throws FileNotFoundException {
+        List<Posilek> posilki = new ArrayList<>();
+        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        String[] nazwyPlikow  = fileNazwy.list();
+        int[] tablicaTypow = new int[nazwyPlikow.length];
+        //dwie tablice przechowujace nazwe pliku i vartosc
+        for (int i = 0; i < tablicaTypow.length; i++) {
+            tablicaTypow[i] = Integer.parseInt(String.valueOf(nazwyPlikow[i].charAt(0)));
+        }
+
+        for (int i = 0; i < nazwyPlikow.length; i++) {
+            String s = nazwyPlikow[i];
+            int typPosilku = tablicaTypow[i];
+            List<Produkt> listaDoPosilku = new ArrayList<>();
+
+
+           TypPosilku obecyTypPosilku = typPosilku(typPosilku);
+
+            File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/" + s);
+            Scanner scanner = new Scanner(file);
+            boolean flaga = true;
+            String nazwaPosilku ="";
+
+            while (scanner.hasNext()) {
+                if (flaga) {
+                    nazwaPosilku = scanner.nextLine();
+                    flaga = false;
+                }
+                String nazwa = scanner.nextLine();
+                double kcal = Double.parseDouble(scanner.nextLine());
+                double bialko = Double.parseDouble(scanner.nextLine());
+                double weglowodany = Double.parseDouble(scanner.nextLine());
+                double blonnik = Double.parseDouble(scanner.nextLine());
+                double tluszcze = Double.parseDouble(scanner.nextLine());
+                Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
+                listaDoPosilku.add(nowyProdukt);
+            }
+
+            posilki.add(new Posilek(obecyTypPosilku, nazwaPosilku, listaDoPosilku));
+
+
+
+        }
+        return posilki;
+
+
+    }
+    public void wypiszPosilek(Posilek posilek){
+        System.out.println("Nazwa posilku: "+ posilek.getNazwaPosilku());
+        System.out.println("jest to:" + posilek.getTypPosilku());
+        System.out.println("Nazwa produktow z jakich sie sklada to: ");
+        String[] nazwy =new String[ posilek.getSkladPosiku().size()];
+        for (int i = 0; i <  posilek.getSkladPosiku().size(); i++) {
+            nazwy[i] = posilek.getSkladPosiku().get(i).getNazwa();
+            System.out.print(nazwy[i]+ " ");
+        }
+        System.out.println();
+
+
+
+
+    }
+
+
 
 
 
@@ -71,10 +140,7 @@ public class MenadzerPosilku{
        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
 
     }
-    public TypPosilku typPosilku(Scanner scanner){
-        menuTypuPosilku();
-        System.out.println("Do jakiego dania chcesz dodać ten posiłek?: ");
-        int typ = Integer.parseInt(scanner.nextLine());
+    public TypPosilku typPosilku(int typ){
         switch (typ) {
             case 1 -> {
                 return TypPosilku.SNIADANIE;
@@ -98,7 +164,11 @@ public class MenadzerPosilku{
         System.out.println("[4] - Kolacja");
     }
 
+    }
 
 
 
-}
+
+
+
+

@@ -6,13 +6,13 @@ import java.util.List;
 
 public class Posilek {
 
-    private String nazwaPosilku;
     TypPosilku typPosilku;
+    private String nazwaPosilku;
     private List<Produkt> skladPosiku;
 
-    public Posilek(String nazwaPosilku, TypPosilku typPosilku, List<Produkt> skladPosiku) {
-        this.nazwaPosilku = nazwaPosilku;
+    public Posilek( TypPosilku typPosilku,String nazwaPosilku, List<Produkt> skladPosiku) {
         this.typPosilku = typPosilku;
+        this.nazwaPosilku = nazwaPosilku;
         this.skladPosiku = skladPosiku;
     }
 
@@ -22,5 +22,9 @@ public class Posilek {
 
     public TypPosilku getTypPosilku() {
         return typPosilku;
+    }
+
+    public List<Produkt> getSkladPosiku() {
+        return skladPosiku;
     }
 }
