@@ -14,11 +14,12 @@ public class DietaApk {
         MenadzerPosilku posilek = new MenadzerPosilku();
         Scanner scanner = new Scanner(System.in);
         menadzerProduktow.dodajProduktyZPlikuDoListy();
+        posilek.dodajPosilkiZPlikuDoListy();
         while (true){
             menu();
             wybor = Integer.parseInt(scanner.nextLine());
             switch (wybor){
-                case 1 -> menadzerProduktow.dodajProduktyZPlikuDoListy();
+                case 1 -> System.out.println("1");
                 case 2 -> menadzerProduktow.wyswietlWszystkieProdukty();
                 case 3 -> System.out.println("3");
                 case 4 -> System.out.println("4");

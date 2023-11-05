@@ -11,14 +11,12 @@ public class MenadzerProduktow {
 
     private List<Produkt> produkty = new ArrayList<>();
     File file = new File("produkty.txt");
-
     public List<Produkt> getProdukty() {
         return produkty;
     }
 
     public void tworzenieProduktu(Scanner scanner) throws IOException {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
-
         System.out.println("Jak nazywa się twój produkt?");
         String nazwa = scanner.nextLine();
         boolean flaga = menadzerPlikow.sprawdzCzyJestWPilku(nazwa, file);
@@ -41,10 +39,20 @@ public class MenadzerProduktow {
         }
     }
     public void dodajProduktyZPlikuDoListy() throws FileNotFoundException {
+        dodajDoListyProduktyZPliku(produkty, file, 0);
+    }
+    public void dodajDoListyProduktyZPliku(List <Produkt> produkty, File file1, int ilePominoc) throws FileNotFoundException {
 
-        Scanner scanner = new Scanner(file);
+        Scanner scanner = new Scanner(file1);
+        boolean flaga = true;
 
-        while (scanner.hasNext()){
+        while (scanner.hasNext()) {
+            if(flaga) {
+                for (int i = 0; i < ilePominoc; i++) {
+                    scanner.nextLine();
+                }
+                flaga = false;
+            }
             String nazwa = scanner.nextLine();
             double kcal = Double.parseDouble(scanner.nextLine());
             double bialko = Double.parseDouble(scanner.nextLine());
@@ -56,8 +64,8 @@ public class MenadzerProduktow {
 
 
         }
-
     }
+
 
     public Produkt wybierzProdukt(int jakiProdukt){
         return produkty.get(jakiProdukt);

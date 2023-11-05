@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class MenadzerPlikow {
@@ -74,6 +75,20 @@ public class MenadzerPlikow {
     }
 
 
+    // sworzyc metode sprawdz czy taki plik istnieje
+
+    public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){
+
+        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        String[] nazwyPlikow  = fileNazwy.list();
+        boolean flaga = true;
+        for (String s : nazwyPlikow) {
+            if (Objects.equals(s, nazwa)) {
+                flaga = false;
+            }
+        }
+        return flaga;
+    }
 
 
     public boolean sprawdzCzyJestWPilku(String nazwa, File file) throws FileNotFoundException {
