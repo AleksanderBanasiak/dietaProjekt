@@ -9,6 +9,8 @@ public class Main {
         DietaApk dietaApk = new DietaApk();
         dietaApk.run();
 
+        // sprawdzam czy dziala git
+
 
 
     }
