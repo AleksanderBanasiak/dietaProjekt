@@ -29,7 +29,8 @@ public class MenadzerPlikow {
       //  String indexPosilku= zwrocPierwszyZnakTypu(typ);
 
 
-        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
+        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
+        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/"+nazwa);
 
         if(!file.exists()) {
             try{
@@ -79,7 +80,8 @@ public class MenadzerPlikow {
 
     public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){
 
-        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        //File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
         boolean flaga = true;
         for (String s : nazwyPlikow) {

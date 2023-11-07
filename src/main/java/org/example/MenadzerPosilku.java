@@ -65,12 +65,14 @@ public class MenadzerPosilku{
     public List<Posilek> dodajPosilkiZPlikuDoListy() throws FileNotFoundException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         List<Posilek> posilki = new ArrayList<>();
-        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        //File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
         for (int i = 0; i < nazwyPlikow.length; i++) {
             String s = nazwyPlikow[i];
             List<Produkt> listaDoPosilku = new ArrayList<>();
-            File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/" + s);
+           // File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/" + s);
+            File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/" + s);
             Scanner scanner = new Scanner(file);
             String nazwaPosilku= scanner.nextLine();
             TypPosilku t = TypPosilku.valueOf(scanner.nextLine());

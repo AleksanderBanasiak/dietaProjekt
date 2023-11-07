@@ -41,14 +41,13 @@ public class MenadzerProduktow {
     public void dodajProduktyZPlikuDoListy() throws FileNotFoundException {
         dodajDoListyProduktyZPliku(produkty, file, 0);
     }
-    public void dodajDoListyProduktyZPliku(List <Produkt> produkty, File file1, int ilePominoc) throws FileNotFoundException {
+    public void dodajDoListyProduktyZPliku(List <Produkt> produkty, File file1, int ilePominac) throws FileNotFoundException {
 
         Scanner scanner = new Scanner(file1);
         boolean flaga = true;
-
         while (scanner.hasNext()) {
             if(flaga) {
-                for (int i = 0; i < ilePominoc; i++) {
+                for (int i = 0; i < ilePominac; i++) {
                     scanner.nextLine();
                 }
                 flaga = false;
@@ -61,8 +60,6 @@ public class MenadzerProduktow {
             double tluszcze = Double.parseDouble(scanner.nextLine());
             Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
             produkty.add(nowyProdukt);
-
-
         }
     }
 
@@ -73,12 +70,17 @@ public class MenadzerProduktow {
 
 
     public void wyswietlWszystkieProdukty(){
+        int i=0;
         for (Produkt produkt : produkty) {
-            System.out.println(wypiszProdukt(produkt));
+
+            i++;
+            System.out.println("["+i+"] - "+  wypiszProdukt(produkt));
         }
+
+
     }
     public String wypiszProdukt(Produkt produkt){
-        return "["+produkt.getId() +"] - "+produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
+        return produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
                 + ", węglowodany: " + produkt.getWeglowodany()+ ", błonnik: "+produkt.getBlonnik()
                 + ", tłuszcze: "+produkt.getTluszcze();
     }
