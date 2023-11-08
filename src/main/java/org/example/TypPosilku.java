@@ -6,7 +6,10 @@ public enum TypPosilku {
     SNIADANIE,
     DRUGIE_SNIADANIE,
     OBIAD,
-    KOLACJA
+
+    KOLACJA,
+
+    DODATKOWE_DANIE
 
 
 }

@@ -20,42 +20,66 @@ public class MenadzerPosilkow {
     // nastepuje zapis dania do pliu o nazwie daty
 
 
-    //dodac zabezpiecznie podczas wyboru posilku zeby wybierac z zakresu
+
     //dodac zabezpieczenie zeby wyskoczyl jakis komunikat gdy nie ma dań dal danego poislku
 
-    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(TypPosilku typPosilku) throws FileNotFoundException {
-        Dania danieDoPosilku = wyborDaniaDoPosilku(typPosilku);
 
-        List<Produkt> produkts = danieDoPosilku.getSkladDania();
-        List<Produkt> produktyZObliczonymMarko = new ArrayList<>();
+    public void pelenProgram(TypPosilku typPosilku) throws FileNotFoundException {
 
-        for (int i = 0; i < produkts.size(); i++) {
-            System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
-            System.out.print("Podaj gramature: ");
-            int ileGram = Integer.parseInt(scanner.nextLine());
-            Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
-            produktyZObliczonymMarko.add(produktZObliczonymMakro);
+        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(typPosilku, wyborDaniaDoPosilku(typPosilku));
+        for (int i = 0; i < produktyZMakro.size(); i++) {
+            System.out.println(menadzerProduktow.wypiszProdukt(produktyZMakro.get(i)));
         }
-        System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(0)));
-        System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(1)));
-        System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(2)));
+
+
+
+    }
+
+    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(TypPosilku typPosilku, Dania danieDoPosilku) throws FileNotFoundException {
+
+            //Dania danieDoPosilku = wyborDaniaDoPosilku(typPosilku);
+            List<Produkt> produkts = danieDoPosilku.getSkladDania();
+            List<Produkt> produktyZObliczonymMarko = new ArrayList<>();
+
+            for (int i = 0; i < produkts.size(); i++) {
+                System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
+                System.out.print("Podaj gramature: ");
+                int ileGram = Integer.parseInt(scanner.nextLine());
+                Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
+                produktyZObliczonymMarko.add(produktZObliczonymMakro);
+            }
+//            System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(0)));
+//            System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(1)));
+//            System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(2)));
+            return produktyZObliczonymMarko;
+
         //wypisanie obliczonych produktow dla testu
-        return produktyZObliczonymMarko;
+
+
+
+
     }
 
 
     public Dania wyborDaniaDoPosilku(TypPosilku typPosilku) throws FileNotFoundException {
         List<Dania> wybraneDania = menadzerDania.stworzListeZDaniamiDanegoTypu(typPosilku);
-        menadzerDania.wyswietlDaniaZListy(wybraneDania);
-        System.out.println("Jakie danie chcesz dodać do "+ odmianaTypuPosilku(typPosilku));
-        int wyborDania = Integer.parseInt(scanner.nextLine());
-        wyborDania--;
-        return wybraneDania.get(wyborDania);
+        if(wybraneDania.size() == 0){
+            System.out.println("Niestety nie ma dań dla tego posiłku");
+            throw new IndexOutOfBoundsException();
+        }else {
+            menadzerDania.wyswietlDaniaZListy(wybraneDania);
+            System.out.print("Jakie danie chcesz dodać do " + odmianaTypuPosilku(typPosilku) + ": ");
+            int wyborDania = Integer.parseInt(scanner.nextLine());
+            while (wyborDania > wybraneDania.size() || wyborDania <= 0) {
+                System.out.println("Podałeś liczbe spoza zakresu");
+                System.out.print("Wybierz jescze raz:");
+                wyborDania = Integer.parseInt(scanner.nextLine());
+            }
+            wyborDania--;
+            return wybraneDania.get(wyborDania);
+        }
 
     }
-
-   // public
-
 
 
     public String odmianaTypuPosilku(TypPosilku typPosilku){
@@ -65,6 +89,7 @@ public class MenadzerPosilkow {
             case DRUGIE_SNIADANIE -> wynik = "drugiego śniadania";
             case OBIAD -> wynik = "obiadu";
             case KOLACJA -> wynik = "kolacji";
+            case DODATKOWE_DANIE -> wynik = "dodatku";
         }
         return wynik;
     }

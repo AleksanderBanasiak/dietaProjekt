@@ -17,25 +17,30 @@ public class MenadzerProduktow {
 
     public void tworzenieProduktu(Scanner scanner) throws IOException {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
-        System.out.println("Jak nazywa się twój produkt?");
+        System.out.print("Jak nazywa się twój produkt?: ");
         String nazwa = scanner.nextLine();
         boolean flaga = menadzerPlikow.sprawdzCzyJestWPilku(nazwa, file);
         if(!flaga){
             System.out.println("Taki produkt juz istnieje!");
         }else {
-        System.out.println("Ile kalorii na 100g ma twój produkt?");
+        System.out.print("Ile kalorii na 100g ma twój produkt?: ");
         double kcal = Double.parseDouble(scanner.nextLine());
-        System.out.println("Ile białka na 100g ma twój produkt?");
+        System.out.print("Ile białka na 100g ma twój produkt?: ");
         double bialko = Double.parseDouble(scanner.nextLine());
-        System.out.println("Ile węglowodanów na 100g ma twój produkt?");
+        System.out.print("Ile węglowodanów na 100g ma twój produkt?: ");
         double weglowodany = Double.parseDouble(scanner.nextLine());
-        System.out.println("Ile błonnika na 100g ma twój produkt?");
+        System.out.print("Ile błonnika na 100g ma twój produkt?: ");
         double blonnik = Double.parseDouble(scanner.nextLine());
-        System.out.println("Ile tłuszczy na 100g ma twój produkt?");
+        System.out.print("Ile tłuszczy na 100g ma twój produkt?: ");
         double tluszcze = Double.parseDouble(scanner.nextLine());
-        Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
-        menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
-        produkty.add(nowyProdukt);
+
+        if(kcal <0 || bialko < 0 || weglowodany <0 || blonnik <0 || tluszcze <0){
+            System.out.println("Takiego produktu nie można dodać ponieważ jeden z makroskładników jest mniejszy od zera!");
+        }else {
+            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
+            menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
+            produkty.add(nowyProdukt);
+        }
         }
     }
     public void dodajProduktyZPlikuDoListy() throws FileNotFoundException {

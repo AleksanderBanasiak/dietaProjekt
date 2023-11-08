@@ -9,19 +9,26 @@ import java.util.Scanner;
 public class MenadzerDania {
     public void tworzenieDania(MenadzerProduktow menadzerProduktow, Scanner scanner) {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
-        System.out.println("Jak ma się nazywać danie: ");
+        System.out.println("-".repeat(24));
+        System.out.print("Jak ma się nazywać danie: ");
         String nazwaPosilku = scanner.nextLine();
         boolean flaga = menadzerPlikow.sprawdzCzyIstniejeTakiPlik(nazwaPosilku);
         if (!flaga) {
             System.out.println("Takie danie juz istnieje!");
         } else {
             menuTypuPosilku();
-            System.out.println("Do jakiego posiłku chcesz dodać to danie?: ");
+            System.out.print("Do jakiego posiłku chcesz dodać to danie?: ");
             int jakiTyp = Integer.parseInt(scanner.nextLine());
+            while (jakiTyp <= 0 || jakiTyp > TypPosilku.values().length){
+                System.out.println("Podałeś złą wartość!");
+                System.out.print("Podaj jeszcze raz: ");
+                jakiTyp = Integer.parseInt(scanner.nextLine());
+
+            }
+
             TypPosilku typ = typPosilku(jakiTyp);
             List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
             new Dania(typ, nazwaPosilku, produkts);
-           // MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
             menadzerPlikow.swtorzPlikZDaniem(typ, nazwaPosilku, produkts);
         }
     }
@@ -30,8 +37,8 @@ public class MenadzerDania {
             //tworzenie Listy Dania składanjącego się z obiektów produktów
 
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Który produkt chcesz dodac: ");
             menadzerProduktow.wyswietlWszystkieProdukty();
+            System.out.print("Które produkty chcesz dodac: ");
             String wybraneProdukty = scanner.nextLine();
             String[] splitWybraneProdukty = wybraneProdukty.split(",");
             int[] tablicaWybranychProduktow = new int[splitWybraneProdukty.length];
@@ -163,6 +170,9 @@ public class MenadzerDania {
             case 4 -> {
                 return TypPosilku.KOLACJA;
             }
+            case 5 -> {
+                return TypPosilku.DODATKOWE_DANIE;
+            }
         }
         return null;
     }
@@ -171,6 +181,7 @@ public class MenadzerDania {
         System.out.println("[2] - Drugie śniadanie");
         System.out.println("[3] - Obiad");
         System.out.println("[4] - Kolacja");
+        System.out.println("[5] - Dodatkowe danie");
     }
 
     }

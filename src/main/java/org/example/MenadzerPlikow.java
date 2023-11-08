@@ -55,17 +55,6 @@ public class MenadzerPlikow {
                 }
             }
     }
-    public String zwrocPierwszyZnakTypu(TypPosilku typ){
-        String wynik ="";
-        switch (typ){
-            case SNIADANIE -> wynik ="1";
-            case DRUGIE_SNIADANIE -> wynik ="2";
-            case OBIAD -> wynik ="3";
-            case KOLACJA -> wynik ="4";
-        }
-
-        return wynik;
-    }
 
 
     public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){

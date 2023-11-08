@@ -26,7 +26,5 @@
 
 
 
-
-        zabezpiecznenie sie przed nadpisaniem pliku z posilkiem
-        
-        są wypisyane pliki ktorych "nazwa" jest taka sama jak TypPosilku
+        ogarnac jak dzialają wyjątki i złapać ten w metodzie wyborDaniaDoPosilku
+        z klasy menadzer posilkow
