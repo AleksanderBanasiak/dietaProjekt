@@ -6,27 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MenadzerPosilku{
-    public void tworzeniePosilku(MenadzerProduktow menadzerProduktow, Scanner scanner) {
+public class MenadzerDania {
+    public void tworzenieDania(MenadzerProduktow menadzerProduktow, Scanner scanner) {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
-        System.out.println("Jak ma się nazywać posiłek: ");
+        System.out.println("Jak ma się nazywać danie: ");
         String nazwaPosilku = scanner.nextLine();
         boolean flaga = menadzerPlikow.sprawdzCzyIstniejeTakiPlik(nazwaPosilku);
         if (!flaga) {
-            System.out.println("Taki posilek juz istnieje!");
+            System.out.println("Takie danie juz istnieje!");
         } else {
             menuTypuPosilku();
-            System.out.println("Do jakiego dania chcesz dodać ten posiłek?: ");
+            System.out.println("Do jakiego posiłku chcesz dodać to danie?: ");
             int jakiTyp = Integer.parseInt(scanner.nextLine());
             TypPosilku typ = typPosilku(jakiTyp);
-            List<Produkt> produkts = wybierzProduktyDoPosilku(menadzerProduktow);
-            new Posilek(typ, nazwaPosilku, produkts);
+            List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
+            new Dania(typ, nazwaPosilku, produkts);
            // MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
-            menadzerPlikow.swtorzPlikZPosilkiem(typ, nazwaPosilku, produkts);
+            menadzerPlikow.swtorzPlikZDaniem(typ, nazwaPosilku, produkts);
         }
     }
 
-        public List<Produkt> wybierzProduktyDoPosilku (MenadzerProduktow menadzerProduktow){
+        public List<Produkt> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
             //tworzenie Listy Dania składanjącego się z obiektów produktów
 
             Scanner scanner = new Scanner(System.in);
@@ -43,7 +43,7 @@ public class MenadzerPosilku{
             int ilosc = produkty.size();
             for (int i = 0; i < tablicaWybranychProduktow.length; i++) {
                 if (tablicaWybranychProduktow[i] < 0 || tablicaWybranychProduktow[i] >= ilosc) {
-                    System.out.println("błąd koniec programu");
+                    System.out.println("Podałeś wartość z poza zakresu!");
                     System.exit(0);
                 }
             }
@@ -62,9 +62,9 @@ public class MenadzerPosilku{
         }
 
     }
-    public List<Posilek> dodajPosilkiZPlikuDoListy() throws FileNotFoundException {
+    public List<Dania> dodajDanieZPlikuDoListy() throws FileNotFoundException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
-        List<Posilek> posilki = new ArrayList<>();
+        List<Dania> danias = new ArrayList<>();
         //File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
         File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
@@ -77,23 +77,67 @@ public class MenadzerPosilku{
             String nazwaPosilku= scanner.nextLine();
             TypPosilku t = TypPosilku.valueOf(scanner.nextLine());
             menadzerProduktow.dodajDoListyProduktyZPliku(listaDoPosilku, file, 2);
-            posilki.add(new Posilek(t, nazwaPosilku, listaDoPosilku));
+            danias.add(new Dania(t, nazwaPosilku, listaDoPosilku));
         }
-        return posilki;
+        return danias;
 
 
     }
-    public void wypiszPosilek(Posilek posilek){
-        System.out.println("Nazwa posilku: "+ posilek.getNazwaPosilku());
-        System.out.println("jest to:" + posilek.getTypPosilku());
-        System.out.println("Nazwa produktow z jakich sie sklada to: ");
-        String[] nazwy =new String[ posilek.getSkladPosiku().size()];
-        for (int i = 0; i <  posilek.getSkladPosiku().size(); i++) {
-            nazwy[i] = posilek.getSkladPosiku().get(i).getNazwa();
-            System.out.print(nazwy[i]+ " ");
+    public void wypiszDanie(Dania dania){
+        System.out.print(dania.getNazwaDania());
+        System.out.print("(");
+        String[] nazwy =new String[ dania.getSkladDania().size()];
+        for (int i = 0; i <  dania.getSkladDania().size(); i++) {
+            nazwy[i] = dania.getSkladDania().get(i).getNazwa();
+            if(i != dania.getSkladDania().size() -1){
+                System.out.print(nazwy[i]+ ",");
+            }else {
+                System.out.print(nazwy[i]+")");
+            }
         }
         System.out.println();
+
     }
+    public void wypiszDanieWPosilku(Dania dania){
+        System.out.print(dania.getNazwaDania());
+        String[] nazwy =new String[ dania.getSkladDania().size()];
+        for (int i = 0; i <  dania.getSkladDania().size(); i++) {
+            nazwy[i] = dania.getSkladDania().get(i).getNazwa();
+            System.out.println(nazwy[i]);
+        }
+        System.out.println();
+
+    }
+    public List<Dania> stworzListeZDaniamiDanegoTypu(TypPosilku typPosilku) throws FileNotFoundException {
+        MenadzerDania menadzerDania = new MenadzerDania();
+        List<Dania> danias = menadzerDania.dodajDanieZPlikuDoListy();
+        List<Dania> danias1 = new ArrayList<>();
+        TypPosilku wybranyTyp;
+        for (int i = 0; i < danias.size(); i++) {
+            wybranyTyp = danias.get(i).getTypPosilku();
+            if (wybranyTyp == typPosilku) {
+                danias1.add(danias.get(i));
+            }
+        }
+        return danias1;
+    }
+
+
+
+    public void wyswietlDaniaZListy(List<Dania> lista) throws FileNotFoundException {
+        MenadzerDania menadzerDania = new MenadzerDania();
+        int licznik=0;
+        for (int i = 0; i < lista.size(); i++) {
+                 licznik++;
+                 System.out.print("["+licznik+"] - ");
+                 menadzerDania.wypiszDanie(lista.get(i));
+        }
+    }
+
+
+
+
+
     public Produkt obliczMakro(int ileGram, Produkt produkt){
 
         double kcal = (produkt.getKcal() * ileGram) / 100;

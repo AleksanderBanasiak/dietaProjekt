@@ -25,13 +25,9 @@ public class MenadzerPlikow {
         }
     }
 
-    public void swtorzPlikZPosilkiem(TypPosilku typ,String nazwa,List<Produkt> produkts){
-      //  String indexPosilku= zwrocPierwszyZnakTypu(typ);
-
-
+    public void swtorzPlikZDaniem(TypPosilku typ, String nazwa, List<Produkt> produkts){
         //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/"+nazwa);
-
         if(!file.exists()) {
             try{
                 file.createNewFile();
@@ -58,10 +54,6 @@ public class MenadzerPlikow {
                     System.out.println(e.getMessage());
                 }
             }
-
-
-
-
     }
     public String zwrocPierwszyZnakTypu(TypPosilku typ){
         String wynik ="";
@@ -75,8 +67,6 @@ public class MenadzerPlikow {
         return wynik;
     }
 
-
-    // sworzyc metode sprawdz czy taki plik istnieje
 
     public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){
 
