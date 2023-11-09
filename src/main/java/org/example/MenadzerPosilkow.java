@@ -31,15 +31,17 @@ public class MenadzerPosilkow {
         if(typPosilku == TypPosilku.DODATKOWE_DANIE){
             wJakimMiejscu();
         }
-        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wyborDaniaDoPosilku(typPosilku));
+        Dania wybraneDanie = wyborDaniaDoPosilku(typPosilku);
+        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wybraneDanie);
 
         for (Produkt produkt : produktyZMakro) {
             System.out.println(menadzerProduktow.wypiszProdukt(produkt));
         }
+        Dania danieZObliczonymMakro = new Dania(wybraneDanie.typPosilku,wybraneDanie.getNazwaDania(), produktyZMakro);
 
 
-
-        menadzerPlikow.stworzPlikZDanymDniem(typPosilku, "e", produktyZMakro);
+        //tu powinien byc przekazywane danie
+        menadzerPlikow.stworzPlikZDanymDniem(danieZObliczonymMakro);
 
 
 
@@ -62,7 +64,7 @@ public class MenadzerPosilkow {
         return gdzieBedziePosilek;
     }
 
-    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) throws FileNotFoundException {
+    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) {
 
             List<Produkt> produkts = danieDoPosilku.getSkladDania();
             List<Produkt> produktyZObliczonymMarko = new ArrayList<>();

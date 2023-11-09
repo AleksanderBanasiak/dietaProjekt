@@ -28,8 +28,8 @@ public class MenadzerDania {
 
             TypPosilku typ = typPosilku(jakiTyp);
             List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
-            new Dania(typ, nazwaPosilku, produkts);
-            menadzerPlikow.stworzPlikZDaniem(typ, nazwaPosilku, produkts);
+            Dania noweDanie = new Dania(typ, nazwaPosilku, produkts);
+            menadzerPlikow.stworzPlikZDaniem(noweDanie);
         }
     }
 
@@ -139,6 +139,26 @@ public class MenadzerDania {
                  System.out.print("["+licznik+"] - ");
                  menadzerDania.wypiszDanie(lista.get(i));
         }
+    }
+
+    public Produkt obliczMarkoZCalegoDania(List<Produkt> lista){
+        double caleKcal =0;
+        double caleBialko=0;
+        double caleWegle=0;
+        double caleBlonnik=0;
+        double caleTluszcze=0;
+
+        for (int i = 0; i < lista.size(); i++) {
+            caleKcal += lista.get(i).getKcal();
+            caleBialko += lista.get(i).getBialko();
+            caleWegle += lista.get(i).getWeglowodany();
+            caleBlonnik += lista.get(i).getBlonnik();
+            caleTluszcze += lista.get(i).getTluszcze();
+        }
+
+
+
+        return new Produkt("Makroskładniki dania: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
     }
 
 
