@@ -31,7 +31,8 @@ public class MenadzerPlikow {
 
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
-        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
+        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
+        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
         if(!file.exists()) {
             try {
                 file.createNewFile();
@@ -67,8 +68,8 @@ public class MenadzerPlikow {
 
 
     public void stworzPlikZDaniem(TypPosilku typ, String nazwa, List<Produkt> produkts){
-        File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
-        //File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/"+nazwa);
+        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
+        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/"+nazwa);
         if(!file.exists()) {
             try{
                 file.createNewFile();
@@ -100,8 +101,8 @@ public class MenadzerPlikow {
 
     public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){
 
-        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
-        //File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
+        //File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
         boolean flaga = true;
         for (String s : nazwyPlikow) {
