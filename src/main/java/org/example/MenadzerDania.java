@@ -29,7 +29,7 @@ public class MenadzerDania {
             TypPosilku typ = typPosilku(jakiTyp);
             List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
             new Dania(typ, nazwaPosilku, produkts);
-            menadzerPlikow.swtorzPlikZDaniem(typ, nazwaPosilku, produkts);
+            menadzerPlikow.stworzPlikZDaniem(typ, nazwaPosilku, produkts);
         }
     }
 
@@ -72,14 +72,14 @@ public class MenadzerDania {
     public List<Dania> dodajDanieZPlikuDoListy() throws FileNotFoundException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         List<Dania> danias = new ArrayList<>();
-        //File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
-        File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
+        File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
+        //File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
         for (int i = 0; i < nazwyPlikow.length; i++) {
             String s = nazwyPlikow[i];
             List<Produkt> listaDoPosilku = new ArrayList<>();
-           // File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/" + s);
-            File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/" + s);
+            File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/" + s);
+           // File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/" + s);
             Scanner scanner = new Scanner(file);
             String nazwaPosilku= scanner.nextLine();
             TypPosilku t = TypPosilku.valueOf(scanner.nextLine());

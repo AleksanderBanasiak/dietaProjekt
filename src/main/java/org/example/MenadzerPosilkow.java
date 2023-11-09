@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public class MenadzerPosilkow {
     MenadzerDania menadzerDania = new MenadzerDania();
     MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
+    MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
     Scanner scanner = new Scanner(System.in);
 
 
@@ -24,38 +26,44 @@ public class MenadzerPosilkow {
     //dodac zabezpieczenie zeby wyskoczyl jakis komunikat gdy nie ma dań dal danego poislku
 
 
-    public void pelenProgram(TypPosilku typPosilku) throws FileNotFoundException {
+    public void pelenProgram(TypPosilku typPosilku) throws IOException {
 
-        // to chyba powinno byc w nowej metodzie i zwracac miejsce ktore wybral uzytkowwnik
         if(typPosilku == TypPosilku.DODATKOWE_DANIE){
-            menuDodatkowegoDania();
-            int wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
-            while (wyborMiejscaPosilku > 3 || wyborMiejscaPosilku <=0){
-                System.out.println("Podałeś nieprawidłową wartość!");
-                System.out.print("Podaj liczbę jeszcze raz: ");
-                wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
-            }
-
-
-
-
+            wJakimMiejscu();
         }
-        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(typPosilku, wyborDaniaDoPosilku(typPosilku));
+        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wyborDaniaDoPosilku(typPosilku));
 
-        for (int i = 0; i < produktyZMakro.size(); i++) {
-                System.out.println(menadzerProduktow.wypiszProdukt(produktyZMakro.get(i)));
-            }
+        for (Produkt produkt : produktyZMakro) {
+            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
+        }
 
 
 
+        menadzerPlikow.stworzPlikZDanymDniem(typPosilku, "e", produktyZMakro);
 
 
 
     }
+    public String wJakimMiejscu() {
+        menuDodatkowegoDania();
+        int wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
+        String gdzieBedziePosilek = "";
+        while (wyborMiejscaPosilku > 3 || wyborMiejscaPosilku <= 0) {
+            System.out.println("Podałeś nieprawidłową wartość!");
+            System.out.print("Podaj liczbę jeszcze raz: ");
+            wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
+        }
+            switch (wyborMiejscaPosilku) {
+                case 1 -> gdzieBedziePosilek = "Dodatkowy posiłek po drugim sniadaniu";
+                case 2 -> gdzieBedziePosilek = "Dodatkowy posiłek po obiedzie";
+                case 3 -> gdzieBedziePosilek = "Dodatkowy posiłek po kolacji";
+                default -> gdzieBedziePosilek = "";
+            }
+        return gdzieBedziePosilek;
+    }
 
-    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(TypPosilku typPosilku, Dania danieDoPosilku) throws FileNotFoundException {
+    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) throws FileNotFoundException {
 
-            //Dania danieDoPosilku = wyborDaniaDoPosilku(typPosilku);
             List<Produkt> produkts = danieDoPosilku.getSkladDania();
             List<Produkt> produktyZObliczonymMarko = new ArrayList<>();
 
@@ -66,16 +74,7 @@ public class MenadzerPosilkow {
                 Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
                 produktyZObliczonymMarko.add(produktZObliczonymMakro);
             }
-//            System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(0)));
-//            System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(1)));
-//            System.out.println(menadzerProduktow.wypiszProdukt(produktyZObliczonymMarko.get(2)));
             return produktyZObliczonymMarko;
-
-        //wypisanie obliczonych produktow dla testu
-
-
-
-
     }
 
 
@@ -121,8 +120,9 @@ public class MenadzerPosilkow {
         System.out.println("Kolacja");
         System.out.println("--------------   <-[3]");
         System.out.print("W którym miejscu zjadłeś dodatkwy posiłek?: ");
-
     }
+
+
 
 
 
