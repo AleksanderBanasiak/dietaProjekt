@@ -26,10 +26,28 @@ public class MenadzerPosilkow {
 
     public void pelenProgram(TypPosilku typPosilku) throws FileNotFoundException {
 
-        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(typPosilku, wyborDaniaDoPosilku(typPosilku));
-        for (int i = 0; i < produktyZMakro.size(); i++) {
-            System.out.println(menadzerProduktow.wypiszProdukt(produktyZMakro.get(i)));
+        // to chyba powinno byc w nowej metodzie i zwracac miejsce ktore wybral uzytkowwnik
+        if(typPosilku == TypPosilku.DODATKOWE_DANIE){
+            menuDodatkowegoDania();
+            int wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
+            while (wyborMiejscaPosilku > 3 || wyborMiejscaPosilku <=0){
+                System.out.println("Podałeś nieprawidłową wartość!");
+                System.out.print("Podaj liczbę jeszcze raz: ");
+                wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
+            }
+
+
+
+
         }
+        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(typPosilku, wyborDaniaDoPosilku(typPosilku));
+
+        for (int i = 0; i < produktyZMakro.size(); i++) {
+                System.out.println(menadzerProduktow.wypiszProdukt(produktyZMakro.get(i)));
+            }
+
+
+
 
 
 
@@ -89,10 +107,23 @@ public class MenadzerPosilkow {
             case DRUGIE_SNIADANIE -> wynik = "drugiego śniadania";
             case OBIAD -> wynik = "obiadu";
             case KOLACJA -> wynik = "kolacji";
-            case DODATKOWE_DANIE -> wynik = "dodatku";
+            case DODATKOWE_DANIE -> wynik = "dodatkowego posiłku";
         }
         return wynik;
     }
+
+    public void menuDodatkowegoDania(){
+        System.out.println("Śniadanie");
+        System.out.println("Drugie śniadanie");
+        System.out.println("--------------   <-[1]");
+        System.out.println("Obiad");
+        System.out.println("--------------   <-[2]");
+        System.out.println("Kolacja");
+        System.out.println("--------------   <-[3]");
+        System.out.print("W którym miejscu zjadłeś dodatkwy posiłek?: ");
+
+    }
+
 
 
 }
