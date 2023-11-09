@@ -29,4 +29,8 @@
         ogarnac jak dzialają wyjątki i złapać ten w metodzie wyborDaniaDoPosilku
         z klasy menadzer posilkow
 
-trze ba dodac zaokroglanie do 2 miejsc po przcinku w pliku z datą
+        trzeba dodac zaokroglanie do 2 miejsc po przcinku w pliku z datą
+
+
+        nie dziala zapisywane do pliku poszczegolnych lini 
+        problem jest taki ze nie ma metody ktora skipuje linie

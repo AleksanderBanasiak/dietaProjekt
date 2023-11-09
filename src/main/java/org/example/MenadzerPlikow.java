@@ -1,9 +1,11 @@
 package org.example;
 
 import java.io.*;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -27,10 +29,20 @@ public class MenadzerPlikow {
             }
         }
     }
-    public void stworzPlikZDanymDniem(Dania dania) throws IOException {
+    public void stworzPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
+
+        int ileSkipnac =0;
+        if(miejsceDodatkowegoPosilku ==0){
+            ileSkipnac =  ileSkipnac(dania.getTypPosilku());
+        }else {
+            ileSkipnac =  ileSkipnacDlaDodatkowegoPosilku(miejsceDodatkowegoPosilku);
+        }
+
+
         MenadzerDania menadzerDania = new MenadzerDania();
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
+        String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
         //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
         if(!file.exists()) {
@@ -42,12 +54,17 @@ public class MenadzerPlikow {
         }
         if (file.canWrite()) {
             try {
-                FileWriter fileWriter = new FileWriter(file);
-                PrintWriter printWriter = new PrintWriter(fileWriter);
-                printWriter.println("-".repeat(8));
+                FileWriter fileWriter = new FileWriter(file, false);
+                PrintWriter printWriter = new PrintWriter(fileWriter, true);
+                printWriter.print(dayOfWeek);
+                printWriter.print(" ");
                 printWriter.println(file.getName());
-                printWriter.println("-".repeat(8));
+
+                for (int i = 0; i < ileSkipnac; i++) {
+                    //printWriter.println();
+                }
                 Produkt pelneMakro = menadzerDania.obliczMarkoZCalegoDania(dania.getSkladDania());
+
                 if(dania.getTypPosilku().equals(TypPosilku.SNIADANIE)) {
                     printWriter.print("Sniadanie: " + dania.getNazwaDania() + "(");
                     for (int i = 0; i < dania.getSkladDania().size(); i++) {
@@ -59,8 +76,6 @@ public class MenadzerPlikow {
                     printWriter.println(")");
                     printWriter.print(pelneMakro.getNazwa() + pelneMakro.getKcal() + " kcal, " + pelneMakro.getBialko() + " białka, "+ pelneMakro.getWeglowodany()+ " węgli, "
                     + pelneMakro.getBlonnik() + " błonnika, "+ pelneMakro.getTluszcze() + " tłuszczy");
-
-
                 }
                 else {
                     printWriter.println();
@@ -86,18 +101,28 @@ public class MenadzerPlikow {
 
     }
 
+
+
     public int ileSkipnac(TypPosilku typPosilku){ // tutaj powinno byc tez gdzie wybralismy danie dodatkowe
 
         int ileSkipnac =0;
 
         switch (typPosilku){
-            case SNIADANIE -> ileSkipnac =3;
+            case SNIADANIE -> ileSkipnac =0;
             case DRUGIE_SNIADANIE ->ileSkipnac =5;
             case OBIAD -> ileSkipnac =6;
             case KOLACJA -> ileSkipnac =2;
-
+            }
+        return ileSkipnac;
+    }
+    public int ileSkipnacDlaDodatkowegoPosilku(int miejsceDodatkowegoPosilku){
+        int ileSkipnac =0;
+        switch (miejsceDodatkowegoPosilku){
+            case 1 -> ileSkipnac = 2;
+            case 2 -> ileSkipnac = 2;
+            case 3 -> ileSkipnac = 2;
+            default -> ileSkipnac = 0;
         }
-
         return ileSkipnac;
     }
 

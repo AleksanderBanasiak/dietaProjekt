@@ -27,9 +27,10 @@ public class MenadzerPosilkow {
 
 
     public void pelenProgram(TypPosilku typPosilku) throws IOException {
+        int miejsceDodatkowegoPosilku = 0;
 
         if(typPosilku == TypPosilku.DODATKOWE_DANIE){
-            wJakimMiejscu();
+             miejsceDodatkowegoPosilku = wJakimMiejscu();
         }
         Dania wybraneDanie = wyborDaniaDoPosilku(typPosilku);
         List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wybraneDanie);
@@ -41,27 +42,21 @@ public class MenadzerPosilkow {
 
 
         //tu powinien byc przekazywane danie
-        menadzerPlikow.stworzPlikZDanymDniem(danieZObliczonymMakro);
+        menadzerPlikow.stworzPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
 
 
 
     }
-    public String wJakimMiejscu() {
+    public int wJakimMiejscu() {
         menuDodatkowegoDania();
         int wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
-        String gdzieBedziePosilek = "";
         while (wyborMiejscaPosilku > 3 || wyborMiejscaPosilku <= 0) {
             System.out.println("Podałeś nieprawidłową wartość!");
             System.out.print("Podaj liczbę jeszcze raz: ");
             wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
         }
-            switch (wyborMiejscaPosilku) {
-                case 1 -> gdzieBedziePosilek = "Dodatkowy posiłek po drugim sniadaniu";
-                case 2 -> gdzieBedziePosilek = "Dodatkowy posiłek po obiedzie";
-                case 3 -> gdzieBedziePosilek = "Dodatkowy posiłek po kolacji";
-                default -> gdzieBedziePosilek = "";
-            }
-        return gdzieBedziePosilek;
+
+        return wyborMiejscaPosilku;
     }
 
     public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) {
