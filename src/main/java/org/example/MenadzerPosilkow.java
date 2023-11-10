@@ -42,7 +42,7 @@ public class MenadzerPosilkow {
 
 
         //tu powinien byc przekazywane danie
-        menadzerPlikow.stworzPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
+        menadzerPlikow.dodajDoPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
 
 
 
@@ -104,6 +104,17 @@ public class MenadzerPosilkow {
             case OBIAD -> wynik = "obiadu";
             case KOLACJA -> wynik = "kolacji";
             case DODATKOWE_DANIE -> wynik = "dodatkowego posiłku";
+        }
+        return wynik;
+    }
+    public String odmianaTypuPosilku2(TypPosilku typPosilku){
+        String wynik="";
+        switch (typPosilku){
+            case SNIADANIE -> wynik = "Śniadanie:";
+            case DRUGIE_SNIADANIE -> wynik = "Drugie śniadanie:";
+            case OBIAD -> wynik = "Obiad:";
+            case KOLACJA -> wynik = "Kolacja:";
+            case DODATKOWE_DANIE -> wynik = "Dodatkowe danie";
         }
         return wynik;
     }

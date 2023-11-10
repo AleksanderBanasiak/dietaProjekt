@@ -3,14 +3,12 @@ package org.example;
 import java.io.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
-import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class MenadzerPlikow {
+
 
     public void zapiszDoPliku(Produkt produkt, File file) {
         if (file.canWrite()) {
@@ -29,14 +27,8 @@ public class MenadzerPlikow {
             }
         }
     }
-    public void stworzPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
 
-        int ileSkipnac =0;
-        if(miejsceDodatkowegoPosilku ==0){
-            ileSkipnac =  ileSkipnac(dania.getTypPosilku());
-        }else {
-            ileSkipnac =  ileSkipnacDlaDodatkowegoPosilku(miejsceDodatkowegoPosilku);
-        }
+    public File zapiszMakroPosilku(Dania dania){
 
 
         MenadzerDania menadzerDania = new MenadzerDania();
@@ -44,7 +36,7 @@ public class MenadzerPlikow {
         LocalDate teraz = LocalDate.now();
         String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
         //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
-        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
+        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MakroZDiety/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
         if(!file.exists()) {
             try {
                 file.createNewFile();
@@ -54,19 +46,98 @@ public class MenadzerPlikow {
         }
         if (file.canWrite()) {
             try {
-                FileWriter fileWriter = new FileWriter(file, false);
+                FileWriter fileWriter = new FileWriter(file, true);
                 PrintWriter printWriter = new PrintWriter(fileWriter, true);
-                printWriter.print(dayOfWeek);
-                printWriter.print(" ");
-                printWriter.println(file.getName());
+                Produkt pelneMakro = menadzerDania.obliczMarkoZCalegoDania(dania.getSkladDania());
+                printWriter.println(pelneMakro.getKcal());
+                printWriter.println(pelneMakro.getBialko());
+                printWriter.println(pelneMakro.getWeglowodany());
+                printWriter.println(pelneMakro.getBlonnik());
+                printWriter.println(pelneMakro.getTluszcze());
+                printWriter.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return file;
+    }
 
-                for (int i = 0; i < ileSkipnac; i++) {
-                    //printWriter.println();
-                }
+
+    public Produkt odczytajZPlikuMakroDlaCalegoDnia(Dania dania) throws FileNotFoundException {
+
+
+        File file = zapiszMakroPosilku(dania);
+
+        Scanner scanner = new Scanner(file);
+
+        double caleKcal =0;
+        double caleBialko=0;
+        double caleWegle=0;
+        double caleBlonnik=0;
+        double caleTluszcze=0;
+
+        while (scanner.hasNext()) {
+            caleKcal += Double.parseDouble(scanner.nextLine());
+            caleBialko += Double.parseDouble(scanner.nextLine());
+            caleWegle += Double.parseDouble(scanner.nextLine());
+            caleBlonnik += Double.parseDouble(scanner.nextLine());
+            caleTluszcze += Double.parseDouble(scanner.nextLine());
+
+        }
+
+        return new Produkt("Makroskładniki z dnia: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
+
+
+    }
+
+
+
+
+
+
+    public void dodajDoPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
+
+        Produkt obliczneMarkoDlaDnia = odczytajZPlikuMakroDlaCalegoDnia(dania);
+
+
+        String  ileSkipnac =  ileSkipnacDlaDodatkowegoPosilku(miejsceDodatkowegoPosilku);
+        MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
+        String posilek = menadzerPosilkow.odmianaTypuPosilku2(dania.getTypPosilku());
+
+        MenadzerDania menadzerDania = new MenadzerDania();
+        DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
+        LocalDate teraz = LocalDate.now();
+        String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
+        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
+        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
+
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        if (file.canWrite()) {
+            try {
+                FileWriter fileWriter = new FileWriter(file, true);
+                PrintWriter printWriter = new PrintWriter(fileWriter, true);
+
+                printWriter.println(obliczneMarkoDlaDnia.getNazwa() + obliczneMarkoDlaDnia.getKcal() + " kcal, " + obliczneMarkoDlaDnia.getBialko() + " białka, "+
+                        obliczneMarkoDlaDnia.getWeglowodany()+ " węgli, " + obliczneMarkoDlaDnia.getBlonnik() + " błonnika, "
+                        + obliczneMarkoDlaDnia.getTluszcze() + " tłuszczy");
+                printWriter.println("-".repeat(40));
+                //tutaj ponny sie wyswietlac makrosy dla calego dnia
+
+               // printWriter.println("-".repeat(40));
+
+                //caly ten zapis powinnien inaczej wygladac
+                // ma yc tutaj zapisywane tylko dane po kolei
+
                 Produkt pelneMakro = menadzerDania.obliczMarkoZCalegoDania(dania.getSkladDania());
 
-                if(dania.getTypPosilku().equals(TypPosilku.SNIADANIE)) {
-                    printWriter.print("Sniadanie: " + dania.getNazwaDania() + "(");
+
+                    printWriter.print(posilek + " "+ileSkipnac +"" + dania.getNazwaDania() + "(");
                     for (int i = 0; i < dania.getSkladDania().size(); i++) {
                             printWriter.print(dania.getSkladDania().get(i).getNazwa());
                         if(i != dania.getSkladDania().size() -1){
@@ -74,13 +145,11 @@ public class MenadzerPlikow {
                         }
                     }
                     printWriter.println(")");
-                    printWriter.print(pelneMakro.getNazwa() + pelneMakro.getKcal() + " kcal, " + pelneMakro.getBialko() + " białka, "+ pelneMakro.getWeglowodany()+ " węgli, "
+                    printWriter.println(pelneMakro.getNazwa() + pelneMakro.getKcal() + " kcal, " + pelneMakro.getBialko() + " białka, "+ pelneMakro.getWeglowodany()+ " węgli, "
                     + pelneMakro.getBlonnik() + " błonnika, "+ pelneMakro.getTluszcze() + " tłuszczy");
-                }
-                else {
-                    printWriter.println();
-                    printWriter.println();
-                }
+                    printWriter.println("-".repeat(40));
+
+
 
                 // tutaj sie to nadpisuje nie wiem czy to powinno tak dzialac
 //                printWriter.println(nazwa.toUpperCase());
@@ -103,25 +172,14 @@ public class MenadzerPlikow {
 
 
 
-    public int ileSkipnac(TypPosilku typPosilku){ // tutaj powinno byc tez gdzie wybralismy danie dodatkowe
 
-        int ileSkipnac =0;
-
-        switch (typPosilku){
-            case SNIADANIE -> ileSkipnac =0;
-            case DRUGIE_SNIADANIE ->ileSkipnac =5;
-            case OBIAD -> ileSkipnac =6;
-            case KOLACJA -> ileSkipnac =2;
-            }
-        return ileSkipnac;
-    }
-    public int ileSkipnacDlaDodatkowegoPosilku(int miejsceDodatkowegoPosilku){
-        int ileSkipnac =0;
+    public String ileSkipnacDlaDodatkowegoPosilku(int miejsceDodatkowegoPosilku){
+        String ileSkipnac = "";
         switch (miejsceDodatkowegoPosilku){
-            case 1 -> ileSkipnac = 2;
-            case 2 -> ileSkipnac = 2;
-            case 3 -> ileSkipnac = 2;
-            default -> ileSkipnac = 0;
+            case 1 -> ileSkipnac = "po drugim sniadaniu: ";
+            case 2 -> ileSkipnac = "po obiedzie: ";
+            case 3 -> ileSkipnac = "po kolacji: ";
+            default -> ileSkipnac = "";
         }
         return ileSkipnac;
     }
@@ -142,7 +200,7 @@ public class MenadzerPlikow {
                 try {
                     FileWriter fileWriter = new FileWriter(file, true);
                     PrintWriter printWriter = new PrintWriter(fileWriter);
-                    printWriter.println(dania.getNazwaDania().toUpperCase());
+                    printWriter.println(dania.getNazwaDania());
                     printWriter.println(dania.typPosilku);
                     for (Produkt produkt : dania.getSkladDania()) {
                         printWriter.println(produkt.getNazwa());
