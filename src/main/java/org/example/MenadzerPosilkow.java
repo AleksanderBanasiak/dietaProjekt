@@ -68,6 +68,7 @@ public class MenadzerPosilkow {
                 System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
                 System.out.print("Podaj gramature: ");
                 int ileGram = Integer.parseInt(scanner.nextLine());
+
                 Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
                 produktyZObliczonymMarko.add(produktZObliczonymMakro);
             }

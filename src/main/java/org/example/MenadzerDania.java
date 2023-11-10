@@ -167,11 +167,12 @@ public class MenadzerDania {
 
     public Produkt obliczMakro(int ileGram, Produkt produkt){
 
-        double kcal = (produkt.getKcal() * ileGram) / 100;
-        double bailko = (produkt.getBialko() * ileGram) / 100;
-        double wegle = (produkt.getWeglowodany() * ileGram) / 100;
-        double blonnik = (produkt.getBlonnik() * ileGram) / 100;
-        double tluszcze = (produkt.getTluszcze() * ileGram) / 100;
+        double kcal = Math.round((produkt.getKcal() * ileGram) / 100);
+        double bailko = Math.round((produkt.getBialko() * ileGram) / 100);
+        double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
+        double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
+        double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
+        System.out.println(kcal);
 
        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
 

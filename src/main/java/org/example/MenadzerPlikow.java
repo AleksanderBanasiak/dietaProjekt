@@ -29,8 +29,6 @@ public class MenadzerPlikow {
     }
 
     public File zapiszMakroPosilku(Dania dania){
-
-
         MenadzerDania menadzerDania = new MenadzerDania();
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
@@ -61,21 +59,14 @@ public class MenadzerPlikow {
         }
         return file;
     }
-
-
     public Produkt odczytajZPlikuMakroDlaCalegoDnia(Dania dania) throws FileNotFoundException {
-
-
         File file = zapiszMakroPosilku(dania);
-
         Scanner scanner = new Scanner(file);
-
         double caleKcal =0;
         double caleBialko=0;
         double caleWegle=0;
         double caleBlonnik=0;
         double caleTluszcze=0;
-
         while (scanner.hasNext()) {
             caleKcal += Double.parseDouble(scanner.nextLine());
             caleBialko += Double.parseDouble(scanner.nextLine());
@@ -84,19 +75,10 @@ public class MenadzerPlikow {
             caleTluszcze += Double.parseDouble(scanner.nextLine());
 
         }
-
         return new Produkt("Makroskładniki z dnia: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
-
-
     }
 
-
-
-
-
-
     public void dodajDoPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
-
         Produkt obliczneMarkoDlaDnia = odczytajZPlikuMakroDlaCalegoDnia(dania);
 
 
@@ -127,9 +109,7 @@ public class MenadzerPlikow {
                         obliczneMarkoDlaDnia.getWeglowodany()+ " węgli, " + obliczneMarkoDlaDnia.getBlonnik() + " błonnika, "
                         + obliczneMarkoDlaDnia.getTluszcze() + " tłuszczy");
                 printWriter.println("-".repeat(40));
-                //tutaj ponny sie wyswietlac makrosy dla calego dnia
 
-               // printWriter.println("-".repeat(40));
 
                 //caly ten zapis powinnien inaczej wygladac
                 // ma yc tutaj zapisywane tylko dane po kolei
@@ -150,25 +130,17 @@ public class MenadzerPlikow {
                     printWriter.println("-".repeat(40));
 
 
-
-                // tutaj sie to nadpisuje nie wiem czy to powinno tak dzialac
-//                printWriter.println(nazwa.toUpperCase());
-//                printWriter.println(typ);
-//                for (Produkt produkt : produkts) {
-//                    printWriter.println(produkt.getNazwa());
-//                    printWriter.println(produkt.getKcal());
-//                    printWriter.println(produkt.getBialko());
-//                    printWriter.println(produkt.getWeglowodany());
-//                    printWriter.println(produkt.getBlonnik());
-//                    printWriter.println(produkt.getTluszcze());
-                //}
                 printWriter.close();
+                fileWriter.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
 
+
     }
+
+
 
 
 
