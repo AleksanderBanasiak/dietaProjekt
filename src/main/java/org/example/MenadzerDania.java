@@ -172,8 +172,6 @@ public class MenadzerDania {
         double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
         double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
         double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
-        System.out.println(kcal);
-
        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
 
     }

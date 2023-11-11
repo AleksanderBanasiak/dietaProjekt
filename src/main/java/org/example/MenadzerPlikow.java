@@ -33,7 +33,6 @@ public class MenadzerPlikow {
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
         String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
-        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MakroZDiety/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
         if(!file.exists()) {
             try {
@@ -78,9 +77,77 @@ public class MenadzerPlikow {
         return new Produkt("Makroskładniki z dnia: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
     }
 
-    public void dodajDoPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
+    public File zapiszMakroZCalegoDnia(Dania dania) throws FileNotFoundException {
+
         Produkt obliczneMarkoDlaDnia = odczytajZPlikuMakroDlaCalegoDnia(dania);
 
+
+        DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
+        LocalDate teraz = LocalDate.now();
+        String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
+        File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MakroZDnia/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
+
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        if (file.canWrite()) {
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                PrintWriter printWriter = new PrintWriter(fileWriter, true);
+
+                printWriter.println(obliczneMarkoDlaDnia.getNazwa() + obliczneMarkoDlaDnia.getKcal() + " kcal, " + obliczneMarkoDlaDnia.getBialko() + " białka, "+
+                        obliczneMarkoDlaDnia.getWeglowodany()+ " węgli, " + obliczneMarkoDlaDnia.getBlonnik() + " błonnika, "
+                        + obliczneMarkoDlaDnia.getTluszcze() + " tłuszczy");
+                printWriter.println("-".repeat(40));
+
+
+                printWriter.close();
+                fileWriter.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return file;
+
+
+    }
+
+
+
+
+
+    public void powielDane(File file1, File file2,String nazwaPliku) throws IOException {
+
+
+
+        Scanner czytajDania = new Scanner(file1);
+        Scanner czytajMakroZDnia = new Scanner(file2);
+
+        File plikKoncowy = new File("/C:/Users/Olek Banasiak/Desktop/Domino/Dieta/" + nazwaPliku+".txt");
+        FileWriter fileWriter = new FileWriter(plikKoncowy);
+        PrintWriter printWriter = new PrintWriter(fileWriter, true);
+
+        while (czytajMakroZDnia.hasNext()){
+            printWriter.println(czytajMakroZDnia.nextLine());
+        }
+        while (czytajDania.hasNext()){
+            printWriter.println(czytajDania.nextLine());
+        }
+        fileWriter.close();
+        printWriter.close();
+
+
+    }
+
+
+
+
+    public void dodajDoPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
+         File file2 =zapiszMakroZCalegoDnia(dania);
 
         String  ileSkipnac =  ileSkipnacDlaDodatkowegoPosilku(miejsceDodatkowegoPosilku);
         MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
@@ -90,7 +157,7 @@ public class MenadzerPlikow {
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
         String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
-        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz));
+        String nazwa =wyswietlDate.format(teraz)+" "+dayOfWeek;
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
 
         if(!file.exists()) {
@@ -104,19 +171,7 @@ public class MenadzerPlikow {
             try {
                 FileWriter fileWriter = new FileWriter(file, true);
                 PrintWriter printWriter = new PrintWriter(fileWriter, true);
-
-                printWriter.println(obliczneMarkoDlaDnia.getNazwa() + obliczneMarkoDlaDnia.getKcal() + " kcal, " + obliczneMarkoDlaDnia.getBialko() + " białka, "+
-                        obliczneMarkoDlaDnia.getWeglowodany()+ " węgli, " + obliczneMarkoDlaDnia.getBlonnik() + " błonnika, "
-                        + obliczneMarkoDlaDnia.getTluszcze() + " tłuszczy");
-                printWriter.println("-".repeat(40));
-
-
-                //caly ten zapis powinnien inaczej wygladac
-                // ma yc tutaj zapisywane tylko dane po kolei
-
                 Produkt pelneMakro = menadzerDania.obliczMarkoZCalegoDania(dania.getSkladDania());
-
-
                     printWriter.print(posilek + " "+ileSkipnac +"" + dania.getNazwaDania() + "(");
                     for (int i = 0; i < dania.getSkladDania().size(); i++) {
                             printWriter.print(dania.getSkladDania().get(i).getNazwa());
@@ -128,14 +183,13 @@ public class MenadzerPlikow {
                     printWriter.println(pelneMakro.getNazwa() + pelneMakro.getKcal() + " kcal, " + pelneMakro.getBialko() + " białka, "+ pelneMakro.getWeglowodany()+ " węgli, "
                     + pelneMakro.getBlonnik() + " błonnika, "+ pelneMakro.getTluszcze() + " tłuszczy");
                     printWriter.println("-".repeat(40));
-
-
                 printWriter.close();
                 fileWriter.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
+        powielDane(file, file2, nazwa);
 
 
     }
@@ -159,7 +213,6 @@ public class MenadzerPlikow {
 
 
     public void stworzPlikZDaniem(Dania dania){
-        //File file = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/"+nazwa);
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/"+dania.getNazwaDania());
         if(!file.exists()) {
             try{
@@ -192,7 +245,6 @@ public class MenadzerPlikow {
 
     public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){
 
-        //File fileNazwy = new File("/C:/Users/olekb/IdeaProjects/dietaProjekt/src/Posilki/");
         File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
         boolean flaga = true;
