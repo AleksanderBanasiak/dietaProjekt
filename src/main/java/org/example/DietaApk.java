@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class DietaApk {
-
     public void run() throws IOException {
         wyswietlDate();
         int wybor;
@@ -15,7 +14,6 @@ public class DietaApk {
         MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
         Scanner scanner = new Scanner(System.in);
         menadzerProduktow.dodajProduktyZPlikuDoListy();
-        //danie.dodajDanieZPlikuDoListy();
         while (true){
             menu();
             wybor = Integer.parseInt(scanner.nextLine());
@@ -37,14 +35,12 @@ public class DietaApk {
             }
         }
     }
-
     public void wyswietlDate(){
         System.out.println("-".repeat(24));
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("   dd/MM/yy HH:mm:ss");
         LocalDateTime teraz = LocalDateTime.now();
         System.out.println(wyswietlDate.format(teraz));
     }
-
     public void menu(){
         System.out.println("-".repeat(24));
         System.out.println("[1] - ŚNIADANIE");
@@ -57,7 +53,4 @@ public class DietaApk {
         System.out.println("[8] - WYJŚCIE Z PROGRAMU");
         System.out.println("-".repeat(24));
     }
-
-
-
 }

@@ -8,13 +8,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenadzerProduktow {
-
     private List<Produkt> produkty = new ArrayList<>();
     File file = new File("produkty.txt");
     public List<Produkt> getProdukty() {
         return produkty;
     }
-
     public void tworzenieProduktu(Scanner scanner) throws IOException {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
         System.out.print("Jak nazywa się twój produkt?: ");
@@ -47,7 +45,6 @@ public class MenadzerProduktow {
         dodajDoListyProduktyZPliku(produkty, file, 0);
     }
     public void dodajDoListyProduktyZPliku(List <Produkt> produkty, File file1, int ilePominac) throws FileNotFoundException {
-
         Scanner scanner = new Scanner(file1);
         boolean flaga = true;
         while (scanner.hasNext()) {
@@ -67,29 +64,16 @@ public class MenadzerProduktow {
             produkty.add(nowyProdukt);
         }
     }
-
-
-    public Produkt wybierzProdukt(int jakiProdukt){
-        return produkty.get(jakiProdukt);
-    }
-
-
     public void wyswietlWszystkieProdukty(){
         int i=0;
         for (Produkt produkt : produkty) {
-
             i++;
             System.out.println("["+i+"] - "+  wypiszProdukt(produkt));
         }
-
-
     }
     public String wypiszProdukt(Produkt produkt){
         return produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
                 + ", węglowodany: " + produkt.getWeglowodany()+ ", błonnik: "+produkt.getBlonnik()
                 + ", tłuszcze: "+produkt.getTluszcze();
     }
-
-
-
 }

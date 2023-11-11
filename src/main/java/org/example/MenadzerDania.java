@@ -23,19 +23,14 @@ public class MenadzerDania {
                 System.out.println("Podałeś złą wartość!");
                 System.out.print("Podaj jeszcze raz: ");
                 jakiTyp = Integer.parseInt(scanner.nextLine());
-
             }
-
             TypPosilku typ = typPosilku(jakiTyp);
             List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
             Dania noweDanie = new Dania(typ, nazwaPosilku, produkts);
             menadzerPlikow.stworzPlikZDaniem(noweDanie);
         }
     }
-
         public List<Produkt> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
-            //tworzenie Listy Dania składanjącego się z obiektów produktów
-
             Scanner scanner = new Scanner(System.in);
             menadzerProduktow.wyswietlWszystkieProdukty();
             System.out.print("Które produkty chcesz dodac: ");
@@ -59,16 +54,6 @@ public class MenadzerDania {
             }
             return listaWybranychProduktow;
         }
-
-
-
-    public void wyswietlListeZWybranymiProduktami(List<Produkt> lista){
-
-        for (int i = 0; i < lista.size(); i++) {
-            System.out.println(lista.get(i).getNazwa());
-        }
-
-    }
     public List<Dania> dodajDanieZPlikuDoListy() throws FileNotFoundException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         List<Dania> danias = new ArrayList<>();
@@ -87,8 +72,6 @@ public class MenadzerDania {
             danias.add(new Dania(t, nazwaPosilku, listaDoPosilku));
         }
         return danias;
-
-
     }
     public void wypiszDanie(Dania dania){
         System.out.print(dania.getNazwaDania());
@@ -103,17 +86,6 @@ public class MenadzerDania {
             }
         }
         System.out.println();
-
-    }
-    public void wypiszDanieWPosilku(Dania dania){
-        System.out.print(dania.getNazwaDania());
-        String[] nazwy =new String[ dania.getSkladDania().size()];
-        for (int i = 0; i <  dania.getSkladDania().size(); i++) {
-            nazwy[i] = dania.getSkladDania().get(i).getNazwa();
-            System.out.println(nazwy[i]);
-        }
-        System.out.println();
-
     }
     public List<Dania> stworzListeZDaniamiDanegoTypu(TypPosilku typPosilku) throws FileNotFoundException {
         MenadzerDania menadzerDania = new MenadzerDania();
@@ -128,9 +100,6 @@ public class MenadzerDania {
         }
         return danias1;
     }
-
-
-
     public void wyswietlDaniaZListy(List<Dania> lista) throws FileNotFoundException {
         MenadzerDania menadzerDania = new MenadzerDania();
         int licznik=0;
@@ -140,7 +109,6 @@ public class MenadzerDania {
                  menadzerDania.wypiszDanie(lista.get(i));
         }
     }
-
     public Produkt obliczMarkoZCalegoDania(List<Produkt> lista){
         double caleKcal =0;
         double caleBialko=0;
@@ -155,25 +123,15 @@ public class MenadzerDania {
             caleBlonnik += lista.get(i).getBlonnik();
             caleTluszcze += lista.get(i).getTluszcze();
         }
-
-
-
         return new Produkt("Makroskładniki dania: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
     }
-
-
-
-
-
     public Produkt obliczMakro(int ileGram, Produkt produkt){
-
         double kcal = Math.round((produkt.getKcal() * ileGram) / 100);
         double bailko = Math.round((produkt.getBialko() * ileGram) / 100);
         double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
         double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
         double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
-
     }
     public TypPosilku typPosilku(int typ){
         switch (typ) {
@@ -202,8 +160,7 @@ public class MenadzerDania {
         System.out.println("[4] - Kolacja");
         System.out.println("[5] - Dodatkowe danie");
     }
-
-    }
+}
 
 
 

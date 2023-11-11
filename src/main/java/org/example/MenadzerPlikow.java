@@ -8,8 +8,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class MenadzerPlikow {
-
-
     public void zapiszDoPliku(Produkt produkt, File file) {
         if (file.canWrite()) {
             try {
@@ -27,7 +25,6 @@ public class MenadzerPlikow {
             }
         }
     }
-
     public File zapiszMakroPosilku(Dania dania){
         MenadzerDania menadzerDania = new MenadzerDania();
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
@@ -72,21 +69,15 @@ public class MenadzerPlikow {
             caleWegle += Double.parseDouble(scanner.nextLine());
             caleBlonnik += Double.parseDouble(scanner.nextLine());
             caleTluszcze += Double.parseDouble(scanner.nextLine());
-
         }
         return new Produkt("Makroskładniki z dnia: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
     }
-
     public File zapiszMakroZCalegoDnia(Dania dania) throws FileNotFoundException {
-
         Produkt obliczneMarkoDlaDnia = odczytajZPlikuMakroDlaCalegoDnia(dania);
-
-
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
         String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MakroZDnia/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
-
         if(!file.exists()) {
             try {
                 file.createNewFile();
@@ -103,8 +94,6 @@ public class MenadzerPlikow {
                         obliczneMarkoDlaDnia.getWeglowodany()+ " węgli, " + obliczneMarkoDlaDnia.getBlonnik() + " błonnika, "
                         + obliczneMarkoDlaDnia.getTluszcze() + " tłuszczy");
                 printWriter.println("-".repeat(40));
-
-
                 printWriter.close();
                 fileWriter.close();
             } catch (Exception e) {
@@ -112,25 +101,13 @@ public class MenadzerPlikow {
             }
         }
         return file;
-
-
     }
-
-
-
-
-
     public void powielDane(File file1, File file2,String nazwaPliku) throws IOException {
-
-
-
         Scanner czytajDania = new Scanner(file1);
         Scanner czytajMakroZDnia = new Scanner(file2);
-
         File plikKoncowy = new File("/C:/Users/Olek Banasiak/Desktop/Domino/Dieta/" + nazwaPliku+".txt");
         FileWriter fileWriter = new FileWriter(plikKoncowy);
         PrintWriter printWriter = new PrintWriter(fileWriter, true);
-
         while (czytajMakroZDnia.hasNext()){
             printWriter.println(czytajMakroZDnia.nextLine());
         }
@@ -139,27 +116,18 @@ public class MenadzerPlikow {
         }
         fileWriter.close();
         printWriter.close();
-
-
     }
-
-
-
-
     public void dodajDoPlikZDanymDniem(Dania dania, int miejsceDodatkowegoPosilku) throws IOException {
          File file2 =zapiszMakroZCalegoDnia(dania);
-
         String  ileSkipnac =  ileSkipnacDlaDodatkowegoPosilku(miejsceDodatkowegoPosilku);
         MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
         String posilek = menadzerPosilkow.odmianaTypuPosilku2(dania.getTypPosilku());
-
         MenadzerDania menadzerDania = new MenadzerDania();
         DateTimeFormatter wyswietlDate = DateTimeFormatter.ofPattern("dd-MM-yy");
         LocalDate teraz = LocalDate.now();
         String dayOfWeek = DayOfWeek.from(teraz).toString().toLowerCase();
         String nazwa =wyswietlDate.format(teraz)+" "+dayOfWeek;
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/MojaDieta/" +wyswietlDate.format(teraz)+" "+dayOfWeek);
-
         if(!file.exists()) {
             try {
                 file.createNewFile();
@@ -190,15 +158,7 @@ public class MenadzerPlikow {
             }
         }
         powielDane(file, file2, nazwa);
-
-
     }
-
-
-
-
-
-
     public String ileSkipnacDlaDodatkowegoPosilku(int miejsceDodatkowegoPosilku){
         String ileSkipnac = "";
         switch (miejsceDodatkowegoPosilku){
@@ -209,9 +169,6 @@ public class MenadzerPlikow {
         }
         return ileSkipnac;
     }
-
-
-
     public void stworzPlikZDaniem(Dania dania){
         File file = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/"+dania.getNazwaDania());
         if(!file.exists()) {
@@ -241,10 +198,7 @@ public class MenadzerPlikow {
                 }
             }
     }
-
-
     public boolean sprawdzCzyIstniejeTakiPlik(String nazwa){
-
         File fileNazwy = new File("/C:/IntelliJNauka/dietaProjekt/src/Posilki/");
         String[] nazwyPlikow  = fileNazwy.list();
         boolean flaga = true;
@@ -255,8 +209,6 @@ public class MenadzerPlikow {
         }
         return flaga;
     }
-
-
     public boolean sprawdzCzyJestWPilku(String nazwa, File file) throws FileNotFoundException {
 
         int licznik = 0;

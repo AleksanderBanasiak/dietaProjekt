@@ -12,40 +12,18 @@ public class MenadzerPosilkow {
     MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
     Scanner scanner = new Scanner(System.in);
 
-
-    // wyswetlic dania dostepne dla wybranego posilku
-    //po wybraniu dania ma sie wyswietlic pierwszy produkt
-    // po zapisnie gramatury ma sie wyswietlic nastepny produkt
-    //po zapisaniu gramatury wszyustkich produktow
-    // ma sie wyswietlic komunikat z makroskladnikami
-
-    // nastepuje zapis dania do pliu o nazwie daty
-
-
-
-    //dodac zabezpieczenie zeby wyskoczyl jakis komunikat gdy nie ma dań dal danego poislku
-
-
     public void pelenProgram(TypPosilku typPosilku) throws IOException {
         int miejsceDodatkowegoPosilku = 0;
-
         if(typPosilku == TypPosilku.DODATKOWE_DANIE){
              miejsceDodatkowegoPosilku = wJakimMiejscu();
         }
         Dania wybraneDanie = wyborDaniaDoPosilku(typPosilku);
         List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wybraneDanie);
-
         for (Produkt produkt : produktyZMakro) {
             System.out.println(menadzerProduktow.wypiszProdukt(produkt));
         }
         Dania danieZObliczonymMakro = new Dania(wybraneDanie.typPosilku,wybraneDanie.getNazwaDania(), produktyZMakro);
-
-
-        //tu powinien byc przekazywane danie
         menadzerPlikow.dodajDoPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
-
-
-
     }
     public int wJakimMiejscu() {
         menuDodatkowegoDania();
@@ -55,7 +33,6 @@ public class MenadzerPosilkow {
             System.out.print("Podaj liczbę jeszcze raz: ");
             wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
         }
-
         return wyborMiejscaPosilku;
     }
 
@@ -74,8 +51,6 @@ public class MenadzerPosilkow {
             }
             return produktyZObliczonymMarko;
     }
-
-
     public Dania wyborDaniaDoPosilku(TypPosilku typPosilku) throws FileNotFoundException {
         List<Dania> wybraneDania = menadzerDania.stworzListeZDaniamiDanegoTypu(typPosilku);
         if(wybraneDania.size() == 0){
@@ -93,10 +68,7 @@ public class MenadzerPosilkow {
             wyborDania--;
             return wybraneDania.get(wyborDania);
         }
-
     }
-
-
     public String odmianaTypuPosilku(TypPosilku typPosilku){
         String wynik="";
         switch (typPosilku){
@@ -119,7 +91,6 @@ public class MenadzerPosilkow {
         }
         return wynik;
     }
-
     public void menuDodatkowegoDania(){
         System.out.println("Śniadanie");
         System.out.println("Drugie śniadanie");
@@ -130,9 +101,4 @@ public class MenadzerPosilkow {
         System.out.println("--------------   <-[3]");
         System.out.print("W którym miejscu zjadłeś dodatkwy posiłek?: ");
     }
-
-
-
-
-
 }
