@@ -1,4 +1,7 @@
+/*
 package org.example;
+
+import org.example.MenadzerProduktow;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -54,3 +57,5 @@ public class DietaApk {
         System.out.println("-".repeat(24));
     }
 }
+
+ */

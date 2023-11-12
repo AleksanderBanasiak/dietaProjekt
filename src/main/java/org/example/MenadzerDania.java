@@ -1,4 +1,8 @@
+/*
 package org.example;
+
+import org.example.MenadzerProduktow;
+import org.example.TypPosilku;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -162,6 +166,8 @@ public class MenadzerDania {
     }
 }
 
+
+ */
 
 
 

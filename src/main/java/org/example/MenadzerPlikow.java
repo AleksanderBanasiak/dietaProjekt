@@ -1,3 +1,4 @@
+/*
 package org.example;
 
 import java.io.*;
@@ -223,4 +224,5 @@ public class MenadzerPlikow {
         return true;
     }
 }
+ */
 

@@ -1,4 +1,8 @@
+/*
 package org.example;
+
+import org.example.Dania;
+import org.example.TypPosilku;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -102,3 +106,6 @@ public class MenadzerPosilkow {
         System.out.print("W którym miejscu zjadłeś dodatkwy posiłek?: ");
     }
 }
+
+
+ */

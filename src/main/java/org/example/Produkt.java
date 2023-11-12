@@ -8,11 +8,11 @@ public class Produkt{
     private double weglowodany;
     private double blonnik;
     private double tluszcze;
-    private static int nextId=1;
 
-    public Produkt(String nazwa, double kcal, double bialko, double weglowodany, double blonnik, double tluszcze){
-        this.id = nextId;
-        nextId++;
+
+
+    public Produkt(int id, String nazwa, double kcal, double bialko, double weglowodany, double blonnik, double tluszcze){
+        this.id = id;
         this.nazwa = nazwa;
         this.kcal = kcal;
         this.bialko = bialko;

@@ -1,3 +1,4 @@
+
 package org.example;
 
 import java.io.File;
@@ -13,6 +14,7 @@ public class MenadzerProduktow {
     public List<Produkt> getProdukty() {
         return produkty;
     }
+    /*
     public void tworzenieProduktu(Scanner scanner) throws IOException {
         MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
         System.out.print("Jak nazywa się twój produkt?: ");
@@ -44,6 +46,8 @@ public class MenadzerProduktow {
         }
         }
     }
+
+
     public void dodajProduktyZPlikuDoListy() throws FileNotFoundException {
         dodajDoListyProduktyZPliku(produkty, file, 0);
     }
@@ -74,8 +78,10 @@ public class MenadzerProduktow {
             System.out.println("["+i+"] - "+  wypiszProdukt(produkt));
         }
     }
+    */
+
     public String wypiszProdukt(Produkt produkt){
-        return produkt.getNazwa().toUpperCase()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
+        return "["+produkt.getId()+"] - "+ produkt.getNazwa()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
                 + ", węglowodany: " + produkt.getWeglowodany()+ ", błonnik: "+produkt.getBlonnik()
                 + ", tłuszcze: "+produkt.getTluszcze();
     }
