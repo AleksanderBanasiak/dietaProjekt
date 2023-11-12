@@ -35,6 +35,9 @@ public class MenadzerProduktow {
         if(kcal <0 || bialko < 0 || weglowodany <0 || blonnik <0 || tluszcze <0){
             System.out.println("Takiego produktu nie można dodać ponieważ jeden z makroskładników jest mniejszy od zera!");
         }else {
+
+
+
             Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
             menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
             produkty.add(nowyProdukt);
