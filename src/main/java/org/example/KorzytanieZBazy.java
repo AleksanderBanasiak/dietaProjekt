@@ -13,7 +13,7 @@ public class KorzytanieZBazy {
         }
 
 
-        List<Produkt> produkty = bazaDanych.wszystkieProdukty();
+        List<Produkt> produkty = bazaDanych.wszystkieProdukty("produkty");
         if(produkty ==null){
             System.out.println("Nie ma produktow do wyswietlenia");
             return;

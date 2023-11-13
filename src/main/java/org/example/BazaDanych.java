@@ -29,11 +29,17 @@ public class BazaDanych {
     public static final int INDEX_BLONNIK =6;
     public static final int INDEX_TLUSZCZE =7;
 
+    public static final String wyswietlWszystkoZDanejTabeli = "SELECT * FROM ?";
+
     private Connection con;
+
+    private PreparedStatement wybierzWsztkoZDanejTabeli;
 
     public boolean open(){
         try{
             con = DriverManager.getConnection(CONNECTION_STRING,USER,PASSWORD );
+            wybierzWsztkoZDanejTabeli =con.prepareStatement(wyswietlWszystkoZDanejTabeli);
+
             return true;
         }catch (SQLException e){
             System.out.println("Nie można się połączyć z bazą danych: "+e.getMessage());
@@ -42,6 +48,9 @@ public class BazaDanych {
     }
     public void close(){
         try{
+            if(wybierzWsztkoZDanejTabeli != null){
+                wybierzWsztkoZDanejTabeli.close();
+            }
             if(con != null){
                 con.close();
             }
@@ -50,10 +59,13 @@ public class BazaDanych {
         }
     }
 
-    public List<Produkt> wszystkieProdukty(){
+    public List<Produkt> wszystkieProdukty(String tabela){
 
-        try(Statement statement = con.createStatement();
-            ResultSet result =statement.executeQuery("SELECT * FROM produkty")){
+        try{
+            wybierzWsztkoZDanejTabeli.setString(1, tabela);
+
+            ResultSet result = wybierzWsztkoZDanejTabeli.executeQuery();
+
             List<Produkt> produkts = new ArrayList<>();
             while (result.next()){
 
