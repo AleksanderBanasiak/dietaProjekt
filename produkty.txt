@@ -148,3 +148,27 @@ Mięso mielone wieprzowe
 0.0
 0.0
 20.0
+Piratki z kurczaka
+104.0
+22.0
+1.7
+0.0
+1.0
+Twaróg chudy
+82.0
+17.0
+3.5
+0.0
+0.0
+Cukier wanilionowy
+397.0
+0.0
+99.3
+0.0
+0.0
+Kisiel o smaku owoców leśnych
+55.0
+0.0
+14.0
+0.0
+0.0
