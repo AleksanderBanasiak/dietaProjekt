@@ -13,9 +13,10 @@ public class KorzytanieZBazy {
             System.out.println("Nie można otworzyć bazy");
             return;
         }
-//
-//        Scanner scanner = new Scanner(System.in);
-//        String cos = scanner.nextLine();
+
+        Scanner scanner = new Scanner(System.in);
+        String cos = scanner.nextLine();
+//       // List<Produkt> produkty = bazaDanych.wyswietlWszyskieProdukty();
 //        List<Produkt> produkty = bazaDanych.wyswietlProdukty(cos);
 //                if(produkty ==null){
 //            System.out.println("Nie ma produktow do wyswietlenia");
@@ -27,7 +28,7 @@ public class KorzytanieZBazy {
 //        }
 
 
-        bazaDanych.insertProdukty("huj");
+        bazaDanych.insertTest(cos);
 
 
 
