@@ -12,6 +12,7 @@ public class BazaDanych {
     public static final String PASSWORD ="admin";
     //tutaj beda odniesienia do kolumn i tabel w bazie
     public static final String TABLE_PRODUKT ="produkty";
+    public static final String TABLE_TEST ="test";
 
     public static final String COLUMN_IDPRODUKTY ="idprodukty";
 
@@ -29,16 +30,28 @@ public class BazaDanych {
     public static final int INDEX_BLONNIK =6;
     public static final int INDEX_TLUSZCZE =7;
 
-    public static final String wyswietlWszystkoZDanejTabeli = "SELECT * FROM ?";
+
+    public static final String KWERENDA_PRODUKTY = "SELECT " +COLUMN_NAZWAPRODUKTOW+ " FROM "+TABLE_PRODUKT+ " WHERE "+ COLUMN_NAZWAPRODUKTOW+ " = ?";
+
+    public static final String wyswietlWszystkoZDanejTabeli = " SELECT * FROM produkty WHERE " + INDEX_NAZWAPRODUKTOW +" = ?";
+    //public static final String INSERT_PRODUKT = "INSERT INTO " + TABLE_PRODUKT + "VALUES (" +COLUMN_IDPRODUKTY +", " +
+      //      ""+COLUMN_NAZWAPRODUKTOW +", "+COLUMN_KCAL+", "+COLUMN_BIALKO +", " +", "+COLUMN_WEGLOWODANY +", "+COLUMN_BLONNIK +", "+COLUMN_TLUSZCZE +")";
+    public static final String INSERT_PRODUKT = "INSERT INTO " + TABLE_TEST + "VALUES (?)";
+
+
 
     private Connection con;
 
     private PreparedStatement wybierzWsztkoZDanejTabeli;
+    private PreparedStatement insertIntoProdukt;
+    private PreparedStatement kwerendaProdukt;
 
     public boolean open(){
         try{
             con = DriverManager.getConnection(CONNECTION_STRING,USER,PASSWORD );
             wybierzWsztkoZDanejTabeli =con.prepareStatement(wyswietlWszystkoZDanejTabeli);
+            insertIntoProdukt = con.prepareStatement(INSERT_PRODUKT, Statement.RETURN_GENERATED_KEYS);
+            kwerendaProdukt = con.prepareStatement(KWERENDA_PRODUKTY);
 
             return true;
         }catch (SQLException e){
@@ -51,6 +64,13 @@ public class BazaDanych {
             if(wybierzWsztkoZDanejTabeli != null){
                 wybierzWsztkoZDanejTabeli.close();
             }
+            if(insertIntoProdukt !=null){
+                insertIntoProdukt.close();
+            }
+            if(kwerendaProdukt != null ){
+                kwerendaProdukt.close();
+            }
+
             if(con != null){
                 con.close();
             }
@@ -59,13 +79,13 @@ public class BazaDanych {
         }
     }
 
-    public List<Produkt> wszystkieProdukty(String tabela){
+    public List<Produkt> wyswietlProdukty(String tabela){
 
         try{
             wybierzWsztkoZDanejTabeli.setString(1, tabela);
 
             ResultSet result = wybierzWsztkoZDanejTabeli.executeQuery();
-
+            result.getString(1);
             List<Produkt> produkts = new ArrayList<>();
             while (result.next()){
 
@@ -86,18 +106,34 @@ public class BazaDanych {
         }
     }
 
-    public void dodajDoBazyProdukt(String nazwa, double kcal, double bialko, double wegle, double blonnik, double tluszcze){
-        //INSERT INTO produkty values (2, 'muj', 122.1, 3.2, 41.2, 93.9 , 2);
-        //"INSERT INTO "+ TABLE_PRODUKT +" VALUES ("'test3' , 123, 'gg@email.com')");
 
-        //ResultSet result =statement.executeQuery("SELECT * FROM produkty")
+    public int insertProdukty(String name) throws SQLException{
 
-        StringBuilder sb = new StringBuilder("INSERT INTO ");
-        sb.append(TABLE_PRODUKT);
-        sb.append(" VALUES (");
-        // id
+        kwerendaProdukt.setString(1, name);
+        ResultSet resultSet = kwerendaProdukt.executeQuery();
 
+        if(resultSet.next()){
+            return resultSet.getInt(1);
+        }else {
+            insertIntoProdukt.setString(1, name);
+            int sprawdzoneWiersze = insertIntoProdukt.executeUpdate();
+
+            if(sprawdzoneWiersze != 1){
+                throw new SQLException("nie można dodać produktu");
+            }
+
+            ResultSet wygenerowanyKlucz = insertIntoProdukt.getGeneratedKeys();
+            if(wygenerowanyKlucz.next()){
+                return wygenerowanyKlucz.getInt(1);
+            }else{
+                throw new SQLException("nie można pobrac id produktu");
+            }
+
+        }
 
     }
+
+
+
 
 }

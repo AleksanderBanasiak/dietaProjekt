@@ -33,6 +33,7 @@ public class Main {
             Statement statement = con.createStatement();
            // statement.execute("DROP TABLE IF EXISTS " + TABLE_COS);
             statement.execute("CREATE TABLE IF NOT EXISTS "+ TABLE_COS +"("+COLUMN_NAME+" TEXT," +COLUMN_PHONE+" INTEGER,"+ COLUMN_EMAIL +" TEXT"+ ")");
+            statement.execute("CREATE TABLE IF NOT EXISTS "+ "test" +"("+"id"+" INTEGER,"+ "name" +" TEXT"+ ")");
 
             insertCos(statement,"test4" , 321, "ee@email.com");
             insertCos(statement,"test5" , 321, "ee@email.com");
