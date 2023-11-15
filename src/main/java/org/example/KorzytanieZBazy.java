@@ -9,31 +9,49 @@ public class KorzytanieZBazy {
     public static void main(String[] args) throws SQLException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         BazaDanych bazaDanych = new BazaDanych();
-        if(!bazaDanych.open()){
-            System.out.println("Nie można otworzyć bazy");
+        ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
+
+        if(!zapytaniaDoBazy.open()){
+            System.out.println("Nie można otworzyć bazy danych");
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
-        String cos = scanner.nextLine();
-//       // List<Produkt> produkty = bazaDanych.wyswietlWszyskieProdukty();
-//        List<Produkt> produkty = bazaDanych.wyswietlProdukty(cos);
-//                if(produkty ==null){
+        //zapytanie 1 wyswietla wszyskie produkty (dziala)
+//        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWyszyskieProdukty();
+//        if(produkty ==null){
 //            System.out.println("Nie ma produktow do wyswietlenia");
 //            return;
 //        }
-//
 //        for (Produkt produkt : produkty){
 //            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
 //        }
 
-
-        bazaDanych.insertTest(cos);
-
-
+       //  zapytanie 2 dodaje produkt do bazy plus zapytanie o nastepne id
+        //  zapytaniaDoBazy.insertIntoProdukt( "test2", 2.2, 12.2, 9.9, 6.6, 5.5);
 
 
-        bazaDanych.close();
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Podaj nazwe: ");
+//        String cos = scanner.nextLine();
+//        System.out.print("Podaj kcal: ");
+//        double cos2 = scanner.nextDouble();
+//        List<Produkt> produkty = zapytaniaDoBazy.podwojneZapytanieSelect(cos, cos2);
+//        if(produkty ==null){
+//            System.out.println("Nie ma produktow do wyswietlenia");
+//            return;
+//        }
+//        for (Produkt produkt : produkty){
+//            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
+//        }
+
+//         int w =zapytaniaDoBazy.pobierzOstatnieID();
+//        System.out.println(w);
+
+
+
+
+
+        zapytaniaDoBazy.close();
 
     }
 
