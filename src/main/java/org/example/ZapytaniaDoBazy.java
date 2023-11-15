@@ -49,6 +49,9 @@ public class ZapytaniaDoBazy {
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
             + " = ?";
 
+public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
+        " VALUES (?, ?)";
+
 
 
 
@@ -58,32 +61,29 @@ public class ZapytaniaDoBazy {
     private PreparedStatement insertIntoProdukt;
 
     private PreparedStatement allProductsByIdDania;
+    private PreparedStatement addProductsToDanie;
 
 
 
 
     public boolean open(){
-
-
         try{
             con = DriverManager.getConnection(URL, USER, PASSWORD);
             prepereTest = con.prepareStatement(QUERY_TEST_PREPERE);
             insertIntoProdukt = con.prepareStatement(QUERY_INSERT_PRODUKT);
             allProductsByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_BY_ID_DANIA);
+            addProductsToDanie = con.prepareStatement(QUERY_ADD_PRODUCTS_TO_DANIE);
 
 
 
 
 
             return true;
-
         }catch (SQLException e){
             System.out.println("Nie można się połączyć z bazą danych " + e.getMessage());
             return false;
         }
     }
-
-
     public void close(){
         try{
             if(prepereTest != null){
@@ -104,7 +104,6 @@ public class ZapytaniaDoBazy {
             System.out.println("Nie można zamknąć bazy danych "+e.getMessage());
         }
     }
-
     public List<Produkt> wyswietlWyszyskieProdukty(){
         List<Produkt> wszyskieProdukty = new ArrayList<>();
         try(Statement statement = con.createStatement();
@@ -125,7 +124,6 @@ public class ZapytaniaDoBazy {
             System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
             return null;
         }
-
     }
     public int pobierzOstatnieID(){
         int ostatnieID =0;
@@ -142,9 +140,7 @@ public class ZapytaniaDoBazy {
         return ostatnieID;
     }
     public void insertIntoProdukt(String name, double kacl, double bialko, double wegle, double blonnik, double tluszcze){
-
         int id = pobierzOstatnieID();
-
         try {
             insertIntoProdukt.setInt(1, id);
             insertIntoProdukt.setString(2, name);
@@ -158,7 +154,6 @@ public class ZapytaniaDoBazy {
             System.out.println("Nie można dodać produktu do bazy "+e.getMessage() );
         }
     }
-
     public List<Produkt> wyswietlWszystkieProduktyZDanegoDania(int id){
         try{
             allProductsByIdDania.setInt(1, id);
@@ -180,6 +175,17 @@ public class ZapytaniaDoBazy {
         }catch (SQLException e ){
             System.out.println("Nie można wyświetlić produktów z danego dania");
             return null;
+        }
+    }
+
+
+    public void dodajProduktyDoDania(int idProduktu, int idDania){
+        try {
+            addProductsToDanie.setInt(1, idProduktu);
+            addProductsToDanie.setInt(2, idDania);
+            addProductsToDanie.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
         }
     }
 

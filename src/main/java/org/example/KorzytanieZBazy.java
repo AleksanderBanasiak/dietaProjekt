@@ -30,6 +30,19 @@ public class KorzytanieZBazy {
         //  zapytaniaDoBazy.insertIntoProdukt( "test2", 2.2, 12.2, 9.9, 6.6, 5.5);
 
 
+        // zapytanie 3 zwraca produkty z danego dania B)
+//        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(id);
+//        if(produkty ==null){
+//            System.out.println("Nie ma produktow do wyswietlenia");
+//            return;
+//        }
+//        for (Produkt produkt : produkty){
+//            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
+//        }
+        // zapytanie 4 dodanie do produkty_has_danie id danie i id produku
+        //zapytaniaDoBazy.dodajProduktyDoDania(id1, id2);
+
+
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.print("Podaj nazwe: ");
 //        String cos = scanner.nextLine();
@@ -47,17 +60,20 @@ public class KorzytanieZBazy {
 //         int w =zapytaniaDoBazy.pobierzOstatnieID();
 //        System.out.println(w);
 
-        Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
 
-        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(id);
-        if(produkty ==null){
-            System.out.println("Nie ma produktow do wyswietlenia");
-            return;
-        }
-        for (Produkt produkt : produkty){
-            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
-        }
+
+
+
+//
+//        Scanner scanner = new Scanner(System.in);
+//        int id1 = scanner.nextInt();
+//        int id2 = scanner.nextInt();
+
+
+
+
+
+
 
 
 
