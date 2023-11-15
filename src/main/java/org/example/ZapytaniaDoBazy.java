@@ -6,11 +6,16 @@ import java.util.List;
 
 public class ZapytaniaDoBazy {
 
+
+
     public static final String URL = "jdbc:mysql://localhost:3306/bazadieta";
     public static final String USER = "root";
     public static final String PASSWORD = "admin";
 
     public static final String TABLE_PRODUKT = "produkty";
+    public static final String TABLE_DANIA_HAS_PRODUKTY = "produkty_has_dania";
+    public static final String COLUMN_PRODUKTY_IDPODUKTY = "produkty_idprodukty";
+    public static final String COLUMN_PRODUKTY_IDDANIA = "dania_iddania";
 
     public static final String COLUMN_IDPRODUKTY = "idprodukty";
     public static final String COLUMN_NAZWAPRODUKTOW = "nazwaProduktow";
@@ -40,6 +45,10 @@ public class ZapytaniaDoBazy {
     //SELECT idprodukty FROM bazadieta.produkty order by idprodukty DESC limit 1;
     public static final String LAST_ID = "SELECT "+ COLUMN_IDPRODUKTY + " FROM " +TABLE_PRODUKT + " ORDER BY " + COLUMN_IDPRODUKTY + " DESC LIMIT 1";
 
+    public static final String QUERY_ALL_PRODUCTS_BY_ID_DANIA = "SELECT * FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
+            COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
+            + " = ?";
+
 
 
 
@@ -47,6 +56,8 @@ public class ZapytaniaDoBazy {
 
     private PreparedStatement prepereTest;
     private PreparedStatement insertIntoProdukt;
+
+    private PreparedStatement allProductsByIdDania;
 
 
 
@@ -58,6 +69,7 @@ public class ZapytaniaDoBazy {
             con = DriverManager.getConnection(URL, USER, PASSWORD);
             prepereTest = con.prepareStatement(QUERY_TEST_PREPERE);
             insertIntoProdukt = con.prepareStatement(QUERY_INSERT_PRODUKT);
+            allProductsByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_BY_ID_DANIA);
 
 
 
@@ -79,6 +91,9 @@ public class ZapytaniaDoBazy {
             }
             if(insertIntoProdukt != null){
                 insertIntoProdukt.close();
+            }
+            if(allProductsByIdDania != null){
+                allProductsByIdDania.close();
             }
 
 
@@ -143,6 +158,32 @@ public class ZapytaniaDoBazy {
             System.out.println("Nie można dodać produktu do bazy "+e.getMessage() );
         }
     }
+
+    public List<Produkt> wyswietlWszystkieProduktyZDanegoDania(int id){
+        try{
+            allProductsByIdDania.setInt(1, id);
+            ResultSet result = allProductsByIdDania.executeQuery();
+            List<Produkt> wszyskieProdukty = new ArrayList<>();
+            while (result.next()){
+
+                Produkt produkt = new Produkt(
+                        result.getInt(1),
+                        result.getString(2),
+                        result.getDouble(3),
+                        result.getDouble(4),
+                        result.getDouble(5),
+                        result.getDouble(6),
+                        result.getDouble(7));
+                wszyskieProdukty.add(produkt);
+            }
+            return wszyskieProdukty;
+        }catch (SQLException e ){
+            System.out.println("Nie można wyświetlić produktów z danego dania");
+            return null;
+        }
+    }
+
+
 
 
 

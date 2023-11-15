@@ -47,6 +47,18 @@ public class KorzytanieZBazy {
 //         int w =zapytaniaDoBazy.pobierzOstatnieID();
 //        System.out.println(w);
 
+        Scanner scanner = new Scanner(System.in);
+        int id = scanner.nextInt();
+
+        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(id);
+        if(produkty ==null){
+            System.out.println("Nie ma produktow do wyswietlenia");
+            return;
+        }
+        for (Produkt produkt : produkty){
+            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
+        }
+
 
 
 
