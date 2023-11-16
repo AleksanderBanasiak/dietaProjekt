@@ -2,6 +2,7 @@ package org.example;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class KorzytanieZBazy {
@@ -10,7 +11,6 @@ public class KorzytanieZBazy {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         BazaDanych bazaDanych = new BazaDanych();
         ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
-
         if(!zapytaniaDoBazy.open()){
             System.out.println("Nie można otworzyć bazy danych");
             return;
@@ -61,8 +61,19 @@ public class KorzytanieZBazy {
 //        System.out.println(w);
 
 
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Podaj nazwe: ");
+        String sprawdzNazwe = scanner.nextLine();
+
+        List<String> nazwy = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktow();
 
 
+        for (String s : nazwy) {
+            if(Objects.equals(sprawdzNazwe, s)){
+                System.out.println("Taki produkt jest już w bazie");
+            }
+            System.out.println(s);
+        }
 
 //
 //        Scanner scanner = new Scanner(System.in);
@@ -70,17 +81,19 @@ public class KorzytanieZBazy {
 //        int id2 = scanner.nextInt();
 
 
-
-
-
-
-
-
-
-
-
         zapytaniaDoBazy.close();
 
+    }
+
+    public boolean sprawdzCzyJestWBazie(String nazwa, ZapytaniaDoBazy zapytaniaDoBazy){
+        boolean flaga = true;
+        List<String> nazwy = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktow();
+        for (String s : nazwy) {
+            if(Objects.equals(nazwa, s)){
+                return false;
+            }
+        }
+        return flaga;
     }
 
 }

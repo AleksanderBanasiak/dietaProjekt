@@ -14,12 +14,19 @@ public class MenadzerProduktow {
     public List<Produkt> getProdukty() {
         return produkty;
     }
-    /*
+    ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
+    KorzytanieZBazy korzytanieZBazy = new KorzytanieZBazy();
+
+
+
     public void tworzenieProduktu(Scanner scanner) throws IOException {
-        MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
+        if(!zapytaniaDoBazy.open()){
+            System.out.println("Nie można otworzyć bazy danych");
+            return;
+        }
         System.out.print("Jak nazywa się twój produkt?: ");
         String nazwa = scanner.nextLine();
-        boolean flaga = menadzerPlikow.sprawdzCzyJestWPilku(nazwa, file);
+        boolean flaga = korzytanieZBazy.sprawdzCzyJestWBazie(nazwa, zapytaniaDoBazy);
         if(!flaga){
             System.out.println("Taki produkt juz istnieje!");
         }else {
@@ -33,21 +40,20 @@ public class MenadzerProduktow {
         double blonnik = Double.parseDouble(scanner.nextLine());
         System.out.print("Ile tłuszczy na 100g ma twój produkt?: ");
         double tluszcze = Double.parseDouble(scanner.nextLine());
-
         if(kcal <0 || bialko < 0 || weglowodany <0 || blonnik <0 || tluszcze <0){
             System.out.println("Takiego produktu nie można dodać ponieważ jeden z makroskładników jest mniejszy od zera!");
         }else {
+            zapytaniaDoBazy.insertIntoProdukt( nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
 
 
-
-            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
-            menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
-            produkty.add(nowyProdukt);
+//            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
+//            menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
+//            produkty.add(nowyProdukt);
         }
         }
     }
 
-
+/*
     public void dodajProduktyZPlikuDoListy() throws FileNotFoundException {
         dodajDoListyProduktyZPliku(produkty, file, 0);
     }
@@ -78,7 +84,11 @@ public class MenadzerProduktow {
             System.out.println("["+i+"] - "+  wypiszProdukt(produkt));
         }
     }
-    */
+
+ */
+
+
+
 
     public String wypiszProdukt(Produkt produkt){
         return "["+produkt.getId()+"] - "+ produkt.getNazwa()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()

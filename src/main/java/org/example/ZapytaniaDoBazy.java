@@ -49,14 +49,14 @@ public class ZapytaniaDoBazy {
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
             + " = ?";
 
-public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
+    public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
+    public static final String QUERY_ALL_PRODUKTS_NAMES ="SELECT "+ COLUMN_NAZWAPRODUKTOW + " FROM "+ TABLE_PRODUKT;
 
 
 
 
     private Connection con;
-
     private PreparedStatement prepereTest;
     private PreparedStatement insertIntoProdukt;
 
@@ -176,6 +176,23 @@ public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DA
             System.out.println("Nie można wyświetlić produktów z danego dania");
             return null;
         }
+    }
+
+    public List<String> wyswietlWszystkieNazwyProduktow() {
+
+        List<String> wszyskieProdukty = new ArrayList<>();
+        try (Statement statement = con.createStatement();
+             ResultSet result = statement.executeQuery(QUERY_ALL_PRODUKTS_NAMES)) {
+            while (result.next()) {
+                String nazwa = result.getString(1);
+                wszyskieProdukty.add(nazwa);
+            }
+            return wszyskieProdukty;
+        }catch (SQLException e ){
+            System.out.println("Nie można zwrócić nazw produktów "+e.getMessage() );
+            return null;
+        }
+
     }
 
 
