@@ -5,3 +5,8 @@
         ogarnac jak dzialają wyjątki i złapać ten w metodzie wyborDaniaDoPosilku
         z klasy menadzer posilkow
 
+
+
+
+        ogarnac to co wpisuje uzytkownik w wyborze produkotow do dania zebu nie wyleciec z zakresu
+

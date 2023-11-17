@@ -15,7 +15,6 @@ public class MenadzerProduktow {
         return produkty;
     }
     ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
-   // KorzytanieZBazy korzytanieZBazy = new KorzytanieZBazy();
 
 
 
@@ -43,7 +42,7 @@ public class MenadzerProduktow {
         if(kcal <0 || bialko < 0 || weglowodany <0 || blonnik <0 || tluszcze <0){
             System.out.println("Takiego produktu nie można dodać ponieważ jeden z makroskładników jest mniejszy od zera!");
         }else {
-            zapytaniaDoBazy.insertIntoProdukt( nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
+            zapytaniaDoBazy.insertIntoProdukt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
 
 
 //            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);

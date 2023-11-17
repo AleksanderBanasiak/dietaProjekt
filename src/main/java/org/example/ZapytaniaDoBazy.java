@@ -20,8 +20,11 @@ public class ZapytaniaDoBazy {
     public static final String COLUMN_PRODUKTY_IDDANIA = "dania_iddania";
 
     public static final String COLUMN_IDPRODUKTY = "idprodukty";
+    public static final String COLUMN_IDDANIA = "iddania";
     public static final String COLUMN_NAZWAPRODUKTOW = "nazwaProduktow";
+
     public static final String COLUMN_NAZWADANIA = "nazwaDania";
+    public static final String COLUMN_TYPDANIA = "typDania";
     public static final String COLUMN_KCAL = "kcal";
     public static final String COLUMN_BIALKO = "bialko";
     public static final String COLUMN_WEGLOWODANY = "weglowodany";
@@ -46,7 +49,8 @@ public class ZapytaniaDoBazy {
 
 
     //SELECT idprodukty FROM bazadieta.produkty order by idprodukty DESC limit 1;
-    public static final String LAST_ID = "SELECT "+ COLUMN_IDPRODUKTY + " FROM " +TABLE_PRODUKT + " ORDER BY " + COLUMN_IDPRODUKTY + " DESC LIMIT 1";
+    public static final String LAST_ID_PRODDUKTY = "SELECT "+ COLUMN_IDPRODUKTY + " FROM " +TABLE_PRODUKT + " ORDER BY " + COLUMN_IDPRODUKTY + " DESC LIMIT 1";
+    public static final String LAST_ID_DANIA = "SELECT "+ COLUMN_IDDANIA + " FROM " +TABLE_DANIA + " ORDER BY " + COLUMN_IDDANIA+ " DESC LIMIT 1";
 
     public static final String QUERY_ALL_PRODUCTS_BY_ID_DANIA = "SELECT * FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
@@ -58,6 +62,9 @@ public class ZapytaniaDoBazy {
     public static final String QUERY_ALL_DANIA_NAMES ="SELECT "+ COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA;
 
 
+    public static final String QUERY_INSERT_INTO_DANIA = "INSERT INTO "+TABLE_DANIA+ "("+COLUMN_IDDANIA + ","+ COLUMN_NAZWADANIA+ ","+COLUMN_TYPDANIA +") VALUES (?,?,?)";
+
+
 
 
     private Connection con;
@@ -66,6 +73,7 @@ public class ZapytaniaDoBazy {
 
     private PreparedStatement allProductsByIdDania;
     private PreparedStatement addProductsToDanie;
+    private PreparedStatement insertIntoDania;
 
 
 
@@ -77,6 +85,7 @@ public class ZapytaniaDoBazy {
             insertIntoProdukt = con.prepareStatement(QUERY_INSERT_PRODUKT);
             allProductsByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_BY_ID_DANIA);
             addProductsToDanie = con.prepareStatement(QUERY_ADD_PRODUCTS_TO_DANIE);
+            insertIntoDania = con.prepareStatement(QUERY_INSERT_INTO_DANIA);
 
 
 
@@ -98,6 +107,12 @@ public class ZapytaniaDoBazy {
             }
             if(allProductsByIdDania != null){
                 allProductsByIdDania.close();
+            }
+            if(addProductsToDanie != null){
+                addProductsToDanie.close();
+            }
+            if(insertIntoDania != null){
+                insertIntoDania.close();
             }
 
 
@@ -129,11 +144,23 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-    public int pobierzOstatnieID(){
+    public int pobierzOstatnieIDProduktu(){
         int ostatnieID =0;
         try(Statement statement = con.createStatement();
-            ResultSet result = statement.executeQuery(LAST_ID)){
-
+            ResultSet result = statement.executeQuery(LAST_ID_PRODDUKTY)){
+            while (result.next()){
+                ostatnieID = result.getInt(1);
+                ostatnieID++;
+            }
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+        }
+        return ostatnieID;
+    }
+    public int pobierzOstatnieIDDania(){
+        int ostatnieID =0;
+        try(Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(LAST_ID_DANIA)){
             while (result.next()){
                 ostatnieID = result.getInt(1);
                 ostatnieID++;
@@ -144,7 +171,7 @@ public class ZapytaniaDoBazy {
         return ostatnieID;
     }
     public void insertIntoProdukt(String name, double kacl, double bialko, double wegle, double blonnik, double tluszcze){
-        int id = pobierzOstatnieID();
+        int id = pobierzOstatnieIDProduktu();
         try {
             insertIntoProdukt.setInt(1, id);
             insertIntoProdukt.setString(2, name);
@@ -154,6 +181,18 @@ public class ZapytaniaDoBazy {
             insertIntoProdukt.setDouble(6, blonnik);
             insertIntoProdukt.setDouble(7, tluszcze);
             insertIntoProdukt.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("Nie można dodać produktu do bazy "+e.getMessage() );
+        }
+    }
+    public void insertIntoDanie(String name, TypPosilku typPosilku){
+        int id = pobierzOstatnieIDDania();
+        try {
+            insertIntoDania.setInt(1, id);
+            insertIntoDania.setString(2, name);
+            insertIntoDania.setString(3, String.valueOf(typPosilku));
+
+            insertIntoDania.executeUpdate();
         }catch (SQLException e){
             System.out.println("Nie można dodać produktu do bazy "+e.getMessage() );
         }
@@ -198,6 +237,11 @@ public class ZapytaniaDoBazy {
         }
     }
 
+    public void dodajListeProduktowDoDania(List<Integer> idProduktu, int idDania){
+        for (Integer integer : idProduktu) {
+            dodajProduktyDoDania(integer, idDania);
+        }
+    }
 
     public void dodajProduktyDoDania(int idProduktu, int idDania){
         try {

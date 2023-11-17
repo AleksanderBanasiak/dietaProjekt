@@ -14,11 +14,14 @@ public class MenadzerDania {
 
         ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
     public void tworzenieDania(MenadzerProduktow menadzerProduktow, Scanner scanner) {
-       // MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
+        if(!zapytaniaDoBazy.open()){
+            System.out.println("Nie można otworzyć bazy danych");
+            return;
+        }
         System.out.println("-".repeat(24));
         System.out.print("Jak ma się nazywać danie: ");
         String nazwaPosilku = scanner.nextLine();
-        boolean flaga = zapytaniaDoBazy.sprawdzCzyJestWBazieTakiProdukt(nazwaPosilku, zapytaniaDoBazy);
+        boolean flaga = zapytaniaDoBazy.sprawdzCzyJestWBazieTakieDanie(nazwaPosilku, zapytaniaDoBazy);
         if (!flaga) {
             System.out.println("Takie danie juz istnieje!");
         } else {
@@ -31,37 +34,26 @@ public class MenadzerDania {
                 jakiTyp = Integer.parseInt(scanner.nextLine());
             }
             TypPosilku typ = typPosilku(jakiTyp);
-            List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
-            Dania noweDanie = new Dania(typ, nazwaPosilku, produkts);
-
-            //tu powinien byc insert do bazy
-
-          //  menadzerPlikow.stworzPlikZDaniem(noweDanie);
+            List<Integer> produkts = wybierzProduktyDoDania(menadzerProduktow);
+            zapytaniaDoBazy.insertIntoDanie(nazwaPosilku, typ);
+            int idDania = zapytaniaDoBazy.pobierzOstatnieIDDania();
+            zapytaniaDoBazy.dodajListeProduktowDoDania(produkts, idDania-1);
         }
     }
-        public List<Produkt> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
+        public List<Integer> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
             Scanner scanner = new Scanner(System.in);
-            menadzerProduktow.wyswietlWszystkieProdukty();
+            List<Produkt> produkty = zapytaniaDoBazy.wyswietlWyszyskieProdukty();
+            for (Produkt produkt : produkty){
+            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
+        }
             System.out.print("Które produkty chcesz dodac: ");
             String wybraneProdukty = scanner.nextLine();
             String[] splitWybraneProdukty = wybraneProdukty.split(",");
-            int[] tablicaWybranychProduktow = new int[splitWybraneProdukty.length];
+            List<Integer> tablicaWybranychProduktow = new ArrayList<>();
             for (int i = 0; i < splitWybraneProdukty.length; i++) {
-                tablicaWybranychProduktow[i] = (Integer.parseInt(splitWybraneProdukty[i]) - 1);
+                tablicaWybranychProduktow.add((Integer.parseInt(splitWybraneProdukty[i])));
             }
-            List<Produkt> listaWybranychProduktow = new ArrayList<>();
-            List<Produkt> produkty = menadzerProduktow.getProdukty();
-            int ilosc = produkty.size();
-            for (int i = 0; i < tablicaWybranychProduktow.length; i++) {
-                if (tablicaWybranychProduktow[i] < 0 || tablicaWybranychProduktow[i] >= ilosc) {
-                    System.out.println("Podałeś wartość z poza zakresu!");
-                    System.exit(0);
-                }
-            }
-            for (int i = 0; i < tablicaWybranychProduktow.length; i++) {
-                listaWybranychProduktow.add(produkty.get(tablicaWybranychProduktow[i]));
-            }
-            return listaWybranychProduktow;
+            return tablicaWybranychProduktow;
         }
     public TypPosilku typPosilku(int typ){
         switch (typ) {
@@ -90,8 +82,13 @@ public class MenadzerDania {
         System.out.println("[4] - Kolacja");
         System.out.println("[5] - Dodatkowe danie");
     }
+
+
 }
-        /*
+
+
+
+/*
     public List<Dania> dodajDanieZPlikuDoListy() throws FileNotFoundException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         List<Dania> danias = new ArrayList<>();

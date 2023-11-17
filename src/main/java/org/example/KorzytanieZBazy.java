@@ -39,8 +39,14 @@ public class KorzytanieZBazy {
 //        for (Produkt produkt : produkty){
 //            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
 //        }
-        // zapytanie 4 dodanie do produkty_has_danie id danie i id produku
-        //zapytaniaDoBazy.dodajProduktyDoDania(id1, id2);
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Podaj id1: ");
+        int id1 = scanner.nextInt();
+        System.out.print("Podaj id2: ");
+        int id2 = scanner.nextInt();
+
+      //   zapytanie 4 dodanie do produkty_has_danie id danie i id produku
+        zapytaniaDoBazy.dodajProduktyDoDania(id1, id2);
 
 
 //        Scanner scanner = new Scanner(System.in);
@@ -61,9 +67,7 @@ public class KorzytanieZBazy {
 //        System.out.println(w);
 
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Podaj nazwe: ");
-        String sprawdzNazwe = scanner.nextLine();
+
 
       //  List<String> nazwy = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktow();
 
