@@ -15,7 +15,7 @@ public class MenadzerProduktow {
         return produkty;
     }
     ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
-    KorzytanieZBazy korzytanieZBazy = new KorzytanieZBazy();
+   // KorzytanieZBazy korzytanieZBazy = new KorzytanieZBazy();
 
 
 
@@ -26,7 +26,7 @@ public class MenadzerProduktow {
         }
         System.out.print("Jak nazywa się twój produkt?: ");
         String nazwa = scanner.nextLine();
-        boolean flaga = korzytanieZBazy.sprawdzCzyJestWBazie(nazwa, zapytaniaDoBazy);
+        boolean flaga = zapytaniaDoBazy.sprawdzCzyJestWBazieTakiProdukt(nazwa, zapytaniaDoBazy);
         if(!flaga){
             System.out.println("Taki produkt juz istnieje!");
         }else {

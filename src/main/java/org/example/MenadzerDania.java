@@ -1,4 +1,4 @@
-/*
+
 package org.example;
 
 import org.example.MenadzerProduktow;
@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenadzerDania {
+
+        ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
     public void tworzenieDania(MenadzerProduktow menadzerProduktow, Scanner scanner) {
-        MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
+       // MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
         System.out.println("-".repeat(24));
         System.out.print("Jak ma się nazywać danie: ");
         String nazwaPosilku = scanner.nextLine();
-        boolean flaga = menadzerPlikow.sprawdzCzyIstniejeTakiPlik(nazwaPosilku);
+        boolean flaga = zapytaniaDoBazy.sprawdzCzyJestWBazieTakiProdukt(nazwaPosilku, zapytaniaDoBazy);
         if (!flaga) {
             System.out.println("Takie danie juz istnieje!");
         } else {
@@ -31,7 +33,10 @@ public class MenadzerDania {
             TypPosilku typ = typPosilku(jakiTyp);
             List<Produkt> produkts = wybierzProduktyDoDania(menadzerProduktow);
             Dania noweDanie = new Dania(typ, nazwaPosilku, produkts);
-            menadzerPlikow.stworzPlikZDaniem(noweDanie);
+
+            //tu powinien byc insert do bazy
+
+          //  menadzerPlikow.stworzPlikZDaniem(noweDanie);
         }
     }
         public List<Produkt> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
@@ -58,6 +63,35 @@ public class MenadzerDania {
             }
             return listaWybranychProduktow;
         }
+    public TypPosilku typPosilku(int typ){
+        switch (typ) {
+            case 1 -> {
+                return TypPosilku.SNIADANIE;
+            }
+            case 2 -> {
+                return TypPosilku.DRUGIE_SNIADANIE;
+            }
+            case 3 -> {
+                return TypPosilku.OBIAD;
+            }
+            case 4 -> {
+                return TypPosilku.KOLACJA;
+            }
+            case 5 -> {
+                return TypPosilku.DODATKOWE_DANIE;
+            }
+        }
+        return null;
+    }
+    public void menuTypuPosilku(){
+        System.out.println("[1] - Śniadanie");
+        System.out.println("[2] - Drugie śniadanie");
+        System.out.println("[3] - Obiad");
+        System.out.println("[4] - Kolacja");
+        System.out.println("[5] - Dodatkowe danie");
+    }
+}
+        /*
     public List<Dania> dodajDanieZPlikuDoListy() throws FileNotFoundException {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         List<Dania> danias = new ArrayList<>();
@@ -137,37 +171,10 @@ public class MenadzerDania {
         double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
     }
-    public TypPosilku typPosilku(int typ){
-        switch (typ) {
-            case 1 -> {
-                return TypPosilku.SNIADANIE;
-            }
-            case 2 -> {
-                return TypPosilku.DRUGIE_SNIADANIE;
-            }
-            case 3 -> {
-                return TypPosilku.OBIAD;
-            }
-            case 4 -> {
-                return TypPosilku.KOLACJA;
-            }
-            case 5 -> {
-                return TypPosilku.DODATKOWE_DANIE;
-            }
-        }
-        return null;
-    }
-    public void menuTypuPosilku(){
-        System.out.println("[1] - Śniadanie");
-        System.out.println("[2] - Drugie śniadanie");
-        System.out.println("[3] - Obiad");
-        System.out.println("[4] - Kolacja");
-        System.out.println("[5] - Dodatkowe danie");
-    }
-}
 
 
- */
+*/
+
 
 
 

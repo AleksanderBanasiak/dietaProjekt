@@ -13,7 +13,7 @@ public class DietaApk {
         wyswietlDate();
         int wybor;
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
-//        MenadzerDania danie = new MenadzerDania();
+        MenadzerDania danie = new MenadzerDania();
 //        MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
         Scanner scanner = new Scanner(System.in);
 //        menadzerProduktow.dodajProduktyZPlikuDoListy();
@@ -26,7 +26,7 @@ public class DietaApk {
 //                case 3 -> menadzerPosilkow.pelenProgram(TypPosilku.OBIAD);
 //                case 4 -> menadzerPosilkow.pelenProgram(TypPosilku.KOLACJA);
 //                case 5 -> menadzerPosilkow.pelenProgram(TypPosilku.DODATKOWE_DANIE);
-//                case 6 -> danie.tworzenieDania(menadzerProduktow, scanner);
+                case 6 -> danie.tworzenieDania(menadzerProduktow, scanner);
                 case 7 -> menadzerProduktow.tworzenieProduktu(scanner);
                 case 8 ->
                 {

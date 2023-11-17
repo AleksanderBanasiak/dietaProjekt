@@ -3,6 +3,7 @@ package org.example;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ZapytaniaDoBazy {
 
@@ -13,12 +14,14 @@ public class ZapytaniaDoBazy {
     public static final String PASSWORD = "admin";
 
     public static final String TABLE_PRODUKT = "produkty";
+    public static final String TABLE_DANIA = "dania";
     public static final String TABLE_DANIA_HAS_PRODUKTY = "produkty_has_dania";
     public static final String COLUMN_PRODUKTY_IDPODUKTY = "produkty_idprodukty";
     public static final String COLUMN_PRODUKTY_IDDANIA = "dania_iddania";
 
     public static final String COLUMN_IDPRODUKTY = "idprodukty";
     public static final String COLUMN_NAZWAPRODUKTOW = "nazwaProduktow";
+    public static final String COLUMN_NAZWADANIA = "nazwaDania";
     public static final String COLUMN_KCAL = "kcal";
     public static final String COLUMN_BIALKO = "bialko";
     public static final String COLUMN_WEGLOWODANY = "weglowodany";
@@ -52,6 +55,7 @@ public class ZapytaniaDoBazy {
     public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
     public static final String QUERY_ALL_PRODUKTS_NAMES ="SELECT "+ COLUMN_NAZWAPRODUKTOW + " FROM "+ TABLE_PRODUKT;
+    public static final String QUERY_ALL_DANIA_NAMES ="SELECT "+ COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA;
 
 
 
@@ -178,21 +182,20 @@ public class ZapytaniaDoBazy {
         }
     }
 
-    public List<String> wyswietlWszystkieNazwyProduktow() {
+    public List<String> wyswietlWszystkieNazwy(String query) {
 
-        List<String> wszyskieProdukty = new ArrayList<>();
+        List<String> wszyskieDania = new ArrayList<>();
         try (Statement statement = con.createStatement();
-             ResultSet result = statement.executeQuery(QUERY_ALL_PRODUKTS_NAMES)) {
+             ResultSet result = statement.executeQuery(query)) {
             while (result.next()) {
                 String nazwa = result.getString(1);
-                wszyskieProdukty.add(nazwa);
+                wszyskieDania.add(nazwa);
             }
-            return wszyskieProdukty;
+            return wszyskieDania;
         }catch (SQLException e ){
             System.out.println("Nie można zwrócić nazw produktów "+e.getMessage() );
             return null;
         }
-
     }
 
 
@@ -232,6 +235,28 @@ public class ZapytaniaDoBazy {
             System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
             return null;
         }
+    }
+
+
+    public boolean sprawdzCzyJestWBazieTakiProdukt(String nazwa, ZapytaniaDoBazy zapytaniaDoBazy){
+        boolean flaga = true;
+        List<String> nazwy = zapytaniaDoBazy.wyswietlWszystkieNazwy(QUERY_ALL_PRODUKTS_NAMES);
+        for (String s : nazwy) {
+            if(Objects.equals(nazwa, s)){
+                return false;
+            }
+        }
+        return flaga;
+    }
+    public boolean sprawdzCzyJestWBazieTakieDanie(String nazwa, ZapytaniaDoBazy zapytaniaDoBazy){
+        boolean flaga = true;
+        List<String> nazwy = zapytaniaDoBazy.wyswietlWszystkieNazwy(QUERY_ALL_DANIA_NAMES);
+        for (String s : nazwy) {
+            if(Objects.equals(nazwa, s)){
+                return false;
+            }
+        }
+        return flaga;
     }
 
 
