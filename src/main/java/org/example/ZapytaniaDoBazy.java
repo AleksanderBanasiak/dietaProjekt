@@ -55,11 +55,16 @@ public class ZapytaniaDoBazy {
     public static final String QUERY_ALL_PRODUCTS_BY_ID_DANIA = "SELECT * FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
             + " = ?";
+    public static final String QUERY_ALL_PRODUCTS_NAMES_BY_ID_DANIA = "SELECT "+COLUMN_NAZWAPRODUKTOW +" FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
+            COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
+            + " = ?";
 
     public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
     public static final String QUERY_ALL_PRODUKTS_NAMES ="SELECT "+ COLUMN_NAZWAPRODUKTOW + " FROM "+ TABLE_PRODUKT;
     public static final String QUERY_ALL_DANIA_NAMES ="SELECT "+ COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA;
+
+    public static final String QUERY_GET_ID_DANIA_TO_TYPE = "SELECT "+COLUMN_IDDANIA +" FROM "+ TABLE_DANIA + " WHERE " + COLUMN_TYPDANIA + " = ?";
 
 
     public static final String QUERY_INSERT_INTO_DANIA = "INSERT INTO "+TABLE_DANIA+ "("+COLUMN_IDDANIA + ","+ COLUMN_NAZWADANIA+ ","+COLUMN_TYPDANIA +") VALUES (?,?,?)";
@@ -74,7 +79,8 @@ public class ZapytaniaDoBazy {
     private PreparedStatement allProductsByIdDania;
     private PreparedStatement addProductsToDanie;
     private PreparedStatement insertIntoDania;
-
+    private PreparedStatement getAllProductsNamesByIdDania;
+    private PreparedStatement getIdDaniaToType;
 
 
 
@@ -86,6 +92,8 @@ public class ZapytaniaDoBazy {
             allProductsByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_BY_ID_DANIA);
             addProductsToDanie = con.prepareStatement(QUERY_ADD_PRODUCTS_TO_DANIE);
             insertIntoDania = con.prepareStatement(QUERY_INSERT_INTO_DANIA);
+            getAllProductsNamesByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_NAMES_BY_ID_DANIA);
+            getIdDaniaToType = con.prepareStatement(QUERY_GET_ID_DANIA_TO_TYPE);
 
 
 
@@ -113,6 +121,12 @@ public class ZapytaniaDoBazy {
             }
             if(insertIntoDania != null){
                 insertIntoDania.close();
+            }
+            if(getAllProductsNamesByIdDania != null){
+                getAllProductsNamesByIdDania.close();
+            }
+            if(getIdDaniaToType != null){
+                getIdDaniaToType.close();
             }
 
 
@@ -220,6 +234,21 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
+    public List<String> wyswietlWszystkieNazwyProduktowZDanegoDania(int id){
+        try{
+            getAllProductsNamesByIdDania.setInt(1, id);
+            ResultSet result = getAllProductsNamesByIdDania.executeQuery();
+            List<String> wszyskieNazwy = new ArrayList<>();
+            while (result.next()){
+               String nazwa = result.getString(1);
+                wszyskieNazwy.add(nazwa);
+            }
+            return wszyskieNazwy;
+        }catch (SQLException e ){
+            System.out.println("Nie można wyświetlić nazw produktów z danego dania");
+            return null;
+        }
+    }
 
     public List<String> wyswietlWszystkieNazwy(String query) {
 
@@ -252,6 +281,27 @@ public class ZapytaniaDoBazy {
             System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
         }
     }
+
+
+    public List<Integer> wyswietlIdDaniaDanegoTypu(TypPosilku typPosilku){
+
+
+        try {
+            getIdDaniaToType.setString(1, String.valueOf(typPosilku));
+            ResultSet result = getIdDaniaToType.executeQuery();
+            List<Integer> idDan = new ArrayList<>();
+            while (result.next()){
+                int idDania =result.getInt(1);
+                idDan.add(idDania);
+            }
+            return idDan;
+        }catch (SQLException e ){
+            System.out.println("Nie można pobrać id dań "+ e.getMessage());
+            return null;
+        }
+    }
+
+
 
 
 

@@ -84,6 +84,45 @@ public class MenadzerDania {
     }
 
 
+
+    public void wypiszDanie(Dania dania){
+        System.out.print(dania.getNazwaDania());
+        System.out.print("(");
+        String[] nazwy =new String[ dania.getSkladDania().size()];
+        for (int i = 0; i <  dania.getSkladDania().size(); i++) {
+            nazwy[i] = dania.getSkladDania().get(i).getNazwa();
+            if(i != dania.getSkladDania().size() -1){
+                System.out.print(nazwy[i]+ ",");
+            }else {
+                System.out.print(nazwy[i]+")");
+            }
+        }
+        System.out.println();
+    }
+
+    public void wyswietlDanie(){
+        if(!zapytaniaDoBazy.open()){
+            System.out.println("Nie można otworzyć bazy danych");
+            return;
+        }
+
+        List<Integer> idDan = zapytaniaDoBazy.wyswietlIdDaniaDanegoTypu(TypPosilku.SNIADANIE);
+
+
+        for (Integer integer : idDan) {
+            System.out.print(integer);
+            System.out.print("- ");
+            List<String> nazwyProduktow = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(integer);
+            for (String s : nazwyProduktow) {
+                System.out.println(s+ ",");
+            }
+
+
+        }
+
+    }
+
+
 }
 
 
@@ -108,20 +147,7 @@ public class MenadzerDania {
         }
         return danias;
     }
-    public void wypiszDanie(Dania dania){
-        System.out.print(dania.getNazwaDania());
-        System.out.print("(");
-        String[] nazwy =new String[ dania.getSkladDania().size()];
-        for (int i = 0; i <  dania.getSkladDania().size(); i++) {
-            nazwy[i] = dania.getSkladDania().get(i).getNazwa();
-            if(i != dania.getSkladDania().size() -1){
-                System.out.print(nazwy[i]+ ",");
-            }else {
-                System.out.print(nazwy[i]+")");
-            }
-        }
-        System.out.println();
-    }
+
     public List<Dania> stworzListeZDaniamiDanegoTypu(TypPosilku typPosilku) throws FileNotFoundException {
         MenadzerDania menadzerDania = new MenadzerDania();
         List<Dania> danias = menadzerDania.dodajDanieZPlikuDoListy();
