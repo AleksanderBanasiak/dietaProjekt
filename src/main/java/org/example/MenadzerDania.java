@@ -100,29 +100,31 @@ public class MenadzerDania {
         System.out.println();
     }
 
-    public void wyswietlDanie(){
+    public int wyswietlDanie(TypPosilku typPosilku){
         if(!zapytaniaDoBazy.open()){
             System.out.println("Nie można otworzyć bazy danych");
-            return;
+            return 0;
         }
-
-        List<Integer> idDan = zapytaniaDoBazy.wyswietlIdDaniaDanegoTypu(TypPosilku.SNIADANIE);
-
-
-        for (Integer integer : idDan) {
-            System.out.print(integer);
-            System.out.print("- ");
-            List<String> nazwyProduktow = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(integer);
-            for (String s : nazwyProduktow) {
-                System.out.println(s+ ",");
+        List<Integer> idDan = zapytaniaDoBazy.wyswietlIdDaniaDanegoTypu(typPosilku);
+        List<String> nazwyDan = zapytaniaDoBazy.wyswietlNazweDaniaDanegoTypu(typPosilku);
+            for (int i = 0; i < nazwyDan.size(); i++) {
+            System.out.print("[");
+            System.out.print(idDan.get(i));
+            System.out.print("] - ");
+            System.out.print(nazwyDan.get(i));
+            System.out.print("(");
+            List<String> nazwyProduktow = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(i+1);
+            for (int j = 0; j < nazwyProduktow.size(); j++) {
+                if(j!=0){
+                    System.out.print(","+nazwyProduktow.get(j));
+                }else {
+                    System.out.print(nazwyProduktow.get(j));
+                }
             }
-
-
+            System.out.println(")");
         }
-
+            return nazwyDan.size();
     }
-
-
 }
 
 

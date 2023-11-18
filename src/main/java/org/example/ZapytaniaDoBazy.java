@@ -65,6 +65,7 @@ public class ZapytaniaDoBazy {
     public static final String QUERY_ALL_DANIA_NAMES ="SELECT "+ COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA;
 
     public static final String QUERY_GET_ID_DANIA_TO_TYPE = "SELECT "+COLUMN_IDDANIA +" FROM "+ TABLE_DANIA + " WHERE " + COLUMN_TYPDANIA + " = ?";
+    public static final String QUERY_GET_NAME_DANIA_TO_TYPE = "SELECT "+COLUMN_NAZWADANIA +" FROM "+ TABLE_DANIA + " WHERE " + COLUMN_TYPDANIA + " = ?";
 
 
     public static final String QUERY_INSERT_INTO_DANIA = "INSERT INTO "+TABLE_DANIA+ "("+COLUMN_IDDANIA + ","+ COLUMN_NAZWADANIA+ ","+COLUMN_TYPDANIA +") VALUES (?,?,?)";
@@ -81,6 +82,7 @@ public class ZapytaniaDoBazy {
     private PreparedStatement insertIntoDania;
     private PreparedStatement getAllProductsNamesByIdDania;
     private PreparedStatement getIdDaniaToType;
+    private PreparedStatement getNazwaDaniaToType;
 
 
 
@@ -94,6 +96,7 @@ public class ZapytaniaDoBazy {
             insertIntoDania = con.prepareStatement(QUERY_INSERT_INTO_DANIA);
             getAllProductsNamesByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_NAMES_BY_ID_DANIA);
             getIdDaniaToType = con.prepareStatement(QUERY_GET_ID_DANIA_TO_TYPE);
+            getNazwaDaniaToType = con.prepareStatement(QUERY_GET_NAME_DANIA_TO_TYPE);
 
 
 
@@ -127,6 +130,9 @@ public class ZapytaniaDoBazy {
             }
             if(getIdDaniaToType != null){
                 getIdDaniaToType.close();
+            }
+            if(getNazwaDaniaToType != null){
+                getNazwaDaniaToType.close();
             }
 
 
@@ -297,6 +303,23 @@ public class ZapytaniaDoBazy {
             return idDan;
         }catch (SQLException e ){
             System.out.println("Nie można pobrać id dań "+ e.getMessage());
+            return null;
+        }
+    }
+    public List<String> wyswietlNazweDaniaDanegoTypu(TypPosilku typPosilku){
+
+
+        try {
+            getNazwaDaniaToType.setString(1, String.valueOf(typPosilku));
+            ResultSet result = getNazwaDaniaToType.executeQuery();
+            List<String> nazwyDan = new ArrayList<>();
+            while (result.next()){
+                String idDania =result.getString(1);
+                nazwyDan.add(idDania);
+            }
+            return nazwyDan;
+        }catch (SQLException e ){
+            System.out.println("Nie można pobrać nazwy dań "+ e.getMessage());
             return null;
         }
     }

@@ -10,3 +10,8 @@
 
         ogarnac to co wpisuje uzytkownik w wyborze produkotow do dania zebu nie wyleciec z zakresu
 
+        chyba zrobie to tak ze w tabeli posilki bedzie data ktora jest dodawane jezeli juz nie istneje
+        a w tabeli dania_has_posilki bedzie id daty i id produktow (tak na prawde posilkow z obliczonym makro)
+        czyli najlepiej zrobic kolejna tabele w ktorej bedzie data nazwaDania i obliczone makrosy dla tego dania 
+        i potem wypisywanie dnia po dniu 
+

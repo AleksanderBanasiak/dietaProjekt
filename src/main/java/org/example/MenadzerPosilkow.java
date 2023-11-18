@@ -1,4 +1,4 @@
-/*
+
 package org.example;
 
 import org.example.Dania;
@@ -13,21 +13,35 @@ import java.util.Scanner;
 public class MenadzerPosilkow {
     MenadzerDania menadzerDania = new MenadzerDania();
     MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
-    MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
+    ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
+  //  MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
     Scanner scanner = new Scanner(System.in);
 
     public void pelenProgram(TypPosilku typPosilku) throws IOException {
+        if(!zapytaniaDoBazy.open()){
+            System.out.println("Nie można otworzyć bazy danych");
+            return;
+        }
         int miejsceDodatkowegoPosilku = 0;
         if(typPosilku == TypPosilku.DODATKOWE_DANIE){
              miejsceDodatkowegoPosilku = wJakimMiejscu();
         }
-        Dania wybraneDanie = wyborDaniaDoPosilku(typPosilku);
+        int wybraneDanie = wyborDaniaDoPosilku(typPosilku);
+
+        List<Produkt> produktyZWybranegoDania = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(wybraneDanie);
+
+
+        /*
+
+
         List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wybraneDanie);
         for (Produkt produkt : produktyZMakro) {
             System.out.println(menadzerProduktow.wypiszProdukt(produkt));
         }
         Dania danieZObliczonymMakro = new Dania(wybraneDanie.typPosilku,wybraneDanie.getNazwaDania(), produktyZMakro);
-        menadzerPlikow.dodajDoPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
+     //   menadzerPlikow.dodajDoPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
+
+         */
     }
     public int wJakimMiejscu() {
         menuDodatkowegoDania();
@@ -55,23 +69,17 @@ public class MenadzerPosilkow {
             }
             return produktyZObliczonymMarko;
     }
-    public Dania wyborDaniaDoPosilku(TypPosilku typPosilku) throws FileNotFoundException {
-        List<Dania> wybraneDania = menadzerDania.stworzListeZDaniamiDanegoTypu(typPosilku);
-        if(wybraneDania.size() == 0){
-            System.out.println("Niestety nie ma dań dla tego posiłku");
-            throw new IndexOutOfBoundsException();
-        }else {
-            menadzerDania.wyswietlDaniaZListy(wybraneDania);
+    public int wyborDaniaDoPosilku(TypPosilku typPosilku) throws FileNotFoundException {
+            int wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
             System.out.print("Jakie danie chcesz dodać do " + odmianaTypuPosilku(typPosilku) + ": ");
-            int wyborDania = Integer.parseInt(scanner.nextLine());
-            while (wyborDania > wybraneDania.size() || wyborDania <= 0) {
+             int idWybranegoDania = Integer.parseInt(scanner.nextLine());
+            while (idWybranegoDania > wyswietlDania || idWybranegoDania <= 0) {
                 System.out.println("Podałeś liczbe spoza zakresu");
                 System.out.print("Wybierz jescze raz:");
-                wyborDania = Integer.parseInt(scanner.nextLine());
+                idWybranegoDania = Integer.parseInt(scanner.nextLine());
             }
-            wyborDania--;
-            return wybraneDania.get(wyborDania);
-        }
+            return idWybranegoDania;
+
     }
     public String odmianaTypuPosilku(TypPosilku typPosilku){
         String wynik="";
@@ -108,4 +116,3 @@ public class MenadzerPosilkow {
 }
 
 
- */

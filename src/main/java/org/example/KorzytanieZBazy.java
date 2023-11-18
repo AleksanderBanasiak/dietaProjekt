@@ -31,22 +31,27 @@ public class KorzytanieZBazy {
 
 
         // zapytanie 3 zwraca produkty z danego dania B)
-//        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(id);
-//        if(produkty ==null){
-//            System.out.println("Nie ma produktow do wyswietlenia");
-//            return;
-//        }
+        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(1);
+
+
+        for (int i = 0; i < produkty.size(); i++) {
+            System.out.println(produkty.get(i).getNazwa());
+        }
+        if(produkty ==null){
+            System.out.println("Nie ma produktow do wyswietlenia");
+            return;
+        }
 //        for (Produkt produkt : produkty){
 //            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
 //        }
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Podaj id1: ");
-        int id1 = scanner.nextInt();
-        System.out.print("Podaj id2: ");
-        int id2 = scanner.nextInt();
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Podaj id1: ");
+//        int id1 = scanner.nextInt();
+//        System.out.print("Podaj id2: ");
+//        int id2 = scanner.nextInt();
 
       //   zapytanie 4 dodanie do produkty_has_danie id danie i id produku
-        zapytaniaDoBazy.dodajProduktyDoDania(id1, id2);
+      //  zapytaniaDoBazy.dodajProduktyDoDania(id1, id2);
 
 
 //        Scanner scanner = new Scanner(System.in);
