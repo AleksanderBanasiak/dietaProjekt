@@ -53,22 +53,22 @@ public class MenadzerPosilkow {
         }
         return wyborMiejscaPosilku;
     }
-
-    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) {
-
-            List<Produkt> produkts = danieDoPosilku.getSkladDania();
-            List<Produkt> produktyZObliczonymMarko = new ArrayList<>();
-
-            for (int i = 0; i < produkts.size(); i++) {
-                System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
-                System.out.print("Podaj gramature: ");
-                int ileGram = Integer.parseInt(scanner.nextLine());
-
-                Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
-                produktyZObliczonymMarko.add(produktZObliczonymMakro);
-            }
-            return produktyZObliczonymMarko;
-    }
+//
+//    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) {
+//
+//            List<Produkt> produkts = danieDoPosilku.getSkladDania();
+//            List<Produkt> produktyZObliczonymMarko = new ArrayList<>();
+//
+//            for (int i = 0; i < produkts.size(); i++) {
+//                System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
+//                System.out.print("Podaj gramature: ");
+//                int ileGram = Integer.parseInt(scanner.nextLine());
+//
+//                Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
+//                produktyZObliczonymMarko.add(produktZObliczonymMakro);
+//            }
+//            return produktyZObliczonymMarko;
+ //   }
     public int wyborDaniaDoPosilku(TypPosilku typPosilku) throws FileNotFoundException {
             int wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
             System.out.print("Jakie danie chcesz dodać do " + odmianaTypuPosilku(typPosilku) + ": ");

@@ -1,7 +1,9 @@
 package org.example;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,15 +17,20 @@ public class ZapytaniaDoBazy {
 
     public static final String TABLE_PRODUKT = "produkty";
     public static final String TABLE_DANIA = "dania";
+    public static final String TABLE_POSILKI = "posilki";
     public static final String TABLE_DANIA_HAS_PRODUKTY = "produkty_has_dania";
     public static final String COLUMN_PRODUKTY_IDPODUKTY = "produkty_idprodukty";
     public static final String COLUMN_PRODUKTY_IDDANIA = "dania_iddania";
 
     public static final String COLUMN_IDPRODUKTY = "idprodukty";
+    public static final String COLUMN_IDPOSILKI = "idposilki";
     public static final String COLUMN_IDDANIA = "iddania";
     public static final String COLUMN_NAZWAPRODUKTOW = "nazwaProduktow";
 
     public static final String COLUMN_NAZWADANIA = "nazwaDania";
+    public static final String COLUMN_DATAPOSILKU = "dataPosilku";
+    public static final String CZAS = "NOW()";
+    public static final String COLUMN_ILEGRAM = "ileGram";
     public static final String COLUMN_TYPDANIA = "typDania";
     public static final String COLUMN_KCAL = "kcal";
     public static final String COLUMN_BIALKO = "bialko";
@@ -51,6 +58,7 @@ public class ZapytaniaDoBazy {
     //SELECT idprodukty FROM bazadieta.produkty order by idprodukty DESC limit 1;
     public static final String LAST_ID_PRODDUKTY = "SELECT "+ COLUMN_IDPRODUKTY + " FROM " +TABLE_PRODUKT + " ORDER BY " + COLUMN_IDPRODUKTY + " DESC LIMIT 1";
     public static final String LAST_ID_DANIA = "SELECT "+ COLUMN_IDDANIA + " FROM " +TABLE_DANIA + " ORDER BY " + COLUMN_IDDANIA+ " DESC LIMIT 1";
+    public static final String LAST_ID_POSILKU = "SELECT "+ COLUMN_IDPOSILKI + " FROM " +TABLE_POSILKI + " ORDER BY " + COLUMN_IDPOSILKI+ " DESC LIMIT 1";
 
     public static final String QUERY_ALL_PRODUCTS_BY_ID_DANIA = "SELECT * FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
@@ -69,6 +77,8 @@ public class ZapytaniaDoBazy {
 
 
     public static final String QUERY_INSERT_INTO_DANIA = "INSERT INTO "+TABLE_DANIA+ "("+COLUMN_IDDANIA + ","+ COLUMN_NAZWADANIA+ ","+COLUMN_TYPDANIA +") VALUES (?,?,?)";
+    public static final String QUERY_INSERT_INTO_POSILKI = "INSERT INTO "+TABLE_POSILKI+ "("+COLUMN_IDPOSILKI + ","+ COLUMN_DATAPOSILKU
+            + ","+COLUMN_ILEGRAM +") VALUES (?,"+CZAS+",?)";
 
 
 
@@ -83,6 +93,7 @@ public class ZapytaniaDoBazy {
     private PreparedStatement getAllProductsNamesByIdDania;
     private PreparedStatement getIdDaniaToType;
     private PreparedStatement getNazwaDaniaToType;
+    private PreparedStatement insetIntoPosilki;
 
 
 
@@ -97,6 +108,7 @@ public class ZapytaniaDoBazy {
             getAllProductsNamesByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_NAMES_BY_ID_DANIA);
             getIdDaniaToType = con.prepareStatement(QUERY_GET_ID_DANIA_TO_TYPE);
             getNazwaDaniaToType = con.prepareStatement(QUERY_GET_NAME_DANIA_TO_TYPE);
+            insetIntoPosilki = con.prepareStatement(QUERY_INSERT_INTO_POSILKI);
 
 
 
@@ -133,6 +145,9 @@ public class ZapytaniaDoBazy {
             }
             if(getNazwaDaniaToType != null){
                 getNazwaDaniaToType.close();
+            }
+            if(insetIntoPosilki != null){
+                insetIntoPosilki.close();
             }
 
 
@@ -190,6 +205,19 @@ public class ZapytaniaDoBazy {
         }
         return ostatnieID;
     }
+    public int pobierzOstatnieIDPosilku(){
+        int ostatnieID =0;
+        try(Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(LAST_ID_POSILKU)){
+            while (result.next()){
+                ostatnieID = result.getInt(1);
+                ostatnieID++;
+            }
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+        }
+        return ostatnieID;
+    }
     public void insertIntoProdukt(String name, double kacl, double bialko, double wegle, double blonnik, double tluszcze){
         int id = pobierzOstatnieIDProduktu();
         try {
@@ -208,15 +236,30 @@ public class ZapytaniaDoBazy {
     public void insertIntoDanie(String name, TypPosilku typPosilku){
         int id = pobierzOstatnieIDDania();
         try {
+
             insertIntoDania.setInt(1, id);
             insertIntoDania.setString(2, name);
             insertIntoDania.setString(3, String.valueOf(typPosilku));
 
             insertIntoDania.executeUpdate();
         }catch (SQLException e){
-            System.out.println("Nie można dodać produktu do bazy "+e.getMessage() );
+            System.out.println("Nie można dodać dania do bazy "+e.getMessage() );
         }
     }
+    public void insertIntoPosilek(int ileGram){
+        int id = pobierzOstatnieIDPosilku();
+        LocalDate data = LocalDate.now();
+        try {
+            insetIntoPosilki.setInt(1, id);
+            //insertIntoDania.setString(2, String.valueOf(data));
+            insetIntoPosilki.setInt(2, ileGram);
+
+            insetIntoPosilki.executeUpdate();
+        }catch (SQLException e){
+            System.out.println("Nie można dodać posilku do bazy "+e.getMessage() );
+        }
+    }
+
     public List<Produkt> wyswietlWszystkieProduktyZDanegoDania(int id){
         try{
             allProductsByIdDania.setInt(1, id);

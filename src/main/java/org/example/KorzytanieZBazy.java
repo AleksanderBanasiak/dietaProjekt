@@ -1,6 +1,8 @@
 package org.example;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -15,6 +17,10 @@ public class KorzytanieZBazy {
             System.out.println("Nie można otworzyć bazy danych");
             return;
         }
+
+
+        zapytaniaDoBazy.insertIntoPosilek(400);
+
 
         //zapytanie 1 wyswietla wszyskie produkty (dziala)
 //        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWyszyskieProdukty();
@@ -34,13 +40,13 @@ public class KorzytanieZBazy {
         List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(1);
 
 
-        for (int i = 0; i < produkty.size(); i++) {
-            System.out.println(produkty.get(i).getNazwa());
-        }
-        if(produkty ==null){
-            System.out.println("Nie ma produktow do wyswietlenia");
-            return;
-        }
+//        for (int i = 0; i < produkty.size(); i++) {
+//            System.out.println(produkty.get(i).getNazwa());
+//        }
+//        if(produkty ==null){
+//            System.out.println("Nie ma produktow do wyswietlenia");
+//            return;
+//        }
 //        for (Produkt produkt : produkty){
 //            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
 //        }
