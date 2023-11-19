@@ -101,23 +101,24 @@ public class MenadzerDania {
     }
 
 
-    public int wyswietlDanie(TypPosilku typPosilku){
+    public List<String> wyswietlDanie(TypPosilku typPosilku){
         if(!zapytaniaDoBazy.open()){
             System.out.println("Nie można otworzyć bazy danych");
-            return 0;
         }
         List<Integer> idDan = zapytaniaDoBazy.wyswietlIdDaniaDanegoTypu(typPosilku);
         List<String> nazwyDan = zapytaniaDoBazy.wyswietlNazweDaniaDanegoTypu(typPosilku);
+        List<String> wybraneDania = new ArrayList<>();
 
 
         for (int i = 0; i < nazwyDan.size(); i++) {
             StringBuilder sb = new StringBuilder();
                 sb.append("[");
-                sb.append(idDan.get(i));
+            int idDania = idDan.get(i);
+            sb.append(idDania);
                 sb.append("] - ");
                 sb.append(nazwyDan.get(i));
                 sb.append("(");
-            List<String> nazwyProduktow = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(i+1);
+            List<String> nazwyProduktow = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(idDania);
             for (int j = 0; j < nazwyProduktow.size(); j++) {
                 if(j!=0){
                   sb.append(",").append(nazwyProduktow.get(j));
@@ -126,10 +127,46 @@ public class MenadzerDania {
                 }
             }
                 sb.append(")");
-            System.out.println(sb);
+            wybraneDania.add(String.valueOf(sb));
         }
-            return nazwyDan.size();
+            return wybraneDania;
     }
+    public String wyswietlKonkretneDanie(TypPosilku typPosilku, int id){
+        if(!zapytaniaDoBazy.open()){
+            System.out.println("Nie można otworzyć bazy danych");
+        }
+        List<Integer> idDan = zapytaniaDoBazy.wyswietlIdDaniaDanegoTypu(typPosilku);
+        List<String> nazwyDan = zapytaniaDoBazy.wyswietlNazweDaniaDanegoTypu(typPosilku);
+        List<String> wybraneDania = new ArrayList<>();
+
+
+
+            StringBuilder sb = new StringBuilder();
+                sb.append(zapytaniaDoBazy.wyswietlDanieODanymID(id));
+                sb.append("(");
+            List<String> nazwyProduktow = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(id);
+            for (int j = 0; j < nazwyProduktow.size(); j++) {
+                if(j!=0){
+                  sb.append(",").append(nazwyProduktow.get(j));
+                }else {
+                  sb.append(nazwyProduktow.get(j));
+                }
+            }
+                sb.append(")");
+
+        return String.valueOf(sb);
+    }
+
+
+//    public Produkt obliczMakro(int ileGram, Produkt produkt) {
+//        double kcal = Math.round((produkt.getKcal() * ileGram) / 100);
+//        double bailko = Math.round((produkt.getBialko() * ileGram) / 100);
+//        double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
+//        double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
+//        double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
+//        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
+//    }
+
 }
 
 
@@ -193,17 +230,14 @@ public class MenadzerDania {
         }
         return new Produkt("Makroskładniki dania: ",caleKcal,caleBialko,caleWegle,caleBlonnik,caleTluszcze);
     }
-    public Produkt obliczMakro(int ileGram, Produkt produkt){
-        double kcal = Math.round((produkt.getKcal() * ileGram) / 100);
-        double bailko = Math.round((produkt.getBialko() * ileGram) / 100);
-        double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
-        double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
-        double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
-       return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
-    }
+
+ */
 
 
-*/
+
+
+
+
 
 
 

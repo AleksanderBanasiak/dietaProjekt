@@ -19,7 +19,7 @@ public class KorzytanieZBazy {
         }
 
 
-        zapytaniaDoBazy.insertIntoPosilek(400);
+     //   zapytaniaDoBazy.insertIntoPosilek(400);
 
 
         //zapytanie 1 wyswietla wszyskie produkty (dziala)
@@ -37,7 +37,17 @@ public class KorzytanieZBazy {
 
 
         // zapytanie 3 zwraca produkty z danego dania B)
-        List<Produkt> produkty = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(1);
+//        List<String> produkty = zapytaniaDoBazy.wyswietlWszystkieNazwyProduktowZDanegoDania(1);
+//        for (int i = 0; i < produkty.size(); i++) {
+//
+//            System.out.println(produkty.get(i));
+//        }
+
+        String danie = zapytaniaDoBazy.wyswietlDanieODanymID(1);
+
+        System.out.println(danie);
+
+
 
 
 //        for (int i = 0; i < produkty.size(); i++) {

@@ -27,8 +27,24 @@ public class MenadzerPosilkow {
              miejsceDodatkowegoPosilku = wJakimMiejscu();
         }
         int wybraneDanie = wyborDaniaDoPosilku(typPosilku);
-
+      //  String danieZSkladem = menadzerDania.wyswietlKonkretneDanie(typPosilku, wybraneDanie);
+        // tu powinna byc metoda ktora zwraca id wybranego dania
+        String konkretneDanie = menadzerDania.wyswietlKonkretneDanie(typPosilku,wybraneDanie);
+        System.out.println(konkretneDanie+ " niggggggggga");
         List<Produkt> produktyZWybranegoDania = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(wybraneDanie);
+        List<String> wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
+
+
+        dodanieGramturyWybranymPosilkom(produktyZWybranegoDania, konkretneDanie);
+        //dodanie tutaj insertu do  produktu _has_gramatura
+
+
+        int idGram = zapytaniaDoBazy.pobierzOstatnieIDGram();
+
+
+        // tutaj jest nazwa dania z składem trzeba uciąć 6 pierwszych liter
+
+       // zapytaniaDoBazy.dodajListeProduktowDoDania(produkty, idGram-1);
 
 
         /*
@@ -53,32 +69,41 @@ public class MenadzerPosilkow {
         }
         return wyborMiejscaPosilku;
     }
-//
-//    public List<Produkt> stworzenieListyProduktowZObliczonymMarko(Dania danieDoPosilku) {
-//
-//            List<Produkt> produkts = danieDoPosilku.getSkladDania();
-//            List<Produkt> produktyZObliczonymMarko = new ArrayList<>();
-//
-//            for (int i = 0; i < produkts.size(); i++) {
-//                System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
-//                System.out.print("Podaj gramature: ");
-//                int ileGram = Integer.parseInt(scanner.nextLine());
-//
-//                Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkts.get(i));
-//                produktyZObliczonymMarko.add(produktZObliczonymMakro);
-//            }
-//            return produktyZObliczonymMarko;
- //   }
-    public int wyborDaniaDoPosilku(TypPosilku typPosilku) throws FileNotFoundException {
-            int wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
+
+    public void dodanieGramturyWybranymPosilkom(List<Produkt> produkts, String wybraneDanieZSkladem) {
+
+        for (int i = 0; i < produkts.size(); i++) {
+            System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
+            System.out.print("Podaj gramature: ");
+            int ileGram = Integer.parseInt(scanner.nextLine());
+            zapytaniaDoBazy.insertIntoGramaturaPosilku(ileGram, wybraneDanieZSkladem);
+        }
+
+    }
+    public int wyborDaniaDoPosilku(TypPosilku typPosilku) {
+            List<Integer> ids = zapytaniaDoBazy.wyswietlIdDaniaDanegoTypu(typPosilku);
+            List<String> wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
+            for (String s : wyswietlDania) {
+                System.out.println(s);
+            }
+
             System.out.print("Jakie danie chcesz dodać do " + odmianaTypuPosilku(typPosilku) + ": ");
              int idWybranegoDania = Integer.parseInt(scanner.nextLine());
-            while (idWybranegoDania > wyswietlDania || idWybranegoDania <= 0) {
+            while (!ids.contains(idWybranegoDania)) {
                 System.out.println("Podałeś liczbe spoza zakresu");
                 System.out.print("Wybierz jescze raz:");
                 idWybranegoDania = Integer.parseInt(scanner.nextLine());
             }
             return idWybranegoDania;
+
+    }
+    public String wyborKonkretnegoDaniaDoPosilku(TypPosilku typPosilku, int id) {
+            List<String> wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
+
+             System.out.println(wyswietlDania.size()+"!!!!!");
+
+            // tutaj wyswietla pozycje w liscie a nie wartosc z tym id
+            return wyswietlDania.get(0);
 
     }
     public String odmianaTypuPosilku(TypPosilku typPosilku){
