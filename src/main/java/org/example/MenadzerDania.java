@@ -158,14 +158,14 @@ public class MenadzerDania {
     }
 
 
-//    public Produkt obliczMakro(int ileGram, Produkt produkt) {
-//        double kcal = Math.round((produkt.getKcal() * ileGram) / 100);
-//        double bailko = Math.round((produkt.getBialko() * ileGram) / 100);
-//        double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
-//        double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
-//        double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
-//        return new Produkt(produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
-//    }
+    public Produkt obliczMakro(int ileGram, Produkt produkt) {
+        double kcal = Math.round((produkt.getKcal() * ileGram) / 100);
+        double bailko = Math.round((produkt.getBialko() * ileGram) / 100);
+        double wegle = Math.round((produkt.getWeglowodany() * ileGram) / 100);
+        double blonnik = Math.round((produkt.getBlonnik() * ileGram) / 100);
+        double tluszcze = Math.round((produkt.getTluszcze() * ileGram) / 100);
+        return new Produkt(produkt.getId(), produkt.getNazwa(), kcal, bailko, wegle, blonnik, tluszcze);
+    }
 
 }
 

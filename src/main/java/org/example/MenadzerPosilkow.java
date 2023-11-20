@@ -1,23 +1,18 @@
 
 package org.example;
 
-import org.example.Dania;
-import org.example.TypPosilku;
+import java.util.*;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import static java.util.Collections.reverse;
+import static java.util.List.*;
 
 public class MenadzerPosilkow {
     MenadzerDania menadzerDania = new MenadzerDania();
     MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
     ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
-  //  MenadzerPlikow menadzerPlikow = new MenadzerPlikow();
     Scanner scanner = new Scanner(System.in);
 
-    public void pelenProgram(TypPosilku typPosilku) throws IOException {
+    public void pelenProgram(TypPosilku typPosilku){
         if(!zapytaniaDoBazy.open()){
             System.out.println("Nie można otworzyć bazy danych");
             return;
@@ -27,37 +22,19 @@ public class MenadzerPosilkow {
              miejsceDodatkowegoPosilku = wJakimMiejscu();
         }
         int wybraneDanie = wyborDaniaDoPosilku(typPosilku);
+
+
       //  String danieZSkladem = menadzerDania.wyswietlKonkretneDanie(typPosilku, wybraneDanie);
         // tu powinna byc metoda ktora zwraca id wybranego dania
-        String konkretneDanie = menadzerDania.wyswietlKonkretneDanie(typPosilku,wybraneDanie);
-        System.out.println(konkretneDanie+ " niggggggggga");
+
         List<Produkt> produktyZWybranegoDania = zapytaniaDoBazy.wyswietlWszystkieProduktyZDanegoDania(wybraneDanie);
-        List<String> wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
+        dodanieGramturyWybranymPosilkom(produktyZWybranegoDania);
 
 
-        dodanieGramturyWybranymPosilkom(produktyZWybranegoDania, konkretneDanie);
-        //dodanie tutaj insertu do  produktu _has_gramatura
+        List<Integer> wybraneProdukty = zapytaniaDoBazy.wyswietlWszystkieDodaneIdDoGram(produktyZWybranegoDania.size());
+        Collections.reverse(wybraneProdukty);
 
-
-        int idGram = zapytaniaDoBazy.pobierzOstatnieIDGram();
-
-
-        // tutaj jest nazwa dania z składem trzeba uciąć 6 pierwszych liter
-
-       // zapytaniaDoBazy.dodajListeProduktowDoDania(produkty, idGram-1);
-
-
-        /*
-
-
-        List<Produkt> produktyZMakro = stworzenieListyProduktowZObliczonymMarko(wybraneDanie);
-        for (Produkt produkt : produktyZMakro) {
-            System.out.println(menadzerProduktow.wypiszProdukt(produkt));
-        }
-        Dania danieZObliczonymMakro = new Dania(wybraneDanie.typPosilku,wybraneDanie.getNazwaDania(), produktyZMakro);
-     //   menadzerPlikow.dodajDoPlikZDanymDniem(danieZObliczonymMakro, miejsceDodatkowegoPosilku);
-
-         */
+         zapytaniaDoBazy.dodajListeGramProduktowDoDania(wybraneProdukty, wybraneDanie);
     }
     public int wJakimMiejscu() {
         menuDodatkowegoDania();
@@ -70,13 +47,13 @@ public class MenadzerPosilkow {
         return wyborMiejscaPosilku;
     }
 
-    public void dodanieGramturyWybranymPosilkom(List<Produkt> produkts, String wybraneDanieZSkladem) {
+    public void dodanieGramturyWybranymPosilkom(List<Produkt> produkts) {
 
         for (int i = 0; i < produkts.size(); i++) {
             System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
             System.out.print("Podaj gramature: ");
             int ileGram = Integer.parseInt(scanner.nextLine());
-            zapytaniaDoBazy.insertIntoGramaturaPosilku(ileGram, wybraneDanieZSkladem);
+            zapytaniaDoBazy.insertIntoGramaturaPosilku(ileGram, produkts.get(i));
         }
 
     }
@@ -95,15 +72,6 @@ public class MenadzerPosilkow {
                 idWybranegoDania = Integer.parseInt(scanner.nextLine());
             }
             return idWybranegoDania;
-
-    }
-    public String wyborKonkretnegoDaniaDoPosilku(TypPosilku typPosilku, int id) {
-            List<String> wyswietlDania = menadzerDania.wyswietlDanie(typPosilku);
-
-             System.out.println(wyswietlDania.size()+"!!!!!");
-
-            // tutaj wyswietla pozycje w liscie a nie wartosc z tym id
-            return wyswietlDania.get(0);
 
     }
     public String odmianaTypuPosilku(TypPosilku typPosilku){

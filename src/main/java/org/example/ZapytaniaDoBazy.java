@@ -18,9 +18,10 @@ public class ZapytaniaDoBazy {
     public static final String TABLE_DANIA = "dania";
     public static final String TABLE_POSILKI = "posilki";
     public static final String TABLE_GRAM = "gramaturaPosilku";
+    public static final String TABLE_GRAMPRODUCTS_HAS_DANIE = "gramaturaposilku_has_dania";
     public static final String TABLE_DANIA_HAS_PRODUKTY = "produkty_has_dania";
-    public static final String TABLE_PRODUKTY_HAS_PRODUKTYGRAM = "produkty_has_gramaturaposilku";
     public static final String COLUMN_PRODUKTY_IDPODUKTY = "produkty_idprodukty";
+    public static final String COLUMN_GRAMPRODUKTY_IDPODUKTY = "GramaturaPosilku_idGramaturaPosilku";
     public static final String COLUMN_GRAMPRODUKTY_IDGRAMPODUKTY = "idGramaturaPosilku";
     public static final String COLUMN_PRODUKTY_IDDANIA = "dania_iddania";
 
@@ -50,8 +51,17 @@ public class ZapytaniaDoBazy {
 
 
     //zapytania do bazy
+
+
+//    SELECT bazadieta.dania.nazwaDania, bazadieta.gramaturaposilku.nazwaProduktow, bazadieta.gramaturaposilku.kcal  FROM bazadieta.gramaturaposilku
+//    JOIN bazadieta.gramaturaposilku_has_dania ON bazadieta.gramaturaposilku.idGramaturaPosilku = bazadieta.gramaturaposilku_has_dania.GramaturaPosilku_idGramaturaPosilku
+//    JOIN bazadieta.dania ON bazadieta.dania.iddania = bazadieta.gramaturaposilku_has_dania.dania_iddania;
+
+
+
+
+
     public static final String QUERY_GET_ALL_PRODUCTS = "SELECT * FROM "+ TABLE_PRODUKT;
-    public static final String QUERY_TEST_PREPERE = " SELECT * FROM "+TABLE_PRODUKT+" WHERE "+ COLUMN_NAZWAPRODUKTOW + " = ? OR "+ COLUMN_KCAL + " = ?";
 
 
     public static final String QUERY_INSERT_PRODUKT = " INSERT INTO "+TABLE_PRODUKT+"("+ COLUMN_IDPRODUKTY +","+COLUMN_NAZWAPRODUKTOW+","+COLUMN_KCAL
@@ -63,6 +73,9 @@ public class ZapytaniaDoBazy {
     public static final String LAST_ID_DANIA = "SELECT "+ COLUMN_IDDANIA + " FROM " +TABLE_DANIA + " ORDER BY " + COLUMN_IDDANIA+ " DESC LIMIT 1";
     public static final String LAST_ID_GRAM = "SELECT "+ COLUMN_IDGRAM + " FROM " +TABLE_GRAM + " ORDER BY " + COLUMN_IDGRAM+ " DESC LIMIT 1";
 
+
+    public static final String GET_IDS_GRAM = "SELECT "+ COLUMN_IDGRAM + " FROM " +TABLE_GRAM + " ORDER BY " + COLUMN_IDGRAM+ " DESC LIMIT ?";
+
     public static final String QUERY_ALL_PRODUCTS_BY_ID_DANIA = "SELECT * FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
             + " = ?";
@@ -73,7 +86,8 @@ public class ZapytaniaDoBazy {
     public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
 
-    public static final String QUERY_ADD_PRODUCTS_TO_GRAM = "INSERT INTO "+TABLE_PRODUKTY_HAS_PRODUKTYGRAM + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_GRAMPRODUKTY_IDGRAMPODUKTY +")" +
+    // to jest to zapytanie
+    public static final String QUERY_ADD_GRAMPRODUKCTS_TO_DANIA = "INSERT INTO "+TABLE_GRAMPRODUCTS_HAS_DANIE + "("+COLUMN_GRAMPRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
     public static final String QUERY_ALL_PRODUKTS_NAMES ="SELECT "+ COLUMN_NAZWAPRODUKTOW + " FROM "+ TABLE_PRODUKT;
     public static final String QUERY_ALL_DANIA_NAMES ="SELECT "+ COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA;
@@ -86,19 +100,18 @@ public class ZapytaniaDoBazy {
     public static final String QUERY_INSERT_INTO_POSILKI = "INSERT INTO "+TABLE_POSILKI+ "("+COLUMN_IDPOSILKI + ","+ COLUMN_DATAPOSILKU
             + ","+COLUMN_ILEGRAM +") VALUES (?,"+CZAS+",?)";
 
-    public static final String QUERY_ADD_GRAMY = "INSERT INTO "+TABLE_GRAM + " VALUES (?,?,?,?)";
+    public static final String QUERY_ADD_GRAMY = "INSERT INTO "+TABLE_GRAM + " VALUES (?,?,?,?,?,?,?,?)";
     public static final String QUERY_GET_NAZWADANIA_TO_ID = "SELECT "+COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA + " WHERE "+ COLUMN_IDDANIA + " = ?";
 
 
 
 
     private Connection con;
-    private PreparedStatement prepereTest;
     private PreparedStatement insertIntoProdukt;
 
     private PreparedStatement allProductsByIdDania;
     private PreparedStatement addProductsToDanie;
-    private PreparedStatement addProductsToGramProducts;
+    private PreparedStatement addGramProductsToDanie;
     private PreparedStatement insertIntoDania;
     private PreparedStatement getAllProductsNamesByIdDania;
     private PreparedStatement getIdDaniaToType;
@@ -109,16 +122,17 @@ public class ZapytaniaDoBazy {
 
     private PreparedStatement getNameDaniaToID;
 
+    private PreparedStatement getIdsGram;
+
 
 
     public boolean open(){
         try{
             con = DriverManager.getConnection(URL, USER, PASSWORD);
-            prepereTest = con.prepareStatement(QUERY_TEST_PREPERE);
             insertIntoProdukt = con.prepareStatement(QUERY_INSERT_PRODUKT);
             allProductsByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_BY_ID_DANIA);
             addProductsToDanie = con.prepareStatement(QUERY_ADD_PRODUCTS_TO_DANIE);
-            addProductsToGramProducts = con.prepareStatement(QUERY_ADD_PRODUCTS_TO_GRAM);
+            addGramProductsToDanie = con.prepareStatement(QUERY_ADD_GRAMPRODUKCTS_TO_DANIA);
             insertIntoDania = con.prepareStatement(QUERY_INSERT_INTO_DANIA);
             getAllProductsNamesByIdDania = con.prepareStatement(QUERY_ALL_PRODUCTS_NAMES_BY_ID_DANIA);
             getIdDaniaToType = con.prepareStatement(QUERY_GET_ID_DANIA_TO_TYPE);
@@ -126,6 +140,7 @@ public class ZapytaniaDoBazy {
             insetIntoPosilki = con.prepareStatement(QUERY_INSERT_INTO_POSILKI);
             addGram = con.prepareStatement(QUERY_ADD_GRAMY);
             getNameDaniaToID = con.prepareStatement(QUERY_GET_NAZWADANIA_TO_ID);
+            getIdsGram = con.prepareStatement(GET_IDS_GRAM);
 
 
 
@@ -139,9 +154,6 @@ public class ZapytaniaDoBazy {
     }
     public void close(){
         try{
-            if(prepereTest != null){
-                prepereTest.close();
-            }
             if(insertIntoProdukt != null){
                 insertIntoProdukt.close();
             }
@@ -169,11 +181,14 @@ public class ZapytaniaDoBazy {
             if(addGram != null){
                 addGram.close();
             }
-            if(addProductsToGramProducts != null){
-               addProductsToGramProducts.close();
+            if(addGramProductsToDanie != null){
+                addGramProductsToDanie.close();
             }
             if(getNameDaniaToID != null){
                 getNameDaniaToID.close();
+            }
+            if(getIdsGram != null){
+                getIdsGram.close();
             }
 
 
@@ -273,14 +288,24 @@ public class ZapytaniaDoBazy {
             System.out.println("Nie można dodać dania do bazy "+e.getMessage() );
         }
     }
-    public void insertIntoGramaturaPosilku(int ileGram, String danie){
+    public void insertIntoGramaturaPosilku(int ileGram, Produkt produkt){
         int id = pobierzOstatnieIDGram();
+        MenadzerDania menadzerDania = new MenadzerDania();
+        Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkt);
+
+
+
+
         LocalDate date = LocalDate.now();
             try {
                 addGram.setInt(1, id);
-                addGram.setInt(2, ileGram);
-                addGram.setString(3, String.valueOf(date));
-                addGram.setString(4, danie);
+                addGram.setString(2, produktZObliczonymMakro.getNazwa());
+                addGram.setDouble(3, produktZObliczonymMakro.getKcal());
+                addGram.setDouble(4, produktZObliczonymMakro.getBialko());
+                addGram.setDouble(5, produktZObliczonymMakro.getWeglowodany());
+                addGram.setDouble(6, produktZObliczonymMakro.getBlonnik());
+                addGram.setDouble(7, produktZObliczonymMakro.getTluszcze());
+                addGram.setString(8, String.valueOf(date));
                 addGram.executeUpdate();
             }catch (SQLException e){
                 System.out.println("Nie można dodać gramatury posilku do bazy "+e.getMessage() );
@@ -343,6 +368,21 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
+    public List<Integer> wyswietlWszystkieDodaneIdDoGram(int ile){
+        try{
+            getIdsGram.setInt(1, ile);
+            ResultSet result = getIdsGram.executeQuery();
+            List<Integer> wszyskieId = new ArrayList<>();
+            while (result.next()){
+               int id = result.getInt(1);
+                wszyskieId.add(id);
+            }
+            return wszyskieId;
+        }catch (SQLException e ){
+            System.out.println("Nie można wyświetlić nazw id dodanych gram produktow");
+            return null;
+        }
+    }
 
     public List<String> wyswietlWszystkieNazwy(String query) {
 
@@ -375,25 +415,26 @@ public class ZapytaniaDoBazy {
             System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
         }
     }
-    public void dodajListeProduktowGramProdukt(List<Integer> idProduktu, int idGram){
-        for (Integer integer : idProduktu) {
-            dodajProduktyDoGramProdukt(integer, idGram);
+
+    public void dodajListeGramProduktowDoDania(List<Integer> idGramProduktu, int idDania){
+        for (Integer integer : idGramProduktu) {
+            dodajGramatureProduktowDoDania(integer, idDania);
         }
     }
 
-    public void dodajProduktyDoGramProdukt(int idProduktu, int idGram){
+
+    public void dodajGramatureProduktowDoDania(int idGramProduktu, int idDania){
         try {
-            addProductsToGramProducts.setInt(1, idProduktu);
-            addProductsToGramProducts.setInt(2, idGram);
-            addProductsToGramProducts.executeUpdate();
+            addGramProductsToDanie.setInt(1, idGramProduktu);
+            addGramProductsToDanie.setInt(2, idDania);
+            addGramProductsToDanie.executeUpdate();
         }catch (SQLException e){
-            System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
+            System.out.println("Problem z dodanie id gram produktów i id dania "+e.getMessage() );
         }
     }
 
 
     public List<Integer> wyswietlIdDaniaDanegoTypu(TypPosilku typPosilku){
-
 
         try {
             getIdDaniaToType.setString(1, String.valueOf(typPosilku));
@@ -411,7 +452,6 @@ public class ZapytaniaDoBazy {
     }
     public List<String> wyswietlNazweDaniaDanegoTypu(TypPosilku typPosilku){
 
-
         try {
             getNazwaDaniaToType.setString(1, String.valueOf(typPosilku));
             ResultSet result = getNazwaDaniaToType.executeQuery();
@@ -426,38 +466,6 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-
-
-
-
-
-
-
-    public List<Produkt> podwojneZapytanieSelect(String table, double kcal){
-        try {
-            prepereTest.setString(1, table);
-            prepereTest.setDouble(2, kcal);
-            ResultSet result = prepereTest.executeQuery();
-            List<Produkt> wszyskieProdukty = new ArrayList<>();
-            while (result.next()){
-               Produkt produkt = new Produkt(
-                       result.getInt(1),
-                       result.getString(2),
-                       result.getDouble(3),
-                       result.getDouble(4),
-                       result.getDouble(5),
-                       result.getDouble(6),
-                       result.getDouble(7));
-               wszyskieProdukty.add(produkt);
-            }
-            return wszyskieProdukty;
-        }catch (SQLException e){
-            System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
-            return null;
-        }
-    }
-
-
     public boolean sprawdzCzyJestWBazieTakiProdukt(String nazwa, ZapytaniaDoBazy zapytaniaDoBazy){
         boolean flaga = true;
         List<String> nazwy = zapytaniaDoBazy.wyswietlWszystkieNazwy(QUERY_ALL_PRODUKTS_NAMES);

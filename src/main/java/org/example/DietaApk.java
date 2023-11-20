@@ -23,11 +23,10 @@ public class DietaApk {
             wybor = Integer.parseInt(scanner.nextLine());
             switch (wybor){
                 case 1 -> menadzerPosilkow.pelenProgram(TypPosilku.SNIADANIE);
-//                case 2 -> menadzerPosilkow.pelenProgram(TypPosilku.DRUGIE_SNIADANIE);
-//                case 3 -> menadzerPosilkow.pelenProgram(TypPosilku.OBIAD);
-//                case 4 -> menadzerPosilkow.pelenProgram(TypPosilku.KOLACJA);
-//                case 5 -> menadzerPosilkow.pelenProgram(TypPosilku.DODATKOWE_DANIE);
-                case 5 -> danie.wyswietlDanie(TypPosilku.SNIADANIE);
+                case 2 -> menadzerPosilkow.pelenProgram(TypPosilku.DRUGIE_SNIADANIE);
+                case 3 -> menadzerPosilkow.pelenProgram(TypPosilku.OBIAD);
+                case 4 -> menadzerPosilkow.pelenProgram(TypPosilku.KOLACJA);
+                case 5 -> menadzerPosilkow.pelenProgram(TypPosilku.DODATKOWE_DANIE);
                 case 6 -> danie.tworzenieDania(menadzerProduktow, scanner);
                 case 7 -> menadzerProduktow.tworzenieProduktu(scanner);
                 case 8 ->

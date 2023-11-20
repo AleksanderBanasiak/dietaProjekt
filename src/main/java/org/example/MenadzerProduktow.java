@@ -45,6 +45,9 @@ public class MenadzerProduktow {
             zapytaniaDoBazy.insertIntoProdukt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
 
 
+
+
+
 //            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
 //            menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
 //            produkty.add(nowyProdukt);
