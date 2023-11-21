@@ -35,6 +35,11 @@ public class MenadzerPosilkow {
         Collections.reverse(wybraneProdukty);
 
          zapytaniaDoBazy.dodajListeGramProduktowDoDania(wybraneProdukty, wybraneDanie);
+
+
+
+
+
     }
     public int wJakimMiejscu() {
         menuDodatkowegoDania();

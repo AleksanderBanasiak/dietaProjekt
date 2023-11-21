@@ -14,6 +14,7 @@ public class DietaApk {
         int wybor;
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         MenadzerDania danie = new MenadzerDania();
+        WyswietlDiete wyswietlDiete = new WyswietlDiete();
 
         MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
         Scanner scanner = new Scanner(System.in);
@@ -29,7 +30,8 @@ public class DietaApk {
                 case 5 -> menadzerPosilkow.pelenProgram(TypPosilku.DODATKOWE_DANIE);
                 case 6 -> danie.tworzenieDania(menadzerProduktow, scanner);
                 case 7 -> menadzerProduktow.tworzenieProduktu(scanner);
-                case 8 ->
+                case 8 -> wyswietlDiete.wyswietDiete();
+                case 9 ->
                 {
                     System.out.println("Koniec programu");
                     scanner.close();
@@ -54,7 +56,8 @@ public class DietaApk {
         System.out.println("[5] - DODATKOWY POSIŁEK");
         System.out.println("[6] - DODAJ DANIE");
         System.out.println("[7] - DODAJ PRODUKT");
-        System.out.println("[8] - WYJŚCIE Z PROGRAMU");
+        System.out.println("[8] - WYŚWIETL DIETĘ");
+        System.out.println("[9] - WYJŚCIE Z PROGRAMU");
         System.out.println("-".repeat(24));
     }
 }

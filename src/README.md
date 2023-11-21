@@ -12,3 +12,8 @@
 
         dodac zapytanie ktore liczy kalorie dla calego danie i je wyspiuje 
 
+
+        dodanie zapyania liczącego sume kcal itd dla całego dnia
+        usprawnienie działania tej okropnej metody
+        dodanie np zapytanie o nawe dania i typu 
+

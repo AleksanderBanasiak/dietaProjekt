@@ -2,10 +2,7 @@ package org.example;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class KorzytanieZBazy {
 
@@ -43,9 +40,29 @@ public class KorzytanieZBazy {
 //            System.out.println(produkty.get(i));
 //        }
 
-        String danie = zapytaniaDoBazy.wyswietlDanieODanymID(1);
+//        String danie = zapytaniaDoBazy.wyswietlDanieODanymID(1);
+//
+//        System.out.println(danie);
 
-        System.out.println(danie);
+
+
+
+        TypPosilku typ = TypPosilku.SNIADANIE;
+        LocalDate data = LocalDate.now();
+
+
+        List<String> dania = zapytaniaDoBazy.pobierzDanePosilku(typ, data);
+        List<String> daty = zapytaniaDoBazy.wyswietlDaty();
+
+        for (int i = 0; i < daty.size(); i++) {
+            System.out.println(daty.get(i));
+        }
+
+
+
+//        for (int i = 0; i < dania.size(); i++) {
+//            System.out.println(dania.get(i));
+//        }
 
 
 

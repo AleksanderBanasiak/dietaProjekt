@@ -3,6 +3,7 @@ package org.example;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,6 +50,10 @@ public class ZapytaniaDoBazy {
     public static final int INDEX_BLONNIK = 6;
     public static final int INDEX_TLUSZCZE = 7;
 
+    public static final String CULUMN_GRAMIDGRAMPOSULKU = "idGramaturaPosilku";
+    public static final String CULUMN_GRAMNAZWAPRODUKTOW = "nazwaProduktow";
+    public static final String CULUMN_GRAMTDATA = "data";
+
 
     //zapytania do bazy
 
@@ -59,6 +64,22 @@ public class ZapytaniaDoBazy {
 
 
 
+
+    public static final String QUERY_SELECT_ALL_DATA_FROM_DAY = "SELECT "+COLUMN_TYPDANIA+"," +COLUMN_NAZWADANIA + ", " + COLUMN_NAZWAPRODUKTOW + ", "+ COLUMN_KCAL  + ", "+ COLUMN_BIALKO
+             + ", "+ COLUMN_WEGLOWODANY + ", "+ COLUMN_BLONNIK + ", "+ COLUMN_TLUSZCZE + " FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+
+            CULUMN_GRAMIDGRAMPOSULKU + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
+            TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
+
+
+    public static final String QUERY_SELECT_ALL_SUMS_FROM_DAY = "SELECT SUM("+ COLUMN_KCAL  + "), SUM("+ COLUMN_BIALKO + "), SUM("+ COLUMN_WEGLOWODANY + "), SUM("+ COLUMN_BLONNIK +
+            "), SUM("+ COLUMN_TLUSZCZE + ") FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+
+            TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
+            TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
+
+
+    public static final String SELECT_DISTINCT_DATA = "SELECT DISTINCT "+CULUMN_GRAMTDATA+ " FROM "+ TABLE_GRAM + " ORDER BY "+ CULUMN_GRAMTDATA;
+
+    public static final String SELECT_DATA_DESC = "SELECT DISTINCT "+CULUMN_GRAMTDATA+ " FROM "+ TABLE_GRAM + " ORDER BY "+ CULUMN_GRAMTDATA + " DESC LIMIT ?";
 
 
     public static final String QUERY_GET_ALL_PRODUCTS = "SELECT * FROM "+ TABLE_PRODUKT;
@@ -124,6 +145,11 @@ public class ZapytaniaDoBazy {
 
     private PreparedStatement getIdsGram;
 
+    private PreparedStatement getAll;
+    private PreparedStatement getAllSums;
+
+    private PreparedStatement getData;
+
 
 
     public boolean open(){
@@ -141,7 +167,9 @@ public class ZapytaniaDoBazy {
             addGram = con.prepareStatement(QUERY_ADD_GRAMY);
             getNameDaniaToID = con.prepareStatement(QUERY_GET_NAZWADANIA_TO_ID);
             getIdsGram = con.prepareStatement(GET_IDS_GRAM);
-
+            getAll = con.prepareStatement(QUERY_SELECT_ALL_DATA_FROM_DAY);
+            getAllSums = con.prepareStatement(QUERY_SELECT_ALL_SUMS_FROM_DAY);
+            getData = con.prepareStatement(SELECT_DATA_DESC);
 
 
 
@@ -189,6 +217,15 @@ public class ZapytaniaDoBazy {
             }
             if(getIdsGram != null){
                 getIdsGram.close();
+            }
+            if(getAll != null){
+                getAll.close();
+            }
+            if(getAllSums != null){
+                getAllSums.close();
+            }
+            if(getData != null){
+                getData.close();
             }
 
 
@@ -485,6 +522,128 @@ public class ZapytaniaDoBazy {
             }
         }
         return flaga;
+    }
+
+    public List<String> wyswietlDaty(){
+       List<String> daty = new ArrayList<>();
+        try(Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(SELECT_DISTINCT_DATA)){
+            while (result.next()){
+                String data = result.getString(1);
+                daty.add(data);
+            }
+            return daty;
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+            return null;
+        }
+
+    }
+
+    public String wyswietlWybranaDate(int data){
+            String wybranaData = "";
+        try {
+            getData.setInt(1,data);
+            ResultSet result = getData.executeQuery();
+            while (result.next()){
+                 wybranaData =result.getString(1);
+            }
+            return wybranaData;
+        }catch (SQLException e ){
+            System.out.println("Nie można wybranej daty "+ e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+    public List<String> pobierzDanePosilku(TypPosilku typPosilku, LocalDate data){
+        // najgorsza metoda jaką napisałem xd (do poprawy)
+
+        // sume mozna zapisac jako kolejne zapytanie z wartosciamy tyle tylko ze suma
+        int licznik =0;
+        int produkt =0;
+        List<String> wyniki =new ArrayList<>();
+        List<String> wszystko =new ArrayList<>();
+        StringBuilder buliderDlaTypuIDania = new StringBuilder();
+        try{
+           getAll.setString(1, String.valueOf(typPosilku));
+           getAll.setString(2, String.valueOf(data));
+           ResultSet result = getAll.executeQuery();
+            while (result.next()){
+                licznik++;
+                String typDania = result.getString(1);
+                String nazwaDania = result.getString(2);
+                String nazwaProduktu = result.getString(3);
+                double kcal = result.getDouble(4);
+                double bialko = result.getDouble(5);
+                double wegle = result.getDouble(6);
+                double blonnik = result.getDouble(7);
+                double tluszcze = result.getDouble(8);
+                typDania = typDania.toUpperCase().charAt(0) + typDania.substring(1).toLowerCase();
+                if(licznik ==1){
+                    buliderDlaTypuIDania.append(typDania);
+                    buliderDlaTypuIDania.append(": ");
+                    buliderDlaTypuIDania.append(nazwaDania);
+                    buliderDlaTypuIDania.append(" ");
+                }
+                StringBuilder stringBuilder = new StringBuilder();
+                produkt++;
+                stringBuilder.append("[");
+                stringBuilder.append(produkt);
+                stringBuilder.append("] - ");
+                stringBuilder.append(nazwaProduktu);
+                stringBuilder.append(": ");
+                stringBuilder.append("kcal:");
+                stringBuilder.append(kcal);
+                stringBuilder.append(",");
+                stringBuilder.append(" białko:");
+                stringBuilder.append(bialko);
+                stringBuilder.append(",");
+                stringBuilder.append(" węglowodany:");
+                stringBuilder.append(wegle);
+                stringBuilder.append(",");
+                stringBuilder.append(" błonnik:");
+                stringBuilder.append(blonnik);
+                stringBuilder.append(",");
+                stringBuilder.append(" tłuszcze:");
+                stringBuilder.append(tluszcze);
+                wyniki.add(String.valueOf(stringBuilder));
+            }
+            wszystko.add(String.valueOf(buliderDlaTypuIDania));
+            wszystko.addAll(wyniki);
+            wszystko.add(pobierzSumy(typPosilku, data));
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+        }
+        return wszystko;
+    }
+
+        public String pobierzSumy(TypPosilku typPosilku, LocalDate data){
+        double sumKcal = 0;
+        double sumBialko = 0;
+        double sumWegle = 0;
+        double sumBlonnik = 0;
+        double sumTluszcze = 0;
+        try{
+           getAllSums.setString(1, String.valueOf(typPosilku));
+           getAllSums.setString(2, String.valueOf(data));
+           ResultSet result = getAllSums.executeQuery();
+            while (result.next()){
+                 sumKcal = result.getDouble(1);
+                 sumBialko = result.getDouble(2);
+                 sumWegle = result.getDouble(3);
+                 sumBlonnik = result.getDouble(4);
+                 sumTluszcze = result.getDouble(5);
+
+            }
+            return "Łącznie: kcal:" + sumKcal+ ", białko: "+sumBialko+ ", węglowodany: "+ sumWegle + ", błonnik: "+sumBlonnik + ", tłuszcze: "+sumTluszcze;
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+            return null;
+        }
+
     }
 
 
