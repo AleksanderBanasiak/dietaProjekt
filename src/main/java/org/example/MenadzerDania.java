@@ -35,14 +35,18 @@ public class MenadzerDania {
             }
             TypPosilku typ = typPosilku(jakiTyp);
             List<Integer> produkts = wybierzProduktyDoDania(menadzerProduktow);
-            zapytaniaDoBazy.insertIntoDanie(nazwaPosilku, typ);
-            int idDania = zapytaniaDoBazy.pobierzOstatnieIDDania();
-            zapytaniaDoBazy.dodajListeProduktowDoDania(produkts, idDania-1);
+
+            if(produkts != null){
+                zapytaniaDoBazy.insertIntoDanie(nazwaPosilku, typ);
+                int idDania = zapytaniaDoBazy.pobierzOstatnieIDDania();
+                zapytaniaDoBazy.dodajListeProduktowDoDania(produkts, idDania-1);
+            }
         }
     }
         public List<Integer> wybierzProduktyDoDania(MenadzerProduktow menadzerProduktow){
             Scanner scanner = new Scanner(System.in);
             List<Produkt> produkty = zapytaniaDoBazy.wyswietlWyszyskieProdukty();
+
             for (Produkt produkt : produkty){
             System.out.println(menadzerProduktow.wypiszProdukt(produkt));
         }
@@ -53,6 +57,19 @@ public class MenadzerDania {
             for (int i = 0; i < splitWybraneProdukty.length; i++) {
                 tablicaWybranychProduktow.add((Integer.parseInt(splitWybraneProdukty[i])));
             }
+
+            for (Integer integer : tablicaWybranychProduktow) {
+                if (integer > produkty.size() || integer <= 0) {
+                    System.out.println("Nie można utworzyć takiego dnia ponieważ wybrano złe produkty");
+                    return null;
+                }
+            }
+
+
+
+
+
+
             return tablicaWybranychProduktow;
         }
     public TypPosilku typPosilku(int typ){

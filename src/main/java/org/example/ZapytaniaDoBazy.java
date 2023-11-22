@@ -65,16 +65,26 @@ public class ZapytaniaDoBazy {
 
 
 
-    public static final String QUERY_SELECT_ALL_DATA_FROM_DAY = "SELECT "+COLUMN_TYPDANIA+"," +COLUMN_NAZWADANIA + ", " + COLUMN_NAZWAPRODUKTOW + ", "+ COLUMN_KCAL  + ", "+ COLUMN_BIALKO
+    public static final String QUERY_SELECT_ALL_DATA_FROM_DAY = "SELECT "+ COLUMN_NAZWAPRODUKTOW + ", "+ COLUMN_KCAL  + ", "+ COLUMN_BIALKO
              + ", "+ COLUMN_WEGLOWODANY + ", "+ COLUMN_BLONNIK + ", "+ COLUMN_TLUSZCZE + " FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+
             CULUMN_GRAMIDGRAMPOSULKU + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
+
+    public static final String QUERY_SELECT_ALL_DATA_FROM_DANIA = "SELECT "+COLUMN_TYPDANIA+"," +COLUMN_NAZWADANIA + " FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE
+            +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " +
+            TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+
+            TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
 
 
     public static final String QUERY_SELECT_ALL_SUMS_FROM_DAY = "SELECT SUM("+ COLUMN_KCAL  + "), SUM("+ COLUMN_BIALKO + "), SUM("+ COLUMN_WEGLOWODANY + "), SUM("+ COLUMN_BLONNIK +
             "), SUM("+ COLUMN_TLUSZCZE + ") FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
+
+    public static final String QUERY_SELECT_ALL_SUMS_FROM_ALL_DAY = "SELECT SUM("+ COLUMN_KCAL  + "), SUM("+ COLUMN_BIALKO + "), SUM("+ COLUMN_WEGLOWODANY + "), SUM("+ COLUMN_BLONNIK +
+            "), SUM("+ COLUMN_TLUSZCZE + ") FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+
+            TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
+            TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
 
 
     public static final String SELECT_DISTINCT_DATA = "SELECT DISTINCT "+CULUMN_GRAMTDATA+ " FROM "+ TABLE_GRAM + " ORDER BY "+ CULUMN_GRAMTDATA;
@@ -148,7 +158,10 @@ public class ZapytaniaDoBazy {
     private PreparedStatement getAll;
     private PreparedStatement getAllSums;
 
+    private PreparedStatement getAllSumsFromAllDay;
+
     private PreparedStatement getData;
+    private PreparedStatement getAllDania;
 
 
 
@@ -170,6 +183,8 @@ public class ZapytaniaDoBazy {
             getAll = con.prepareStatement(QUERY_SELECT_ALL_DATA_FROM_DAY);
             getAllSums = con.prepareStatement(QUERY_SELECT_ALL_SUMS_FROM_DAY);
             getData = con.prepareStatement(SELECT_DATA_DESC);
+            getAllDania = con.prepareStatement(QUERY_SELECT_ALL_DATA_FROM_DANIA);
+            getAllSumsFromAllDay = con.prepareStatement(QUERY_SELECT_ALL_SUMS_FROM_ALL_DAY);
 
 
 
@@ -226,6 +241,12 @@ public class ZapytaniaDoBazy {
             }
             if(getData != null){
                 getData.close();
+            }
+            if(getAllDania != null){
+                getAllDania.close();
+            }
+            if(getAllSumsFromAllDay != null){
+                getAllSumsFromAllDay.close();
             }
 
 
@@ -560,34 +581,20 @@ public class ZapytaniaDoBazy {
 
     public List<String> pobierzDanePosilku(TypPosilku typPosilku, LocalDate data){
         // najgorsza metoda jaką napisałem xd (do poprawy)
-
-        // sume mozna zapisac jako kolejne zapytanie z wartosciamy tyle tylko ze suma
-        int licznik =0;
         int produkt =0;
         List<String> wyniki =new ArrayList<>();
         List<String> wszystko =new ArrayList<>();
-        StringBuilder buliderDlaTypuIDania = new StringBuilder();
         try{
            getAll.setString(1, String.valueOf(typPosilku));
            getAll.setString(2, String.valueOf(data));
            ResultSet result = getAll.executeQuery();
             while (result.next()){
-                licznik++;
-                String typDania = result.getString(1);
-                String nazwaDania = result.getString(2);
-                String nazwaProduktu = result.getString(3);
-                double kcal = result.getDouble(4);
-                double bialko = result.getDouble(5);
-                double wegle = result.getDouble(6);
-                double blonnik = result.getDouble(7);
-                double tluszcze = result.getDouble(8);
-                typDania = typDania.toUpperCase().charAt(0) + typDania.substring(1).toLowerCase();
-                if(licznik ==1){
-                    buliderDlaTypuIDania.append(typDania);
-                    buliderDlaTypuIDania.append(": ");
-                    buliderDlaTypuIDania.append(nazwaDania);
-                    buliderDlaTypuIDania.append(" ");
-                }
+                String nazwaProduktu = result.getString(1);
+                double kcal = result.getDouble(2);
+                double bialko = result.getDouble(3);
+                double wegle = result.getDouble(4);
+                double blonnik = result.getDouble(5);
+                double tluszcze = result.getDouble(6);
                 StringBuilder stringBuilder = new StringBuilder();
                 produkt++;
                 stringBuilder.append("[");
@@ -611,15 +618,33 @@ public class ZapytaniaDoBazy {
                 stringBuilder.append(tluszcze);
                 wyniki.add(String.valueOf(stringBuilder));
             }
-            wszystko.add(String.valueOf(buliderDlaTypuIDania));
+            wszystko.add(pobierzDaneDanZPosilku(typPosilku, data));
             wszystko.addAll(wyniki);
             wszystko.add(pobierzSumy(typPosilku, data));
+
         }catch (SQLException e) {
             System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
         }
+
         return wszystko;
     }
-
+    public String pobierzDaneDanZPosilku(TypPosilku typPosilku, LocalDate data){
+        String wynik = "";
+        try{
+           getAllDania.setString(1, String.valueOf(typPosilku));
+           getAllDania.setString(2, String.valueOf(data));
+           ResultSet result = getAllDania.executeQuery();
+            while (result.next()){
+                String typDania = result.getString(1);
+                String nazwaDania = result.getString(2);
+                typDania = typDania.toUpperCase().charAt(0) + typDania.substring(1).toLowerCase();
+                    wynik = typDania + ": "+nazwaDania;
+            }
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+        }
+        return wynik;
+    }
         public String pobierzSumy(TypPosilku typPosilku, LocalDate data){
         double sumKcal = 0;
         double sumBialko = 0;
@@ -636,14 +661,39 @@ public class ZapytaniaDoBazy {
                  sumWegle = result.getDouble(3);
                  sumBlonnik = result.getDouble(4);
                  sumTluszcze = result.getDouble(5);
-
             }
             return "Łącznie: kcal:" + sumKcal+ ", białko: "+sumBialko+ ", węglowodany: "+ sumWegle + ", błonnik: "+sumBlonnik + ", tłuszcze: "+sumTluszcze;
         }catch (SQLException e) {
             System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
             return null;
         }
+    }
 
+
+
+
+
+    public String pobierzSumyZCalegoDnia(LocalDate data){
+        double sumKcal = 0;
+        double sumBialko = 0;
+        double sumWegle = 0;
+        double sumBlonnik = 0;
+        double sumTluszcze = 0;
+        try{
+            getAllSumsFromAllDay.setString(1, String.valueOf(data));
+            ResultSet result = getAllSumsFromAllDay.executeQuery();
+            while (result.next()){
+                sumKcal = result.getDouble(1);
+                sumBialko = result.getDouble(2);
+                sumWegle = result.getDouble(3);
+                sumBlonnik = result.getDouble(4);
+                sumTluszcze = result.getDouble(5);
+            }
+            return "Makroskładniki dla całego dnia: kcal:" + sumKcal+ ", białko: "+sumBialko+ ", węglowodany: "+ sumWegle + ", błonnik: "+sumBlonnik + ", tłuszcze: "+sumTluszcze;
+        }catch (SQLException e) {
+            System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
+            return null;
+        }
     }
 
 

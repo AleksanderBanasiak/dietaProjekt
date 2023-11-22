@@ -37,9 +37,14 @@ public class WyswietlDiete {
         for (int i = 0; i < daty.size(); i++) {
             System.out.println("["+(daty.size()-i)+"] - " + daty.get(i));
         }
-        System.out.println("Wybierz dzień który chcesz wyświetlić");
+        System.out.print("Wybierz dzień który chcesz wyświetlić: ");
         int data = Integer.parseInt(scanner.nextLine());
 
+        while (data > daty.size() || data <= 0){
+            System.out.println("Podałeś liczbe z poza zakresu");
+            System.out.print("Wybierz dzień jeszcze raz: ");
+            data = Integer.parseInt(scanner.nextLine());
+        }
         return zapytaniaDoBazy.wyswietlWybranaDate(data);
     }
 
@@ -49,11 +54,13 @@ public class WyswietlDiete {
         List<String> obiad = zapytaniaDoBazy.pobierzDanePosilku(TypPosilku.OBIAD, LocalDate.parse(dzien));
         List<String> kolacja = zapytaniaDoBazy.pobierzDanePosilku(TypPosilku.KOLACJA, LocalDate.parse(dzien));
         List<String> dodatkoweDania = zapytaniaDoBazy.pobierzDanePosilku(TypPosilku.DODATKOWE_DANIE, LocalDate.parse(dzien));
+        String podsumowanie = zapytaniaDoBazy.pobierzSumyZCalegoDnia(LocalDate.parse(dzien));
         sprawdzCzyPuste(sniadanie);
         sprawdzCzyPuste(drugieSniadanie);
         sprawdzCzyPuste(obiad);
         sprawdzCzyPuste(kolacja);
         sprawdzCzyPuste(dodatkoweDania);
+        dania.add(podsumowanie);
     }
 
     public void sprawdzCzyPuste(List<String> lista) {

@@ -48,15 +48,20 @@ public class KorzytanieZBazy {
 
 
         TypPosilku typ = TypPosilku.SNIADANIE;
-        LocalDate data = LocalDate.now();
+        LocalDate data = LocalDate.parse("2023-11-21");
+//
+//
+//        List<String> dania = zapytaniaDoBazy.pobierzDanePosilku(typ, data);
+//        List<String> daty = zapytaniaDoBazy.wyswietlDaty();
+//
+//        for (int i = 0; i < daty.size(); i++) {
+//            System.out.println(daty.get(i));
+//        }
+
+        String wynik = zapytaniaDoBazy.pobierzDaneDanZPosilku(typ, data);
 
 
-        List<String> dania = zapytaniaDoBazy.pobierzDanePosilku(typ, data);
-        List<String> daty = zapytaniaDoBazy.wyswietlDaty();
-
-        for (int i = 0; i < daty.size(); i++) {
-            System.out.println(daty.get(i));
-        }
+        System.out.println(wynik);
 
 
 

@@ -17,10 +17,6 @@ public class MenadzerPosilkow {
             System.out.println("Nie można otworzyć bazy danych");
             return;
         }
-        int miejsceDodatkowegoPosilku = 0;
-        if(typPosilku == TypPosilku.DODATKOWE_DANIE){
-             miejsceDodatkowegoPosilku = wJakimMiejscu();
-        }
         int wybraneDanie = wyborDaniaDoPosilku(typPosilku);
 
 
@@ -41,16 +37,16 @@ public class MenadzerPosilkow {
 
 
     }
-    public int wJakimMiejscu() {
-        menuDodatkowegoDania();
-        int wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
-        while (wyborMiejscaPosilku > 3 || wyborMiejscaPosilku <= 0) {
-            System.out.println("Podałeś nieprawidłową wartość!");
-            System.out.print("Podaj liczbę jeszcze raz: ");
-            wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
-        }
-        return wyborMiejscaPosilku;
-    }
+//    public int wJakimMiejscu() {
+//        menuDodatkowegoDania();
+//        int wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
+//        while (wyborMiejscaPosilku > 3 || wyborMiejscaPosilku <= 0) {
+//            System.out.println("Podałeś nieprawidłową wartość!");
+//            System.out.print("Podaj liczbę jeszcze raz: ");
+//            wyborMiejscaPosilku = Integer.parseInt(scanner.nextLine());
+//        }
+//        return wyborMiejscaPosilku;
+//    }
 
     public void dodanieGramturyWybranymPosilkom(List<Produkt> produkts) {
 
@@ -58,6 +54,14 @@ public class MenadzerPosilkow {
             System.out.println(menadzerProduktow.wypiszProdukt(produkts.get(i)));
             System.out.print("Podaj gramature: ");
             int ileGram = Integer.parseInt(scanner.nextLine());
+
+            while (ileGram <= 0){
+                System.out.println("Podałeś niepoprawną gramaturę");
+                System.out.print("Podaj gramature jescze raz: ");
+                ileGram = Integer.parseInt(scanner.nextLine());
+            }
+
+
             zapytaniaDoBazy.insertIntoGramaturaPosilku(ileGram, produkts.get(i));
         }
 
@@ -90,27 +94,27 @@ public class MenadzerPosilkow {
         }
         return wynik;
     }
-    public String odmianaTypuPosilku2(TypPosilku typPosilku){
-        String wynik="";
-        switch (typPosilku){
-            case SNIADANIE -> wynik = "Śniadanie:";
-            case DRUGIE_SNIADANIE -> wynik = "Drugie śniadanie:";
-            case OBIAD -> wynik = "Obiad:";
-            case KOLACJA -> wynik = "Kolacja:";
-            case DODATKOWE_DANIE -> wynik = "Dodatkowe danie";
-        }
-        return wynik;
-    }
-    public void menuDodatkowegoDania(){
-        System.out.println("Śniadanie");
-        System.out.println("Drugie śniadanie");
-        System.out.println("--------------   <-[1]");
-        System.out.println("Obiad");
-        System.out.println("--------------   <-[2]");
-        System.out.println("Kolacja");
-        System.out.println("--------------   <-[3]");
-        System.out.print("W którym miejscu zjadłeś dodatkwy posiłek?: ");
-    }
+//    public String odmianaTypuPosilku2(TypPosilku typPosilku){
+//        String wynik="";
+//        switch (typPosilku){
+//            case SNIADANIE -> wynik = "Śniadanie:";
+//            case DRUGIE_SNIADANIE -> wynik = "Drugie śniadanie:";
+//            case OBIAD -> wynik = "Obiad:";
+//            case KOLACJA -> wynik = "Kolacja:";
+//            case DODATKOWE_DANIE -> wynik = "Dodatkowe danie";
+//        }
+//        return wynik;
+//    }
+//    public void menuDodatkowegoDania(){
+//        System.out.println("Śniadanie");
+//        System.out.println("Drugie śniadanie");
+//        System.out.println("--------------   <-[1]");
+//        System.out.println("Obiad");
+//        System.out.println("--------------   <-[2]");
+//        System.out.println("Kolacja");
+//        System.out.println("--------------   <-[3]");
+//        System.out.print("W którym miejscu zjadłeś dodatkwy posiłek?: ");
+//    }
 }
 
 
