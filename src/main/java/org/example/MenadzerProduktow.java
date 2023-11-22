@@ -1,24 +1,11 @@
-
 package org.example;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MenadzerProduktow {
-    private List<Produkt> produkty = new ArrayList<>();
-    File file = new File("produkty.txt");
-    public List<Produkt> getProdukty() {
-        return produkty;
-    }
     ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
 
-
-
-    public void tworzenieProduktu(Scanner scanner) throws IOException {
+    public void tworzenieProduktu(Scanner scanner){
         if(!zapytaniaDoBazy.open()){
             System.out.println("Nie można otworzyć bazy danych");
             return;
@@ -43,55 +30,9 @@ public class MenadzerProduktow {
             System.out.println("Takiego produktu nie można dodać ponieważ jeden z makroskładników jest mniejszy od zera!");
         }else {
             zapytaniaDoBazy.insertIntoProdukt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
-
-
-
-
-
-//            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
-//            menadzerPlikow.zapiszDoPliku(nowyProdukt, file);
-//            produkty.add(nowyProdukt);
         }
         }
     }
-
-/*
-    public void dodajProduktyZPlikuDoListy() throws FileNotFoundException {
-        dodajDoListyProduktyZPliku(produkty, file, 0);
-    }
-    public void dodajDoListyProduktyZPliku(List <Produkt> produkty, File file1, int ilePominac) throws FileNotFoundException {
-        Scanner scanner = new Scanner(file1);
-        boolean flaga = true;
-        while (scanner.hasNext()) {
-            if(flaga) {
-                for (int i = 0; i < ilePominac; i++) {
-                    scanner.nextLine();
-                }
-                flaga = false;
-            }
-            String nazwa = scanner.nextLine();
-            double kcal = Double.parseDouble(scanner.nextLine());
-            double bialko = Double.parseDouble(scanner.nextLine());
-            double weglowodany = Double.parseDouble(scanner.nextLine());
-            double blonnik = Double.parseDouble(scanner.nextLine());
-            double tluszcze = Double.parseDouble(scanner.nextLine());
-            Produkt nowyProdukt = new Produkt(nazwa, kcal, bialko, weglowodany, blonnik, tluszcze);
-            produkty.add(nowyProdukt);
-        }
-    }
-    public void wyswietlWszystkieProdukty(){
-        int i=0;
-        for (Produkt produkt : produkty) {
-            i++;
-            System.out.println("["+i+"] - "+  wypiszProdukt(produkt));
-        }
-    }
-
- */
-
-
-
-
     public String wypiszProdukt(Produkt produkt){
         return "["+produkt.getId()+"] - "+ produkt.getNazwa()+ ": kcal:"+ produkt.getKcal()+ ", białko: "+produkt.getBialko()
                 + ", węglowodany: " + produkt.getWeglowodany()+ ", błonnik: "+produkt.getBlonnik()

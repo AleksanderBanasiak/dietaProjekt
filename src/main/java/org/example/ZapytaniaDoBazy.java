@@ -3,18 +3,13 @@ package org.example;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class ZapytaniaDoBazy {
-
-
-
     public static final String URL = "jdbc:mysql://localhost:3306/bazadieta";
     public static final String USER = "root";
     public static final String PASSWORD = "admin";
-
     public static final String TABLE_PRODUKT = "produkty";
     public static final String TABLE_DANIA = "dania";
     public static final String TABLE_POSILKI = "posilki";
@@ -23,15 +18,12 @@ public class ZapytaniaDoBazy {
     public static final String TABLE_DANIA_HAS_PRODUKTY = "produkty_has_dania";
     public static final String COLUMN_PRODUKTY_IDPODUKTY = "produkty_idprodukty";
     public static final String COLUMN_GRAMPRODUKTY_IDPODUKTY = "GramaturaPosilku_idGramaturaPosilku";
-    public static final String COLUMN_GRAMPRODUKTY_IDGRAMPODUKTY = "idGramaturaPosilku";
     public static final String COLUMN_PRODUKTY_IDDANIA = "dania_iddania";
-
     public static final String COLUMN_IDPRODUKTY = "idprodukty";
     public static final String COLUMN_IDPOSILKI = "idposilki";
     public static final String COLUMN_IDGRAM = "idGramaturaPosilku";
     public static final String COLUMN_IDDANIA = "iddania";
     public static final String COLUMN_NAZWAPRODUKTOW = "nazwaProduktow";
-
     public static final String COLUMN_NAZWADANIA = "nazwaDania";
     public static final String COLUMN_DATAPOSILKU = "dataPosilku";
     public static final String CZAS = "NOW()";
@@ -42,82 +34,43 @@ public class ZapytaniaDoBazy {
     public static final String COLUMN_WEGLOWODANY = "weglowodany";
     public static final String COLUMN_BLONNIK = "blonnik";
     public static final String COLUMN_TLUSZCZE = "tluszcze";
-    public static final int INDEX_IDPRODUKTY = 1;
-    public static final int INDEX_NAZWAPRODUKTOW = 2;
-    public static final int INDEX_KCAL = 3;
-    public static final int INDEX_BIALKO = 4;
-    public static final int INDEX_WEGLOWODANY = 5;
-    public static final int INDEX_BLONNIK = 6;
-    public static final int INDEX_TLUSZCZE = 7;
-
     public static final String CULUMN_GRAMIDGRAMPOSULKU = "idGramaturaPosilku";
-    public static final String CULUMN_GRAMNAZWAPRODUKTOW = "nazwaProduktow";
     public static final String CULUMN_GRAMTDATA = "data";
-
-
-    //zapytania do bazy
-
-
-//    SELECT bazadieta.dania.nazwaDania, bazadieta.gramaturaposilku.nazwaProduktow, bazadieta.gramaturaposilku.kcal  FROM bazadieta.gramaturaposilku
-//    JOIN bazadieta.gramaturaposilku_has_dania ON bazadieta.gramaturaposilku.idGramaturaPosilku = bazadieta.gramaturaposilku_has_dania.GramaturaPosilku_idGramaturaPosilku
-//    JOIN bazadieta.dania ON bazadieta.dania.iddania = bazadieta.gramaturaposilku_has_dania.dania_iddania;
-
-
 
 
     public static final String QUERY_SELECT_ALL_DATA_FROM_DAY = "SELECT "+ COLUMN_NAZWAPRODUKTOW + ", "+ COLUMN_KCAL  + ", "+ COLUMN_BIALKO
              + ", "+ COLUMN_WEGLOWODANY + ", "+ COLUMN_BLONNIK + ", "+ COLUMN_TLUSZCZE + " FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+
             CULUMN_GRAMIDGRAMPOSULKU + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
-
     public static final String QUERY_SELECT_ALL_DATA_FROM_DANIA = "SELECT "+COLUMN_TYPDANIA+"," +COLUMN_NAZWADANIA + " FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE
             +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " +
             TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+ TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+
             TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
-
-
     public static final String QUERY_SELECT_ALL_SUMS_FROM_DAY = "SELECT SUM("+ COLUMN_KCAL  + "), SUM("+ COLUMN_BIALKO + "), SUM("+ COLUMN_WEGLOWODANY + "), SUM("+ COLUMN_BLONNIK +
             "), SUM("+ COLUMN_TLUSZCZE + ") FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_DANIA+"."+COLUMN_TYPDANIA + " = ?" + " AND "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
-
     public static final String QUERY_SELECT_ALL_SUMS_FROM_ALL_DAY = "SELECT SUM("+ COLUMN_KCAL  + "), SUM("+ COLUMN_BIALKO + "), SUM("+ COLUMN_WEGLOWODANY + "), SUM("+ COLUMN_BLONNIK +
             "), SUM("+ COLUMN_TLUSZCZE + ") FROM "+ TABLE_GRAM + " JOIN "+ TABLE_GRAMPRODUCTS_HAS_DANIE +" ON " + TABLE_GRAM + "."+ CULUMN_GRAMIDGRAMPOSULKU + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_GRAMPRODUKTY_IDPODUKTY + " JOIN "+ TABLE_DANIA + " ON " + TABLE_DANIA+"."+COLUMN_IDDANIA + " = "+
             TABLE_GRAMPRODUCTS_HAS_DANIE+"."+COLUMN_PRODUKTY_IDDANIA + " WHERE "+ TABLE_GRAM+"."+CULUMN_GRAMTDATA + " = ?";
-
-
     public static final String SELECT_DISTINCT_DATA = "SELECT DISTINCT "+CULUMN_GRAMTDATA+ " FROM "+ TABLE_GRAM + " ORDER BY "+ CULUMN_GRAMTDATA;
-
     public static final String SELECT_DATA_DESC = "SELECT DISTINCT "+CULUMN_GRAMTDATA+ " FROM "+ TABLE_GRAM + " ORDER BY "+ CULUMN_GRAMTDATA + " DESC LIMIT ?";
-
-
     public static final String QUERY_GET_ALL_PRODUCTS = "SELECT * FROM "+ TABLE_PRODUKT;
-
-
     public static final String QUERY_INSERT_PRODUKT = " INSERT INTO "+TABLE_PRODUKT+"("+ COLUMN_IDPRODUKTY +","+COLUMN_NAZWAPRODUKTOW+","+COLUMN_KCAL
             +","+COLUMN_BIALKO+","+COLUMN_WEGLOWODANY+","+COLUMN_BLONNIK+","+COLUMN_TLUSZCZE+") VALUES (?,?,?,?,?,?,?)";
-
-
-    //SELECT idprodukty FROM bazadieta.produkty order by idprodukty DESC limit 1;
     public static final String LAST_ID_PRODDUKTY = "SELECT "+ COLUMN_IDPRODUKTY + " FROM " +TABLE_PRODUKT + " ORDER BY " + COLUMN_IDPRODUKTY + " DESC LIMIT 1";
     public static final String LAST_ID_DANIA = "SELECT "+ COLUMN_IDDANIA + " FROM " +TABLE_DANIA + " ORDER BY " + COLUMN_IDDANIA+ " DESC LIMIT 1";
     public static final String LAST_ID_GRAM = "SELECT "+ COLUMN_IDGRAM + " FROM " +TABLE_GRAM + " ORDER BY " + COLUMN_IDGRAM+ " DESC LIMIT 1";
-
-
     public static final String GET_IDS_GRAM = "SELECT "+ COLUMN_IDGRAM + " FROM " +TABLE_GRAM + " ORDER BY " + COLUMN_IDGRAM+ " DESC LIMIT ?";
-
     public static final String QUERY_ALL_PRODUCTS_BY_ID_DANIA = "SELECT * FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
             + " = ?";
     public static final String QUERY_ALL_PRODUCTS_NAMES_BY_ID_DANIA = "SELECT "+COLUMN_NAZWAPRODUKTOW +" FROM "+TABLE_PRODUKT+" INNER JOIN "+TABLE_DANIA_HAS_PRODUKTY + " ON "+TABLE_PRODUKT+"."+
             COLUMN_IDPRODUKTY+ " = " + TABLE_DANIA_HAS_PRODUKTY + "." + COLUMN_PRODUKTY_IDPODUKTY + " WHERE " + TABLE_DANIA_HAS_PRODUKTY +"." +COLUMN_PRODUKTY_IDDANIA
             + " = ?";
-
     public static final String QUERY_ADD_PRODUCTS_TO_DANIE = "INSERT INTO "+TABLE_DANIA_HAS_PRODUKTY + "("+COLUMN_PRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
-
-    // to jest to zapytanie
     public static final String QUERY_ADD_GRAMPRODUKCTS_TO_DANIA = "INSERT INTO "+TABLE_GRAMPRODUCTS_HAS_DANIE + "("+COLUMN_GRAMPRODUKTY_IDPODUKTY+","+ COLUMN_PRODUKTY_IDDANIA +")" +
         " VALUES (?, ?)";
     public static final String QUERY_ALL_PRODUKTS_NAMES ="SELECT "+ COLUMN_NAZWAPRODUKTOW + " FROM "+ TABLE_PRODUKT;
@@ -125,21 +78,15 @@ public class ZapytaniaDoBazy {
 
     public static final String QUERY_GET_ID_DANIA_TO_TYPE = "SELECT "+COLUMN_IDDANIA +" FROM "+ TABLE_DANIA + " WHERE " + COLUMN_TYPDANIA + " = ?";
     public static final String QUERY_GET_NAME_DANIA_TO_TYPE = "SELECT "+COLUMN_NAZWADANIA +" FROM "+ TABLE_DANIA + " WHERE " + COLUMN_TYPDANIA + " = ?";
-
-
     public static final String QUERY_INSERT_INTO_DANIA = "INSERT INTO "+TABLE_DANIA+ "("+COLUMN_IDDANIA + ","+ COLUMN_NAZWADANIA+ ","+COLUMN_TYPDANIA +") VALUES (?,?,?)";
     public static final String QUERY_INSERT_INTO_POSILKI = "INSERT INTO "+TABLE_POSILKI+ "("+COLUMN_IDPOSILKI + ","+ COLUMN_DATAPOSILKU
             + ","+COLUMN_ILEGRAM +") VALUES (?,"+CZAS+",?)";
-
     public static final String QUERY_ADD_GRAMY = "INSERT INTO "+TABLE_GRAM + " VALUES (?,?,?,?,?,?,?,?)";
     public static final String QUERY_GET_NAZWADANIA_TO_ID = "SELECT "+COLUMN_NAZWADANIA + " FROM "+ TABLE_DANIA + " WHERE "+ COLUMN_IDDANIA + " = ?";
 
 
-
-
     private Connection con;
     private PreparedStatement insertIntoProdukt;
-
     private PreparedStatement allProductsByIdDania;
     private PreparedStatement addProductsToDanie;
     private PreparedStatement addGramProductsToDanie;
@@ -148,22 +95,14 @@ public class ZapytaniaDoBazy {
     private PreparedStatement getIdDaniaToType;
     private PreparedStatement getNazwaDaniaToType;
     private PreparedStatement insetIntoPosilki;
-
     private PreparedStatement addGram;
-
     private PreparedStatement getNameDaniaToID;
-
     private PreparedStatement getIdsGram;
-
     private PreparedStatement getAll;
     private PreparedStatement getAllSums;
-
     private PreparedStatement getAllSumsFromAllDay;
-
     private PreparedStatement getData;
     private PreparedStatement getAllDania;
-
-
 
     public boolean open(){
         try{
@@ -185,10 +124,6 @@ public class ZapytaniaDoBazy {
             getData = con.prepareStatement(SELECT_DATA_DESC);
             getAllDania = con.prepareStatement(QUERY_SELECT_ALL_DATA_FROM_DANIA);
             getAllSumsFromAllDay = con.prepareStatement(QUERY_SELECT_ALL_SUMS_FROM_ALL_DAY);
-
-
-
-
             return true;
         }catch (SQLException e){
             System.out.println("Nie można się połączyć z bazą danych " + e.getMessage());
@@ -248,8 +183,6 @@ public class ZapytaniaDoBazy {
             if(getAllSumsFromAllDay != null){
                 getAllSumsFromAllDay.close();
             }
-
-
             if(con != null){
                 con.close();
             }
@@ -317,7 +250,6 @@ public class ZapytaniaDoBazy {
         }
         return ostatnieID;
     }
-
     public void insertIntoProdukt(String name, double kacl, double bialko, double wegle, double blonnik, double tluszcze){
         int id = pobierzOstatnieIDProduktu();
         try {
@@ -336,11 +268,9 @@ public class ZapytaniaDoBazy {
     public void insertIntoDanie(String name, TypPosilku typPosilku){
         int id = pobierzOstatnieIDDania();
         try {
-
             insertIntoDania.setInt(1, id);
             insertIntoDania.setString(2, name);
             insertIntoDania.setString(3, String.valueOf(typPosilku));
-
             insertIntoDania.executeUpdate();
         }catch (SQLException e){
             System.out.println("Nie można dodać dania do bazy "+e.getMessage() );
@@ -350,10 +280,6 @@ public class ZapytaniaDoBazy {
         int id = pobierzOstatnieIDGram();
         MenadzerDania menadzerDania = new MenadzerDania();
         Produkt produktZObliczonymMakro = menadzerDania.obliczMakro(ileGram, produkt);
-
-
-
-
         LocalDate date = LocalDate.now();
             try {
                 addGram.setInt(1, id);
@@ -368,17 +294,13 @@ public class ZapytaniaDoBazy {
             }catch (SQLException e){
                 System.out.println("Nie można dodać gramatury posilku do bazy "+e.getMessage() );
             }
-
-
     }
-
     public List<Produkt> wyswietlWszystkieProduktyZDanegoDania(int id) {
         try {
             allProductsByIdDania.setInt(1, id);
             ResultSet result = allProductsByIdDania.executeQuery();
             List<Produkt> wszyskieProdukty = new ArrayList<>();
             while (result.next()) {
-
                 Produkt produkt = new Produkt(
                         result.getInt(1),
                         result.getString(2),
@@ -391,22 +313,6 @@ public class ZapytaniaDoBazy {
             }
             return wszyskieProdukty;
         } catch (SQLException e) {
-            System.out.println("Nie można wyświetlić produktów z danego dania");
-            return null;
-        }
-    }
-        public String wyswietlDanieODanymID(int id){
-        try{
-            getNameDaniaToID.setInt(1, id);
-            ResultSet result =  getNameDaniaToID.executeQuery();
-            String wynik ="";
-            while (result.next()){
-                wynik = result.getString(1);
-            }
-
-
-            return wynik;
-        }catch (SQLException e ){
             System.out.println("Nie można wyświetlić produktów z danego dania");
             return null;
         }
@@ -441,7 +347,6 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-
     public List<String> wyswietlWszystkieNazwy(String query) {
 
         List<String> wszyskieDania = new ArrayList<>();
@@ -457,13 +362,11 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-
     public void dodajListeProduktowDoDania(List<Integer> idProduktu, int idDania){
         for (Integer integer : idProduktu) {
             dodajProduktyDoDania(integer, idDania);
         }
     }
-
     public void dodajProduktyDoDania(int idProduktu, int idDania){
         try {
             addProductsToDanie.setInt(1, idProduktu);
@@ -473,14 +376,11 @@ public class ZapytaniaDoBazy {
             System.out.println("Problem z zapytaniem o produkty "+e.getMessage() );
         }
     }
-
     public void dodajListeGramProduktowDoDania(List<Integer> idGramProduktu, int idDania){
         for (Integer integer : idGramProduktu) {
             dodajGramatureProduktowDoDania(integer, idDania);
         }
     }
-
-
     public void dodajGramatureProduktowDoDania(int idGramProduktu, int idDania){
         try {
             addGramProductsToDanie.setInt(1, idGramProduktu);
@@ -490,10 +390,7 @@ public class ZapytaniaDoBazy {
             System.out.println("Problem z dodanie id gram produktów i id dania "+e.getMessage() );
         }
     }
-
-
     public List<Integer> wyswietlIdDaniaDanegoTypu(TypPosilku typPosilku){
-
         try {
             getIdDaniaToType.setString(1, String.valueOf(typPosilku));
             ResultSet result = getIdDaniaToType.executeQuery();
@@ -509,7 +406,6 @@ public class ZapytaniaDoBazy {
         }
     }
     public List<String> wyswietlNazweDaniaDanegoTypu(TypPosilku typPosilku){
-
         try {
             getNazwaDaniaToType.setString(1, String.valueOf(typPosilku));
             ResultSet result = getNazwaDaniaToType.executeQuery();
@@ -544,7 +440,6 @@ public class ZapytaniaDoBazy {
         }
         return flaga;
     }
-
     public List<String> wyswietlDaty(){
        List<String> daty = new ArrayList<>();
         try(Statement statement = con.createStatement();
@@ -558,9 +453,7 @@ public class ZapytaniaDoBazy {
             System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
             return null;
         }
-
     }
-
     public String wyswietlWybranaDate(int data){
             String wybranaData = "";
         try {
@@ -575,10 +468,6 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-
-
-
-
     public List<String> pobierzDanePosilku(TypPosilku typPosilku, LocalDate data){
         // najgorsza metoda jaką napisałem xd (do poprawy)
         int produkt =0;
@@ -625,7 +514,6 @@ public class ZapytaniaDoBazy {
         }catch (SQLException e) {
             System.out.println("Nie można pobrać ostaniego id "+ e.getMessage());
         }
-
         return wszystko;
     }
     public String pobierzDaneDanZPosilku(TypPosilku typPosilku, LocalDate data){
@@ -668,11 +556,6 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-
-
-
-
-
     public String pobierzSumyZCalegoDnia(LocalDate data){
         double sumKcal = 0;
         double sumBialko = 0;
@@ -695,12 +578,4 @@ public class ZapytaniaDoBazy {
             return null;
         }
     }
-
-
-
-
-
-
-
-
 }

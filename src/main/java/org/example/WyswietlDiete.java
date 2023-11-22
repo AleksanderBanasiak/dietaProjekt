@@ -6,28 +6,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class WyswietlDiete {
-
     ZapytaniaDoBazy zapytaniaDoBazy = new ZapytaniaDoBazy();
     Scanner scanner = new Scanner(System.in);
-
     private List<String> dania = new ArrayList<>();
 
 
-
-
     public void wyswietDiete(){
-
         String wybranyDzien = wybierzDzien();
-
         wyswietlDateDlaWybranegoDnia(wybranyDzien);
         wypiszWszystko();
-
-
-
-
     }
-
-
     public String wybierzDzien(){
         if(!zapytaniaDoBazy.open()){
             System.out.println("Nie można otworzyć bazy danych");
@@ -47,7 +35,6 @@ public class WyswietlDiete {
         }
         return zapytaniaDoBazy.wyswietlWybranaDate(data);
     }
-
     public void wyswietlDateDlaWybranegoDnia(String dzien){
         List<String> sniadanie = zapytaniaDoBazy.pobierzDanePosilku(TypPosilku.SNIADANIE, LocalDate.parse(dzien));
         List<String> drugieSniadanie = zapytaniaDoBazy.pobierzDanePosilku(TypPosilku.DRUGIE_SNIADANIE, LocalDate.parse(dzien));
@@ -62,7 +49,6 @@ public class WyswietlDiete {
         sprawdzCzyPuste(dodatkoweDania);
         dania.add(podsumowanie);
     }
-
     public void sprawdzCzyPuste(List<String> lista) {
         if (lista.size() != 2) {
             dania.addAll(lista);
@@ -74,11 +60,4 @@ public class WyswietlDiete {
             System.out.println(dania.get(i));
         }
     }
-
-
-
-
-
-
-
 }

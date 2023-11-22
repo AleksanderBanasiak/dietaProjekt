@@ -1,7 +1,4 @@
-
 package org.example;
-
-import org.example.MenadzerProduktow;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -15,10 +12,8 @@ public class DietaApk {
         MenadzerProduktow menadzerProduktow = new MenadzerProduktow();
         MenadzerDania danie = new MenadzerDania();
         WyswietlDiete wyswietlDiete = new WyswietlDiete();
-
         MenadzerPosilkow menadzerPosilkow = new MenadzerPosilkow();
         Scanner scanner = new Scanner(System.in);
-//        menadzerProduktow.dodajProduktyZPlikuDoListy();
         while (true){
             menu();
             wybor = Integer.parseInt(scanner.nextLine());
